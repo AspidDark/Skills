@@ -7,9 +7,9 @@ public static class ApiRoutes
 
     private const string Base = Root + "/" + Version;
 
-    public static class TopicsRoute
+    public static class SkillRoute
     {
-        private const string baseRoute = "/topic";
+        private const string baseRoute = "/skill";
 
         public const string Get = Base + baseRoute;
 
@@ -17,39 +17,9 @@ public static class ApiRoutes
 
         public const string Create = Base + baseRoute;
 
-        public const string Update = Base + baseRoute + "/{topicId}";
+        public const string Update = Base + baseRoute + "/{skillId}";
 
-        public const string Delete = Base + baseRoute + "/{topicId}";
-    }
-
-    public static class ParagraphRoute
-    {
-        private const string baseRoute = "/paragraph";
-
-        public const string Get = Base + baseRoute;
-
-        public const string GetList = Base + baseRoute + "s";
-
-        public const string Create = Base + baseRoute;
-
-        public const string Update = Base + baseRoute + "/{paragraphId}";
-
-        public const string Delete = Base + baseRoute + "/{paragraphId}";
-    }
-
-    public static class NotesRoute
-    {
-        private const string baseRoute = "/note";
-
-        public const string Get = Base + baseRoute;
-
-        public const string GetList = Base + baseRoute + "s";
-
-        public const string Create = Base + baseRoute;
-
-        public const string Update = Base + baseRoute + "/{noteId}";
-
-        public const string Delete = Base + baseRoute + "/{noteId}";
+        public const string Delete = Base + baseRoute + "/{skillId}";
     }
 
     public static class FileRoute
