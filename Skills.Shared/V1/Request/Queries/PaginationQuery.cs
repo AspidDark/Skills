@@ -16,7 +16,7 @@ public class PaginationQuery
         PageSize = pageSize < PageElements.Max ? pageSize : PageElements.Max;
     }
 
-    public int PageNumber { get; set; }
+    public required int  PageNumber { get; init; }
 
-    public int PageSize { get; set; }
+    public required int PageSize { get; init; }
 }

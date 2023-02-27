@@ -5,5 +5,5 @@ namespace Skills.Shared.V1.Request.Queries;
 public class EntityQuery
 {
     [FromQuery(Name = "entityId")]
-    public Guid EntityId { get; set; }
+    public required Guid EntityId { get; init; }
 }
