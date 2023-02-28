@@ -2,5 +2,9 @@
 
 public class SkillsRequestModel
 {
-    public required Guid Id { get; set; }
+    public required Guid ImageId { get; init; }
+
+    public required string SkillName{ get; init; }
+
+    public required int Level { get; init; }
 }

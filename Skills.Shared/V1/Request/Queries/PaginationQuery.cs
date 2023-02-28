@@ -1,4 +1,5 @@
-﻿using static Skills.Domain.Consts.DomainConsts;
+﻿
+using static Skills.Shared.Consts.Consts;
 
 namespace Skills.Shared.V1.Request.Queries;
 

@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skills", "Skills\Skills.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skills.Identity", "Skills.Identity\Skills.Identity.csproj", "{CD0D40BF-9B99-4E7D-86E2-DC92DB91FABB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skills.Shared", "Skills.Shared\Skills.Shared.csproj", "{329D750B-C15D-4461-A40A-241C79692C23}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skills.Domain", "Skills.Domain\Skills.Domain.csproj", "{9964A976-5EC3-48D5-836C-71D5207AB8D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skills.Shared", "Skills.Shared\Skills.Shared.csproj", "{329D750B-C15D-4461-A40A-241C79692C23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{329D750B-C15D-4461-A40A-241C79692C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{329D750B-C15D-4461-A40A-241C79692C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{329D750B-C15D-4461-A40A-241C79692C23}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9964A976-5EC3-48D5-836C-71D5207AB8D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9964A976-5EC3-48D5-836C-71D5207AB8D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9964A976-5EC3-48D5-836C-71D5207AB8D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9964A976-5EC3-48D5-836C-71D5207AB8D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Skills.Domain.Models;
 using Skills.Extensions;
 using Skills.Models;
 using Skills.Shared.V1;
@@ -13,15 +12,15 @@ namespace Skills.Controllers;
 [Authorize]
 [ApiController]
 [Route("[controller]")]
-public class SkillsController : ControllerBase
+public class CharacterController : ControllerBase
 {
     private readonly IMapper _mapper;
-    public SkillsController(IMapper mapper)
+    public CharacterController(IMapper mapper)
     {
         _mapper = mapper;
     }
 
-    [HttpGet(ApiRoutes.SkillRoute.Get)]
+    [HttpGet(ApiRoutes.CharacterRoute.Get)]
     public async Task<IActionResult> Get([FromQuery] EntityQuery entityByUserIdQuery)
     {
         var userId = HttpContext.GetUserId();
@@ -30,7 +29,7 @@ public class SkillsController : ControllerBase
         return Ok(new());
     }
 
-    [HttpGet(ApiRoutes.SkillRoute.GetList)]
+    [HttpGet(ApiRoutes.CharacterRoute.GetList)]
     public async Task<IActionResult> GetList([FromQuery] PaginationQuery paginationQuery)
     {
         var paginationfilter = _mapper.Map<PaginationFilter>(paginationQuery);
@@ -41,25 +40,25 @@ public class SkillsController : ControllerBase
         return Ok(new());
     }
 
-    [HttpPost(ApiRoutes.SkillRoute.Create)]
-    public async Task<IActionResult> Create([FromBody] SkillsRequestModel request)
+    [HttpPost(ApiRoutes.CharacterRoute.Create)]
+    public async Task<IActionResult> Create([FromBody] CharacterRequestModel request)
     {
-        var skillCreate = _mapper.Map<SkillsModel>(request);
-        skillCreate.UserId = HttpContext.GetUserId();
+        var model = _mapper.Map<CharacterModel>(request);
+        model.UserId = HttpContext.GetUserId();
         return Ok(new());
     }
 
-    [HttpPut(ApiRoutes.SkillRoute.Update)]
-    public async Task<IActionResult> Update([FromRoute] Guid skillId, [FromBody] SkillsRequestModel request)
+    [HttpPut(ApiRoutes.CharacterRoute.Update)]
+    public async Task<IActionResult> Update([FromRoute] Guid characterId, [FromBody] CharacterRequestModel request)
     {
-        var skillUpdate = _mapper.Map<SkillsModel>(request);
-        skillUpdate.Id = skillId;
-        skillUpdate.UserId = HttpContext.GetUserId();
+        var model = _mapper.Map<CharacterModel>(request);
+        model.Id = characterId;
+        model.UserId = HttpContext.GetUserId();
         return Ok(new());
     }
 
-    [HttpDelete(ApiRoutes.SkillRoute.Delete)]
-    public async Task<IActionResult> Delete([FromRoute] Guid skillId)
+    [HttpDelete(ApiRoutes.CharacterRoute.Delete)]
+    public async Task<IActionResult> Delete([FromRoute] Guid characterId)
     {
         return Ok(new());
     }

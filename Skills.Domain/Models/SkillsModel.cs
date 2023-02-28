@@ -2,7 +2,7 @@
 
 public class SkillsModel
 {
-    public required Guid Id { get; init; }
+    public Guid Id { get; set; }
 
     public Guid UserId { get; set; }
 }

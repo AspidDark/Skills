@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.OpenApi.Models;
 using Skills.Identity;
+using Skills.Services;
 using Swashbuckle.AspNetCore.Filters;
 
 internal class Program
@@ -24,9 +25,9 @@ internal class Program
         builder.Services.AddAutoMapper(cfg => cfg.AddMaps(new[]
         {
                 "Skills",
-                //"MyNotes.Services"
         }));
 
+        builder.Services.AddScoped<ICharacterService, CharacterService>();
 
 
         var app = builder.Build();

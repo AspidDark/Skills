@@ -7,9 +7,9 @@ public static class ApiRoutes
 
     private const string Base = Root + "/" + Version;
 
-    public static class SkillRoute
+    public static class CharacterRoute
     {
-        private const string baseRoute = "/skill";
+        private const string baseRoute = "/character";
 
         public const string Get = Base + baseRoute;
 
@@ -17,9 +17,9 @@ public static class ApiRoutes
 
         public const string Create = Base + baseRoute;
 
-        public const string Update = Base + baseRoute + "/{skillId}";
+        public const string Update = Base + baseRoute + "/{characterId}";
 
-        public const string Delete = Base + baseRoute + "/{skillId}";
+        public const string Delete = Base + baseRoute + "/{characterId}";
     }
 
     public static class FileRoute
