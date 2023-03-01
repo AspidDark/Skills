@@ -5,16 +5,16 @@ public class CharacterModel
     public Guid UserId { get; set; }
 
     public Guid Id { get; set; }
+    public required int Priority { get; init; }
 
     public required string BuildName { get; init; }
-
-    public required int Age { get; init; }
-
-    public required int Month { get; init; }
+    public required DateOnly StartingDate { get; set; }
 
     public required ImageModel Photo { get; init; }
 
-    public required SkillsModel MainSkill { get; init; }
+    public required SkillsModel Speciality { get; init; }
 
     public IEnumerable<SkillsModel>? Skills { get; init; }
+
+    public string? Story { get; set; }
 }
