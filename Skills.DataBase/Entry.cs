@@ -15,21 +15,6 @@ namespace Skills.DataBase
                     x => x.MigrationsAssembly("Skills.DataBase"));
             });
 
-            //Inmemory  Microsoft.EntityFrameworkCore.InMemory
-            //services.AddDbContext<AppDbContext>(opt =>
-            //   opt.UseInMemoryDatabase("InMem"));
-
-
-            //services.AddScoped<ICommentContract, CommentService>();
-
-            //services.AddScoped<IFileEntityContract, FileEntityService>();
-            //services.AddScoped<INoteContract, NoteService>();
-            //services.AddScoped<IParagraphContract, ParagraphService>();
-            //services.AddScoped<ITopicContract, TopicService>();
-
-            //services.AddScoped<IGlobalRightContract, GlobalRightService>();
-            //services.AddScoped<ILocalRightContract, LocalRightService>();
-
             return services;
         }
     }

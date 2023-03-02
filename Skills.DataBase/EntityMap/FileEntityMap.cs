@@ -11,7 +11,7 @@ public class FileEntityMap : BaseEntityMap<FileEntity>
     public override void Configure(EntityTypeBuilder<FileEntity> builder)
     {
         base.Configure(builder);
-        builder.Property(x => x.Path).HasColumnName("path").IsRequired();
+        builder.Property(x => x.Path).HasColumnName("path").HasMaxLength(1000).IsRequired();
        
     }
 }

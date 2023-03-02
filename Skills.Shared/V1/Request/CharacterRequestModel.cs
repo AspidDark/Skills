@@ -13,8 +13,7 @@ public class CharacterRequestModel
 
     public required ImageRequestModel Photo { get; init; }
 
-    public required SkillsRequestModel Speciality { get; init; }
-    [MaxLength(8)]
+    [MaxLength(9)]
     public IEnumerable<SkillsRequestModel>? Skills { get; init; }
     [MaxLength(1000)]
     public string? Story { get; set; }

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Hosting;
+using Skills.DataBase;
 using Microsoft.OpenApi.Models;
 using Skills.Identity;
 using Skills.Services;
@@ -26,6 +26,8 @@ internal class Program
         {
                 "Skills",
         }));
+
+        builder.Services.AddDataAccess(configuration);
 
         builder.Services.AddScoped<ICharacterService, CharacterService>();
 

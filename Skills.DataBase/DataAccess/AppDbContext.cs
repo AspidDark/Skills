@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Skills.DataBase.DataAccess.Entities;
 using Skills.DataBase.EntityMap;
+using System.Security.Principal;
 
 namespace Skills.DataBase.DataAccess
 {
@@ -20,6 +21,11 @@ namespace Skills.DataBase.DataAccess
             modelBuilder.ApplyConfiguration(new CharacterMap());
             modelBuilder.ApplyConfiguration(new SkillMap());
             modelBuilder.ApplyConfiguration(new FileEntityMap());
+
+            modelBuilder.Entity<Character>()
+                .HasMany(s => s.Skills)
+                .WithOne(c => c.Character)
+                .HasForeignKey(p => p.CahracterId);
 
             base.OnModelCreating(modelBuilder);
         }

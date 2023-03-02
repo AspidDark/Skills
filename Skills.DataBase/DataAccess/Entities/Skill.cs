@@ -12,6 +12,8 @@ public class Skill : BaseEntity
 
     public Character Character { get; set; }
 
-    public Guid? PhotoId { get; set; }
-    public FileEntity? Photo { get; set; }
+    public Guid? ImageId { get; set; }
+    public FileEntity? Image { get; set; }
+
+    public int IsMain { get; set; }
 }

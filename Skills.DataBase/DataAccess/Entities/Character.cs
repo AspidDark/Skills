@@ -7,11 +7,7 @@ public class Character : BaseEntity
     public  string BuildName { get; set; }
     public  DateOnly StartingDate { get; set; }
 
-    public Guid SpecialityId { get; set; }
-
-    public Skill Speciality { get; set; }
-
-    public virtual IEnumerable<Skill>? Skills { get; set; }
+    public ICollection<Skill>? Skills { get; set; }
 
     public string? Story { get; set; }
 

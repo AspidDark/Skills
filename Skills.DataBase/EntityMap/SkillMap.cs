@@ -13,15 +13,9 @@ public class SkillMap : BaseEntityMap<Skill>
         base.Configure(builder);
         builder.Property(x => x.Priority).HasColumnName("priority").IsRequired();
         builder.Property(x => x.Level).HasColumnName("level").IsRequired();
-        builder.Property(x => x.CahracterId).HasColumnName("cahracter_id").IsRequired();
-        builder.HasOne(x => x.Character).WithOne().HasForeignKey("cahracter_id");
-        builder.Property(x => x.PhotoId).HasColumnName("photo_id");
-        builder.HasOne(x => x.Photo).WithOne().HasForeignKey("photo_id");
+        builder.Property(x => x.ImageId).HasColumnName("image_id");
+        builder.HasOne(x => x.Image).WithMany().HasForeignKey("image_id");
+        builder.Property(x => x.IsMain).HasColumnName("is_main").IsRequired();
+        builder.Property(x => x.SkillName).HasColumnName("skill_name").HasMaxLength(100).IsRequired();
     }
 }
-
-
-
-
-public Guid? PhotoId { get; set; }
-public FileEntity? Photo { get; set; }
