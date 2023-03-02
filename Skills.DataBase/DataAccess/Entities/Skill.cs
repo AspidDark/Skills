@@ -2,13 +2,11 @@
 
 public class Skill : BaseEntity
 {
-    public required Guid ImageId { get; init; }
+    public int Priority { get; set; }
 
-    public required int Priority { get; init; }
+    public required string SkillName { get; set; }
 
-    public required string SkillName { get; init; }
-
-    public required int Level { get; init; }
+    public required int Level { get; set; }
 
     public Guid CahracterId { get; set; }
 
