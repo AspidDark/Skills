@@ -10,7 +10,7 @@ public class Skill : BaseEntity
 
     public Guid CahracterId { get; set; }
 
-    public Character Character { get; set; }
+    public Character Character { get; set; } = null!;
 
     public Guid? ImageId { get; set; }
     public FileEntity? Image { get; set; }
