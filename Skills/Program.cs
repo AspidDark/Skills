@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using Skills.Identity;
 using Skills.Services;
 using Swashbuckle.AspNetCore.Filters;
+using Skills.Options;
 
 internal class Program
 {
@@ -29,7 +30,14 @@ internal class Program
 
         builder.Services.AddDataAccess(configuration);
 
+        builder.Services.AddOptions<FilePathOptions>()
+            .Bind(builder.Configuration.GetSection(FilePathOptions.Path))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
         builder.Services.AddScoped<ICharacterService, CharacterService>();
+        builder.Services.AddScoped<IFileService, FileService>();
+        builder.Services.AddScoped<IFileHelper, FileHelper>();
 
 
         var app = builder.Build();
@@ -38,7 +46,10 @@ internal class Program
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Skills v1"));
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Skills v1");
+            });
         }
         else
         {

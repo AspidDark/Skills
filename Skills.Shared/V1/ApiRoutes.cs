@@ -28,6 +28,8 @@ public static class ApiRoutes
 
         public const string Get = Base + baseRoute;
 
+        public const string GetList = Base + baseRoute + "s";
+
         public const string Create = Base + baseRoute;
 
         public const string Delete = Base + baseRoute + "/{fileId}";

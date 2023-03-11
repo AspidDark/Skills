@@ -10,7 +10,8 @@ using Skills.Shared.V1.Request.Queries;
 
 namespace Skills.Controllers;
 
-[Authorize]
+//[Authorize]
+[AllowAnonymous]
 [ApiController]
 [Route("[controller]")]
 public class CharacterController : ControllerBase
@@ -34,7 +35,7 @@ public class CharacterController : ControllerBase
             var result = await _characterService.Get(entityByUserIdfilter);
 
             return result.Match<IActionResult>(
-                character => Ok(character),
+                Ok,
                 errorModel => BadRequest(errorModel.Message)
                 );
         }

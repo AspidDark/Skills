@@ -11,7 +11,7 @@ public class CharacterRequestModel
 
     public required DateOnly StartingDate { get; set; }
 
-    public required ImageRequestModel Photo { get; init; }
+    public Guid? PhotoId { get; set; }
 
     [MaxLength(9)]
     public required IEnumerable<SkillsRequestModel> Skills { get; init; }

@@ -9,8 +9,8 @@ public class SkillsRequestModel
 
     [MaxLength(50)]
     public required string SkillName{ get; init; }
-    public required Guid ImageId { get; init; }
-    [Range(0,2)]
     public required int Level { get; init; }
+    public required Guid SkillPictureId { get; init; }
+    [Range(0,2)]
     public int IsMain { get; set; }
 }

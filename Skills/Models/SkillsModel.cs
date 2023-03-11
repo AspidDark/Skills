@@ -6,7 +6,7 @@ public class SkillsModel
     public required int Priority { get; init; }
     public required string SkillName { get; init; }
     public required int Level { get; init; }
-    public ImageModel? Photo { get; init; }
+    public Guid SkillPictureId { get; init; }
     public int IsMain { get; set; }
 
 }

@@ -114,31 +114,12 @@ public class CharacterService : ICharacterService
         EditDate = DateTime.UtcNow,
         IsDeleted = 0,
         OwnerId = userId,
-        Photo = MapPhoto(model.Photo, userId),
+        PhotoId = model.PhotoId,
         Priority = model.Priority,
         StartingDate = model.StartingDate,
         Story = model.Story,
         Skills = MapSkills(model.Skills, cahracterId, userId)
     };
-
-
-    private static FileEntity? MapPhoto(ImageModel? image, Guid userId)
-    {
-        if (image is null)
-        {
-            return null;
-        }
-
-        return new()
-        {
-            CreateDate = DateTime.UtcNow,
-            EditDate = DateTime.UtcNow,
-            Id = Guid.NewGuid(),
-            IsDeleted = 0,
-            OwnerId = userId,
-            Path = image!.Path,
-        };
-    }
 
     private static List<Skill> MapSkills(IEnumerable<SkillsModel> skills, Guid characterId, Guid userId)
       => skills.Select(x => new Skill()
@@ -149,7 +130,7 @@ public class CharacterService : ICharacterService
           EditDate = DateTime.UtcNow,
           Id = Guid.NewGuid(),
           Level = x.Level,
-          Image = MapPhoto(x.Photo, userId),
+          ImageId = x.SkillPictureId,
           IsDeleted = 0,
           IsMain = x.IsMain,
           OwnerId = userId,
