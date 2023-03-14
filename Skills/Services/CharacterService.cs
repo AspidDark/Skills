@@ -2,6 +2,7 @@
 using OneOf;
 using Skills.DataBase.DataAccess;
 using Skills.DataBase.DataAccess.Entities;
+using Skills.DataBase.DataAccess.Services;
 using Skills.Models;
 using Skills.Shared.V1;
 
@@ -17,45 +18,34 @@ public interface ICharacterService
 
     Task<OneOf<Character, ErrorModel>> Update(CharacterModel model, Guid characterId, Guid userId);
 
-    Task<OneOf<int, ErrorModel>> Delete(Guid noteId, Guid userId);
+    Task<OneOf<Character, ErrorModel>> Delete(Guid noteId, Guid userId);
 }
 
 public class CharacterService : ICharacterService
 {
-    private readonly AppDbContext _appDbContext;
+    private readonly ICharacterDataService _characterDataService;
+    private readonly ISkillsDataService _skillsDataService;
 
-    public CharacterService(AppDbContext appDbContext)
+    public CharacterService(ICharacterDataService characterDataService, ISkillsDataService skillsDataService)
     {
-        _appDbContext = appDbContext;
+        _characterDataService = characterDataService;
+        _skillsDataService = skillsDataService;
     }
     public async Task<OneOf<Character, ErrorModel>> Get(ByEntityFilter filter)
     {
-        var character = await _appDbContext.Characters
-            .Include(x => x.Skills)
-            .Include(x => x.Photo)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == filter.EntityId && x.OwnerId == filter.UserId);
-
+        var character = await _characterDataService.Get(filter.EntityId, filter.UserId);
         if (character is null)
         {
             return new ErrorModel(1001, $"Character with {filter.EntityId} not found");
         }
-
         return character;
     }
 
     public async Task<OneOf<List<Character>, ErrorModel>> GetList(BaseUserIdFilter filter, PaginationFilter paginationFilter)
     {
-        var result = await _appDbContext.Characters.
-            Include(x => x.Skills)
-            .Include(x => x.Photo).Where(x => x.OwnerId == filter.UserId)
-            .OrderBy(x => x.Priority)
-            .Skip(paginationFilter.PageSize * paginationFilter.PageNumber)
-            .Take(paginationFilter.PageSize)
-            .AsNoTracking()
-            .ToListAsync();
+        var result = await _characterDataService.GetList(filter.UserId, paginationFilter.PageSize, paginationFilter.PageNumber);
 
-        if (result.Count == 0)
+        if (result is null || result.Count == 0)
         {
             return new ErrorModel(1002, $"Character with PageNumber: {paginationFilter.PageNumber} PageSize: {paginationFilter.PageSize} not found");
         }
@@ -68,14 +58,14 @@ public class CharacterService : ICharacterService
         {
             return new ErrorModel(1100, "Character model is invalid skills mismach year of expirience");
         }
-        var characterId = Guid.NewGuid();
-        var character = CharacterMap(model, characterId, userId);
+        var characterToCraate = CharacterMap(model, userId);
+        var character = await _characterDataService.Create(characterToCraate);
 
-        var savedCharacter = _appDbContext.Characters.Add(character);
+        var skillsToSave = MapSkills(model.Skills, character.Id, userId);
 
-        var saveResult = await _appDbContext.SaveChangesAsync();
-        //log
-        return savedCharacter.Entity;
+        var skills = await _skillsDataService.AddMany(skillsToSave);
+        character.Skills = skills;
+        return character;
     }
 
     public async Task<OneOf<Character, ErrorModel>> Update(CharacterModel model, Guid characterId, Guid userId)
@@ -84,31 +74,31 @@ public class CharacterService : ICharacterService
         {
             return new ErrorModel(1100, "Character model is invalid skills mismach year of expirience");
         }
-        var character = CharacterMap(model, characterId, userId);
+        var characterToUpdate = CharacterMap(model, userId);
+        var updatedCharacter = await _characterDataService.Update(characterToUpdate, characterId, userId);
 
-        var updatedCharacter = _appDbContext.Characters.Update(character);
-        var saveResult = await _appDbContext.SaveChangesAsync();
-        //log
-        return updatedCharacter.Entity;
+        var skillsToUpdate = MapSkills(model.Skills, updatedCharacter.Id, userId);
+
+        var skills = await _skillsDataService.UpdateMany(skillsToUpdate, characterId);
+        updatedCharacter.Skills =skills;
+        return updatedCharacter;
     }
 
-    public async Task<OneOf<int, ErrorModel>> Delete(Guid characterId, Guid userId)
+    public async Task<OneOf<Character, ErrorModel>> Delete(Guid characterId, Guid userId)
     {
-        var character = await _appDbContext.Characters
-           .FirstOrDefaultAsync(x => x.Id == characterId && x.OwnerId == userId);
+        var skills = await _skillsDataService.DeleteForCharacter(characterId, userId);
+        var character = await _characterDataService.Delete(characterId, userId);
         if (character is null)
         {
             return new ErrorModel(1001, $"Character with {characterId} not found");
         }
-        character.IsDeleted = 1;
-        var saveResult = await _appDbContext.SaveChangesAsync();
-        return saveResult;
+        character.Skills = skills;
+        return character;
     }
 
-    private static Character CharacterMap(CharacterModel model, Guid cahracterId, Guid userId)
+    private static Character CharacterMap(CharacterModel model, Guid userId)
     => new()
     {
-        Id = cahracterId,
         BuildName = model.BuildName,
         CreateDate = DateTime.UtcNow,
         EditDate = DateTime.UtcNow,
@@ -118,7 +108,6 @@ public class CharacterService : ICharacterService
         Priority = model.Priority,
         StartingDate = model.StartingDate,
         Story = model.Story,
-        Skills = MapSkills(model.Skills, cahracterId, userId)
     };
 
     private static List<Skill> MapSkills(IEnumerable<SkillsModel> skills, Guid characterId, Guid userId)

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Skills.DataBase.DataAccess;
+using Skills.DataBase.DataAccess.Services;
 
 namespace Skills.DataBase
 {
@@ -14,6 +15,9 @@ namespace Skills.DataBase
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
                     x => x.MigrationsAssembly("Skills.DataBase"));
             });
+
+            services.AddScoped<ISkillsDataService, SkillsDataService>();
+            services.AddScoped<ICharacterDataService, CharacterDataService>();
 
             return services;
         }

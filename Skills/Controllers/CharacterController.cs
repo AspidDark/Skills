@@ -58,7 +58,7 @@ public class CharacterController : ControllerBase
             var result = await _characterService.GetList(userIdFilter, paginationfilter);
 
             return result.Match<IActionResult>(
-                character => Ok(character),
+                Ok,
                 errorModel => BadRequest(errorModel.Message)
                 );
         }
@@ -78,7 +78,7 @@ public class CharacterController : ControllerBase
             var result = await _characterService.Create(model, userId);
 
             return result.Match<IActionResult>(
-              character => Ok(character),
+              Ok,
               errorModel => BadRequest(errorModel.Message)
               );
         }
@@ -98,7 +98,7 @@ public class CharacterController : ControllerBase
             var result = await _characterService.Update(model, characterId, userId);
 
             return result.Match<IActionResult>(
-              character => Ok(character),
+               Ok,
               errorModel => BadRequest(errorModel.Message)
               );
         }
@@ -116,7 +116,7 @@ public class CharacterController : ControllerBase
             var userId = HttpContext.GetUserId();
             var result = await _characterService.Delete(characterId, userId);
             return result.Match<IActionResult>(
-            character => Ok(character),
+            Ok,
             errorModel => BadRequest(errorModel.Message)
             );
         }

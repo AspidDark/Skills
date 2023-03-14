@@ -4,6 +4,7 @@ using Skills.Identity;
 using Skills.Services;
 using Swashbuckle.AspNetCore.Filters;
 using Skills.Options;
+using System.Text.Json.Serialization;
 
 internal class Program
 {
@@ -29,6 +30,11 @@ internal class Program
         }));
 
         builder.Services.AddDataAccess(configuration);
+
+        builder.Services.AddControllers()
+            .AddJsonOptions(o => o.JsonSerializerOptions
+                .ReferenceHandler = ReferenceHandler.Preserve);
+
 
         builder.Services.AddOptions<FilePathOptions>()
             .Bind(builder.Configuration.GetSection(FilePathOptions.Path))

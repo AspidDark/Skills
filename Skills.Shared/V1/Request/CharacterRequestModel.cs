@@ -4,7 +4,6 @@ namespace Skills.Shared.V1.Request;
 
 public class CharacterRequestModel
 {
-    public required Guid Id { get; init; }
     public required int Priority { get; init; }
     [MaxLength(100)]
     public required string BuildName { get; init; }
