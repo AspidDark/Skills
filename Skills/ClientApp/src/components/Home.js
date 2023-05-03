@@ -7,7 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 import BasicButtons from '../components/InputPart/index'
-import SimpleBadge from '../components/OutputPart/index'
+import SimpleBadge from '../components/IconsPart/index'
 
 export class Home extends Component {
   static displayName = Home.name;

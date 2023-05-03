@@ -4,8 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
 
 export default function BasicButtons() {
-  const { cahracterId } = useParams()
-  const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
 
   const handleClose = () => {
     setIsLoading(false)
