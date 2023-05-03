@@ -1,15 +1,14 @@
 import { FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import * as React from 'react';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import SkillModel from '../../models/SkillModel';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 export interface SkillDataProps{
-    skill: SkillModel
-    onSkillValueChanged: () => void
-    isLast: boolean
+    skill?: SkillModel
+    onSkillValueChanged?: () => void
+    isLast?: boolean
 }
 
 export default function SkillData(skill?: SkillDataProps) {

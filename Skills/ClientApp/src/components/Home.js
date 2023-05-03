@@ -6,8 +6,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import BasicButtons from '../components/InputPart/index'
-import SimpleBadge from '../components/OutputPart/index'
+import { InputData} from '../components/InputPart/index'
+import SimpleBadge from './IconsPart/index'
 
 export class Home extends Component {
   static displayName = Home.name;
@@ -20,7 +20,7 @@ export class Home extends Component {
             <TableBody>
               <TableRow>
                 <TableCell>
-                  <BasicButtons/></TableCell>
+                                <InputData /></TableCell>
                 <TableCell align="right">
                   <SimpleBadge/>
                 </TableCell>
