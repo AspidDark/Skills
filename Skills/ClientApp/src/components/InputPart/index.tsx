@@ -1,19 +1,10 @@
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
-import { TextField } from '@mui/material';
-import * as React from 'react';
-import dayjs, { Dayjs } from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import SkillData from '../skill'
 
-export function InputData() {
-  const { cahracterId } = useParams()
-  const [isLoading, setIsLoading] = useState(true)
-
-  const [value, setValue] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
+export default function BasicButtons() {
+    const [isLoading, setIsLoading] = useState(true)
 
   const handleClose = () => {
     setIsLoading(false)
@@ -24,17 +15,8 @@ export function InputData() {
   const navigate = useNavigate()
 
   return (
-    <>
-      <TextField id="standard-basic" label="Name" variant="standard" />
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DatePicker', 'DatePicker']}>
-        <DatePicker
-          label="Controlled picker"
-          value={value}
-          onChange={(newValue) => setValue(newValue)}
-        />
-      </DemoContainer>
-    </LocalizationProvider>
-    </>
+    <Stack spacing={2} direction="row">
+      <Button variant="text">LeftSide</Button>
+    </Stack>
   );
 }
