@@ -8,6 +8,6 @@ export default interface SkillModel extends BaseModel
     level: number
     skillPictureId: string
     isMain: number
-    image: FileModel
+    image?: FileModel
 }
 
