@@ -1,74 +1,153 @@
-import { FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
-import * as React from 'react';
-import { useState } from 'react';
-import SkillModel from '../../models/SkillModel';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import React, { useState, useEffect } from 'react'
+import { useTheme } from '@emotion/react'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import { DropResult } from 'react-beautiful-dnd'
+import DraggableList from '../DraggabeList/DraggableList'
+import { reorder } from '../DraggabeList/helpers'
+import './styles.css'
+import { v4 } from 'uuid'
+import _ from 'lodash'
+import SkillModel from '../../models/SkillModel'
+import CardHeader from '@mui/material/CardHeader'
+import TextField from '@mui/material/TextField';
+import TableCell from '@mui/material/TableCell'
+import TableRow from '@mui/material/TableRow'
+import dayjs, { Dayjs } from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Table from '@mui/material/Table'
 
-export interface SkillDataProps{
-    skill?: SkillModel
-    onSkillValueChanged?: () => void
-    isLast?: boolean
-}
+const useStyles = makeStyles({
+  flexPaper: {
+    flex: 1,
+    margin: 16,
+    minWidth: 350
+  },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  }
+})
 
-export default function SkillData(skill?: SkillDataProps) {
+export default function SkillList () {
+  const theme: any = useTheme()
+  const classes = useStyles()
+  const [name, setName] = useState('')
+  const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
+  const [skillPointCount, setskillPointCount] = useState(0)
 
-    const [skillName, setSkillName] = useState('')
 
-    const [age, setAge] = React.useState<string | number>('');
-    const [open, setOpen] = React.useState(false);
+  const [subHeadline, setSubHeadline] = useState('')
+  const [id, setId] = useState('')
+  const [isActive, setIsActive] = useState(false)
+  const [items, setItems] = useState<SkillModel[]>([{
+    id: v4(),
+    createDate: new Date(),
+    editDate: new Date(),
+    ownerId:'ownerId',
+    priority:1,
+    skillName:'skillName',
+    level:1,
+    skillPictureId: 'skillPictureId',
+    isMain:1,
+    image: undefined
+  }])
+
+  const setOrderedItems = (newItems: SkillModel[]) => {
+    const orderedItems = _.sortBy(newItems, 'priority')
+    setItems(orderedItems)
+  }
+ 
+
+  const setItem = (value: string, id: string) => {
+    const newItems = items.map(x => {
+      if (x.id === id) {
+        x.skillName = value
+      }
+      return x
+    })
+    setOrderedItems(newItems)
+  }
+
+  const deleteItem = (id: string) => {
+    const newItems = items.filter(x => {
+      if (x.id !== id) {
+        return x
+      }
+    })
+    for (let i = 0; i < newItems.length; i++) {
+      newItems[i].priority = i
+    }
+    setOrderedItems(newItems)
+  }
+
+  const addItem = () => {
+    const newitems = [...items, {
+        id: v4(),
+        createDate: new Date(),
+        editDate: new Date(),
+        ownerId:'ownerId',
+        skillName:'skillName',
+        level:1,
+        skillPictureId: 'skillPictureId',
+        isMain:1,
+        image: undefined,
+        priority: items.length
+    }]
+    setOrderedItems(newitems)
+  }
+
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    // dropped outside the list
+    if (!destination) return
+    const newItems = reorder(items, source.index, destination.index)
+    for (let i = 0; i < newItems.length; i++) {
+      newItems[i].priority = i
+    }
+    setOrderedItems(newItems)
+  }
+
+  const validateInput = async (skillId: number | '', id: string) => {
+
+  }
+
+  const setStartDateValue =(value: Dayjs | null) => {
+    setStartDate(value)
+    if(!value){
+      return
+    }
+    const now = new Date();
+    const nowYear=now.getFullYear();
+    const startYear = value.year()
+    const skillPointCount = nowYear + 1 - startYear
+    setskillPointCount(skillPointCount)
+  }
+
+
+  return (<>
+  <CardHeader>{name}</CardHeader>
+  <TextField id="standard-basic" label="Name" variant="standard" value={name} onChange={e=>setName(e.target.value)}/>
+    <Table>
+      <TableRow>
+        <TableCell align="left">
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={['DatePicker', 'DatePicker']}>
+            <DatePicker
+              label="Controlled picker"
+              value={startDate}
+              onChange={(newValue) => setStartDateValue(newValue)}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
+        </TableCell>
+        <TableCell align="right">
+        {skillPointCount===0 ? '':skillPointCount}
+        </TableCell>
+      </TableRow>
+    </Table>
   
-    const handleChange = (event: SelectChangeEvent<typeof age>) => {
-      setAge(event.target.value);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
-  
-    const handleOpen = () => {
-      setOpen(true);
-    };
-
-    return (
-       <>
-       <TableRow>
-            <TableCell>Picture here</TableCell>
-            <TableCell align="right"><TextField value={skillName} onChange={(e: any)=> setSkillName(e.target.value)} id="standard-basic" label="Standard" variant="standard" /></TableCell>
-            <TableCell align="right">  
-                <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-controlled-open-select-label">Age</InputLabel>
-                <Select
-                labelId="demo-controlled-open-select-label"
-                id="demo-controlled-open-select"
-                open={open}
-                onClose={handleClose}
-                onOpen={handleOpen}
-                value={age}
-                label="Age"
-                onChange={handleChange}
-                >
-                <MenuItem value="">
-                    <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-            </FormControl>
-            </TableCell>
-            <TableCell align="right">
-                <IconButton aria-label="delete">
-                <AddCircleOutlineIcon /> 
-                </IconButton>
-            </TableCell>
-            <TableCell align="right">
-                <IconButton aria-label="delete">
-                <RemoveCircleOutlineIcon />
-                </IconButton>
-                </TableCell>
-     </TableRow>
-       </>
-  )
-
+        <DraggableList items={items} onDragEnd={onDragEnd} setValue={setItem} deleteValue={deleteItem} addItem={addItem} validateInput={validateInput}/>
+  </>)
 }

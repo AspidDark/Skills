@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import SkillList from './skill/skillList';
+import SkillList from './skill';
 
 export class Home extends Component {
   static displayName = Home.name;
