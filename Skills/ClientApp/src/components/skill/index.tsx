@@ -8,7 +8,6 @@ import './styles.css'
 import { v4 } from 'uuid'
 import _ from 'lodash'
 import SkillModel from '../../models/SkillModel'
-import CardHeader from '@mui/material/CardHeader'
 import TextField from '@mui/material/TextField';
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
@@ -18,6 +17,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Table from '@mui/material/Table'
+
+import ImageUpload from "./ImageUpload"
+
+//https://codesandbox.io/s/vj1q68zm25?file=/src/ImageUpload.js
 
 const useStyles = makeStyles({
   flexPaper: {
@@ -126,8 +129,18 @@ export default function SkillList () {
   }
 
 
+  const galleryImageList = [
+    "https://raw.githubusercontent.com/dxyang/StyleTransfer/master/style_imgs/mosaic.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+    "https://raw.githubusercontent.com/ShafeenTejani/fast-style-transfer/master/examples/dora-maar-picasso.jpg",
+    "https://pbs.twimg.com/profile_images/925531519858257920/IyYLHp-u_400x400.jpg",
+    "https://raw.githubusercontent.com/ShafeenTejani/fast-style-transfer/master/examples/dog.jpg",
+    "http://r.ddmcdn.com/s_f/o_1/cx_462/cy_245/cw_1349/ch_1349/w_720/APL/uploads/2015/06/caturday-shutterstock_149320799.jpg"
+  ];
+
   return (<>
-  <CardHeader>{name}</CardHeader>
+  <h4>{name}</h4>
+  <ImageUpload cardName="Input Image" imageGallery={galleryImageList} />
   <TextField id="standard-basic" label="Name" variant="standard" value={name} onChange={e=>setName(e.target.value)}/>
     <Table>
       <TableRow>
