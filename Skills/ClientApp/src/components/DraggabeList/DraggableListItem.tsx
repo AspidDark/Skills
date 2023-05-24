@@ -4,7 +4,7 @@ import SkillModel from '../../models/SkillModel'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemText from '@material-ui/core/ListItemText'
+import ButtonBases from './skillImage'
 import Avatar from '@material-ui/core/Avatar'
 import InboxIcon from '@material-ui/icons/Inbox'
 import TextField from '@mui/material/TextField'
@@ -61,13 +61,9 @@ const DraggableListItem = ({ item, index, setValue, deleteValue, addItem, isLast
             sx={{ display: 'flex' }}
           >
           <Box sx={{ width: '50' }}>
-          <ListItemAvatar>
-            <Avatar>
-              <InboxIcon />
-            </Avatar>
-          </ListItemAvatar>
+          {ButtonBases('')}
           </Box>
-          <Box sx={{ width: '500', minWidth: 500 }}>
+          <Box sx={{ width: '800', minWidth: 800 }}>
           <TextField id="outlined-basic" label="Skill name" variant="outlined" value={skillText}
                                             onChange={e => setSkillText(e.target.value)}/>
           </Box>

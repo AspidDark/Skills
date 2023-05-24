@@ -148,7 +148,7 @@ export default function SkillList () {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker', 'DatePicker']}>
             <DatePicker
-              label="Controlled picker"
+              label="Starting date"
               value={startDate}
               onChange={(newValue) => setStartDateValue(newValue)}
             />
@@ -156,11 +156,10 @@ export default function SkillList () {
         </LocalizationProvider>
         </TableCell>
         <TableCell align="right">
-        {skillPointCount===0 ? '':skillPointCount}
+        {skillPointCount === 0 ? '':skillPointCount}
         </TableCell>
       </TableRow>
     </Table>
-  
-        <DraggableList items={items} onDragEnd={onDragEnd} setValue={setItem} deleteValue={deleteItem} addItem={addItem} validateInput={validateInput}/>
+  <DraggableList items={items} onDragEnd={onDragEnd} setValue={setItem} deleteValue={deleteItem} addItem={addItem} validateInput={validateInput}/>
   </>)
 }

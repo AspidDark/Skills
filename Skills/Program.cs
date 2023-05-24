@@ -5,6 +5,7 @@ using Skills.Services;
 using Swashbuckle.AspNetCore.Filters;
 using Skills.Options;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.FileProviders;
 
 internal class Program
 {
