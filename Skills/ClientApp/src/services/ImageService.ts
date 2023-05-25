@@ -1,3 +1,4 @@
+import FileModel from '../models/FileModel'
 import SkillImageModel from '../models/SkillImageModel'
 
 const images: SkillImageModel[] =
@@ -152,14 +153,25 @@ export let getAll = ():SkillImageModel[] => {
     return images
 }
 
-export let getById = (id:string):SkillImageModel | undefined => {
-    const result = images.find(x=>x.id==id)
+export const getById = (id:string):SkillImageModel => {
+    let result = images.find(x=>x.id==id)
+    if(!result){
+        result = images[0];
+    }
     return result
 }
 
-export let getRandom = ():SkillImageModel =>{
-    const result = getRandomInt(images.length)
-    return images[result]
+export const getRandomImage = ():FileModel =>{
+    const randomImageNumber = getRandomInt(images.length)
+    const randomImage = images[randomImageNumber]
+    const fileModel:FileModel ={
+        id: randomImage.id,
+        path: randomImage.url,
+        ownerId:'',
+        editDate:new Date(),
+        createDate:new Date()
+    }
+    return fileModel
 }
 
 export let getByType = (type:string):SkillImageModel[] => {

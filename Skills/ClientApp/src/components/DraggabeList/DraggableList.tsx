@@ -13,10 +13,9 @@ export interface DraggableListProps {
   setValue: (value: string, id: string) => void
   deleteValue: (id: string) => void
   addItem: () => void
-  validateInput: (skillId: number | '', id: string) => void
 }
 
-const DraggableList = React.memo(({ items, onDragEnd, setValue, deleteValue, addItem, validateInput }: DraggableListProps) => {
+const DraggableList = React.memo(({ items, onDragEnd, setValue, deleteValue, addItem }: DraggableListProps) => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable-list">
@@ -27,12 +26,12 @@ const DraggableList = React.memo(({ items, onDragEnd, setValue, deleteValue, add
                 item={item}
                 index={index}
                 key={item.id}
-                setValue={setValue}
+                setSkillName={setValue}
                 deleteValue={deleteValue}
                 addItem={addItem}
                 isLast={items.length - 1 === index}
-                validateInput={validateInput}
-                itemsLength={items.length} />
+                itemsLength={items.length}
+                />
             ))}
             {provided.placeholder}
           </div>

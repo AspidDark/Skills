@@ -19,6 +19,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Table from '@mui/material/Table'
 
 import ImageUpload from "./ImageUpload"
+import FileModel from '../../models/FileModel'
+import { getRandomImage } from '../../services/ImageService'
 
 //https://codesandbox.io/s/vj1q68zm25?file=/src/ImageUpload.js
 
@@ -55,7 +57,7 @@ export default function SkillList () {
     level:1,
     skillPictureId: 'skillPictureId',
     isMain:1,
-    image: undefined
+    image: getRandomImage()
   }])
 
   const setOrderedItems = (newItems: SkillModel[]) => {
@@ -96,8 +98,8 @@ export default function SkillList () {
         level:1,
         skillPictureId: 'skillPictureId',
         isMain:1,
-        image: undefined,
-        priority: items.length
+        image: getRandomImage(),
+        priority: items.length,
     }]
     setOrderedItems(newitems)
   }
@@ -110,10 +112,6 @@ export default function SkillList () {
       newItems[i].priority = i
     }
     setOrderedItems(newItems)
-  }
-
-  const validateInput = async (skillId: number | '', id: string) => {
-
   }
 
   const setStartDateValue =(value: Dayjs | null) => {
@@ -160,6 +158,6 @@ export default function SkillList () {
         </TableCell>
       </TableRow>
     </Table>
-  <DraggableList items={items} onDragEnd={onDragEnd} setValue={setItem} deleteValue={deleteItem} addItem={addItem} validateInput={validateInput}/>
+  <DraggableList items={items} onDragEnd={onDragEnd} setValue={setItem} deleteValue={deleteItem} addItem={addItem}/>
   </>)
 }

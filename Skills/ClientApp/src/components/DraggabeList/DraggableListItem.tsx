@@ -3,10 +3,7 @@ import { Draggable } from 'react-beautiful-dnd'
 import SkillModel from '../../models/SkillModel'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ButtonBases from './skillImage'
-import Avatar from '@material-ui/core/Avatar'
-import InboxIcon from '@material-ui/icons/Inbox'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
@@ -22,15 +19,14 @@ const useStyles = makeStyles({
 export interface DraggableListItemProps {
   item: SkillModel
   index: number
-  setValue: (value: string, id: string) => void
+  setSkillName: (value: string, id: string) => void
   deleteValue: (id: string) => void
   addItem: () => void
   isLast: boolean
-  validateInput: (skillId: number | '', id: string) => void
-  itemsLength: number
+  itemsLength: number,
 }
 
-const DraggableListItem = ({ item, index, setValue, deleteValue, addItem, isLast, validateInput, itemsLength }: DraggableListItemProps) => {
+const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, isLast, itemsLength }: DraggableListItemProps) => {
   const classes = useStyles()
 
   const [skillText, setSkillText] = useState<string>('')
@@ -42,10 +38,15 @@ const DraggableListItem = ({ item, index, setValue, deleteValue, addItem, isLast
   }
 
   const addListItem = () => {
-    if (itemsLength >= 20) {
+    if (itemsLength >= 8) {
       return
     }
     addItem()
+  }
+
+  const setSkillTextVlue =(value:string) => {
+    setSkillText(value),
+    setSkillName(value, item.id)
   }
 
   return (
@@ -61,11 +62,11 @@ const DraggableListItem = ({ item, index, setValue, deleteValue, addItem, isLast
             sx={{ display: 'flex' }}
           >
           <Box sx={{ width: '50' }}>
-          {ButtonBases('')}
+          {ButtonBases(item.image.id)}
           </Box>
           <Box sx={{ width: '800', minWidth: 800 }}>
           <TextField id="outlined-basic" label="Skill name" variant="outlined" value={skillText}
-                                            onChange={e => setSkillText(e.target.value)}/>
+                                            onChange={e => setSkillTextVlue(e.target.value)}/>
           </Box>
           <Box sx={{ width: '50' }}>
           <IconButton onClick={_ => deleteItem(item.id)}> <RemoveCircleOutlineIcon fontSize="large" /></IconButton>

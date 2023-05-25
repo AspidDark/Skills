@@ -1,9 +1,8 @@
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
-import {getById, getRandom} from '../../services/ImageService'
+import {getById} from '../../services/ImageService'
 
 const templateUrl = 'images/'
 
@@ -72,15 +71,9 @@ const ImageMarked = styled('span')(({ theme }) => ({
 }));
 
 export default function ButtonBases(id: string) {
-  let image = getRandom()
-  if(id) {
-    const imageById = getById(id)
-    if(imageById) {
-      image = imageById
-    }
-  }
+  let image = getById(id)
   const completeUrl = `${templateUrl}${image.url}`
-  console.log(completeUrl)
+
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
         <ImageButton
