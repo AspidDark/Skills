@@ -162,8 +162,10 @@ export const getById = (id:string):SkillImageModel => {
 }
 
 export const getRandomImage = ():FileModel =>{
-    const randomImageNumber = getRandomInt(images.length)
-    const randomImage = images[randomImageNumber]
+
+    const firstLevelSkill = images.filter(x=>x.level===1)
+    const randomImageNumber = getRandomInt(firstLevelSkill.length)
+    const randomImage = firstLevelSkill[randomImageNumber]
     const fileModel:FileModel ={
         id: randomImage.id,
         path: randomImage.url,

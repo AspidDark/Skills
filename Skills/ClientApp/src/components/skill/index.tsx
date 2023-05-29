@@ -21,6 +21,7 @@ import Table from '@mui/material/Table'
 import ImageUpload from "./ImageUpload"
 import FileModel from '../../models/FileModel'
 import { getRandomImage } from '../../services/ImageService'
+import { SkillLevelSelector } from '../DraggabeList/SkillLevalSelector'
 
 //https://codesandbox.io/s/vj1q68zm25?file=/src/ImageUpload.js
 
@@ -138,6 +139,7 @@ export default function SkillList () {
 
   return (<>
   <h4>{name}</h4>
+  <SkillLevelSelector></SkillLevelSelector>
   <ImageUpload cardName="Input Image" imageGallery={galleryImageList} />
   <TextField id="standard-basic" label="Name" variant="standard" value={name} onChange={e=>setName(e.target.value)}/>
     <Table>
