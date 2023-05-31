@@ -19,7 +19,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Table from '@mui/material/Table'
 
 import ImageUpload from "./ImageUpload"
-import FileModel from '../../models/FileModel'
 import { getRandomImage } from '../../services/ImageService'
 import { SkillLevelSelector } from '../DraggabeList/SkillLevalSelector'
 
@@ -43,6 +42,9 @@ export default function SkillList () {
   const [name, setName] = useState('')
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
   const [skillPointCount, setskillPointCount] = useState(0)
+
+
+  const [skillLeval, setSkillLevel] = useState(1)
 
 
   const [subHeadline, setSubHeadline] = useState('')
@@ -127,6 +129,14 @@ export default function SkillList () {
     setskillPointCount(skillPointCount)
   }
 
+  const tempSmth = (value:boolean):void =>{
+    if(value) {
+      setSkillLevel(skillLeval+1);
+      return
+    }
+    setSkillLevel(skillLeval-1)
+  }
+
 
   const galleryImageList = [
     "https://raw.githubusercontent.com/dxyang/StyleTransfer/master/style_imgs/mosaic.jpg",
@@ -139,7 +149,7 @@ export default function SkillList () {
 
   return (<>
   <h4>{name}</h4>
-  <SkillLevelSelector></SkillLevelSelector>
+  <SkillLevelSelector currentSkillLevel={skillLeval} changeSkillValue={tempSmth}></SkillLevelSelector>
   <ImageUpload cardName="Input Image" imageGallery={galleryImageList} />
   <TextField id="standard-basic" label="Name" variant="standard" value={name} onChange={e=>setName(e.target.value)}/>
     <Table>
