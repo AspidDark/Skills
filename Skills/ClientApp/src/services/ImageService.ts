@@ -161,6 +161,31 @@ export const getById = (id:string):SkillImageModel => {
     return result
 }
 
+export const getSameForOtherLevel = (id:string, isUp:boolean):FileModel => {
+    const image = images.filter(x=>x.id===id)[0]
+    const resultImages = images.filter(x=>x.type===image.type)
+    if(isUp){
+         const imageResult =  resultImages.filter(x=>x.level-1===image.level)[0]
+         const fileModel:FileModel ={
+            id: imageResult.id,
+            path: imageResult.url,
+            ownerId:'',
+            editDate:new Date(),
+            createDate:new Date()
+        }
+        return fileModel
+    }
+    const imageResult =  resultImages.filter(x=>x.level+1===image.level)[0]
+         const fileModel:FileModel ={
+            id: imageResult.id,
+            path: imageResult.url,
+            ownerId:'',
+            editDate:new Date(),
+            createDate:new Date()
+        }
+        return fileModel
+}
+
 export const getRandomImage = ():FileModel =>{
 
     const firstLevelSkill = images.filter(x=>x.level===1)

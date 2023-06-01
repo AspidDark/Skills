@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import Box from '@mui/material/Box'
+import { SkillLevelSelector } from '../DraggabeList/SkillLevalSelector'
 
 const useStyles = makeStyles({
   draggingListItem: {
@@ -24,9 +25,10 @@ export interface DraggableListItemProps {
   addItem: () => void
   isLast: boolean
   itemsLength: number,
+  changeSkillLevel: (value:boolean, id: string) => void
 }
 
-const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, isLast, itemsLength }: DraggableListItemProps) => {
+const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, isLast, itemsLength, changeSkillLevel }: DraggableListItemProps) => {
   const classes = useStyles()
 
   const [skillText, setSkillText] = useState<string>('')
@@ -49,6 +51,10 @@ const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, is
     setSkillName(value, item.id)
   }
 
+  const changeSkillLevelValue  = (value:boolean) => {
+    changeSkillLevel(value, item.id)
+  }
+
   return (
     <Draggable draggableId={item.id} index={index}>
       {(provided, snapshot) => (
@@ -64,6 +70,7 @@ const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, is
           <Box sx={{ width: '50' }}>
           {ButtonBases(item.image.id)}
           </Box>
+          <SkillLevelSelector currentSkillLevel={item.level} changeSkillValue={changeSkillLevelValue}></SkillLevelSelector>
           <Box sx={{ width: '800', minWidth: 800 }}>
           <TextField id="outlined-basic" label="Skill name" variant="outlined" value={skillText}
                                             onChange={e => setSkillTextVlue(e.target.value)}/>
@@ -72,7 +79,7 @@ const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, is
           <IconButton onClick={_ => deleteItem(item.id)}> <RemoveCircleOutlineIcon fontSize="large" /></IconButton>
           </Box>
           <Box width={50} sx={{ width: '50px' }}>
-             {isLast && <IconButton onClick={_ => addListItem()}> <AddCircleOutlineIcon fontSize="large" /></IconButton>}
+             {isLast && itemsLength < 8  && <IconButton onClick={_ => addListItem()}> <AddCircleOutlineIcon fontSize="large" /></IconButton>}
           </Box>
           <Box sx={{ width: '500' }}>
           </Box>

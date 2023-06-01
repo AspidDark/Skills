@@ -19,8 +19,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Table from '@mui/material/Table'
 
 import ImageUpload from "./ImageUpload"
-import { getRandomImage } from '../../services/ImageService'
-import { SkillLevelSelector } from '../DraggabeList/SkillLevalSelector'
+import { getRandomImage, getSameForOtherLevel } from '../../services/ImageService'
+
 
 //https://codesandbox.io/s/vj1q68zm25?file=/src/ImageUpload.js
 
@@ -43,10 +43,6 @@ export default function SkillList () {
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
   const [skillPointCount, setskillPointCount] = useState(0)
 
-
-  const [skillLeval, setSkillLevel] = useState(1)
-
-
   const [subHeadline, setSubHeadline] = useState('')
   const [id, setId] = useState('')
   const [isActive, setIsActive] = useState(false)
@@ -67,12 +63,12 @@ export default function SkillList () {
     const orderedItems = _.sortBy(newItems, 'priority')
     setItems(orderedItems)
   }
- 
 
   const setItem = (value: string, id: string) => {
     const newItems = items.map(x => {
       if (x.id === id) {
         x.skillName = value
+
       }
       return x
     })
@@ -129,13 +125,26 @@ export default function SkillList () {
     setskillPointCount(skillPointCount)
   }
 
-  const tempSmth = (value:boolean):void =>{
-    if(value) {
-      setSkillLevel(skillLeval+1);
-      return
-    }
-    setSkillLevel(skillLeval-1)
+  const changeSkillLevelValue = (value:boolean, id: string):void =>{
+    var newItems = items.map(x=>{
+      if(x.id === id) {
+        if(value){
+          
+          x.level++
+          x.image = getSameForOtherLevel(x.image.id, true)
+          return x
+        }
+        x.level--
+        x.image = getSameForOtherLevel(x.image.id, false)
+        return x
+      }
+      return x
+    })
+    setItems(newItems);
   }
+
+  useEffect(() => {
+  }, [items]);
 
 
   const galleryImageList = [
@@ -149,7 +158,6 @@ export default function SkillList () {
 
   return (<>
   <h4>{name}</h4>
-  <SkillLevelSelector currentSkillLevel={skillLeval} changeSkillValue={tempSmth}></SkillLevelSelector>
   <ImageUpload cardName="Input Image" imageGallery={galleryImageList} />
   <TextField id="standard-basic" label="Name" variant="standard" value={name} onChange={e=>setName(e.target.value)}/>
     <Table>
@@ -170,6 +178,14 @@ export default function SkillList () {
         </TableCell>
       </TableRow>
     </Table>
-  <DraggableList items={items} onDragEnd={onDragEnd} setValue={setItem} deleteValue={deleteItem} addItem={addItem}/>
+  <DraggableList 
+    items={items} 
+    onDragEnd={onDragEnd} 
+    setValue={setItem} 
+    deleteValue={deleteItem} 
+    addItem={addItem}
+    changeSkillLevel={changeSkillLevelValue}
+    />
+    
   </>)
 }
