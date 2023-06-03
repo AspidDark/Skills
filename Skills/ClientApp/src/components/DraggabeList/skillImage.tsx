@@ -74,13 +74,30 @@ export default function ButtonBases(id: string) {
   let image = getById(id)
   const completeUrl = `${templateUrl}${image.url}`
 
+  const showSkillLevel = (value:number):string => {
+    switch (value){
+      case 1 : {
+        return 'Junior'
+      }
+      case 2 : {
+        return 'Middle'
+      }
+      case 3 : {
+        return 'Senior'
+      }
+      default : {
+        return ''
+      }
+    }
+  }
+
   return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 100, maxWidth: 100, width: '100%' }}>
         <ImageButton
           focusRipple
           key={image.title}
           style={{
-            width: '40%',
+            width: '100%',
           }}
         >
           <ImageSrc style={{ backgroundImage: `url(${completeUrl})` }} />
@@ -97,7 +114,7 @@ export default function ButtonBases(id: string) {
                 pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
               }}
             >
-              {image.title}
+              {showSkillLevel(image.level)}
               <ImageMarked className="MuiImageMarked-root" />
             </Typography>
           </Image>

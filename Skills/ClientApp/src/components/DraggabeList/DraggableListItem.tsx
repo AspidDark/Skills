@@ -72,7 +72,7 @@ const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, is
           </Box>
           <SkillLevelSelector currentSkillLevel={item.level} changeSkillValue={changeSkillLevelValue}></SkillLevelSelector>
           <Box sx={{ width: '800', minWidth: 800 }}>
-          <TextField id="outlined-basic" label="Skill name" variant="outlined" value={skillText}
+          <TextField id="standard-basic" label="Skill" variant="standard" value={skillText}
                                             onChange={e => setSkillTextVlue(e.target.value)}/>
           </Box>
           <Box sx={{ width: '50' }}>

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
@@ -30,31 +28,25 @@ export const SkillLevelSelector = ({currentSkillLevel, changeSkillValue}:SkillLe
 
   const isValidDown = ():boolean =>(currentSkillLevel-1 >= 1)
 
-    
-    const Item = styled(Paper)(({ theme }) => ({
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-      }));
 
       return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ maxHeight: 90, maxWidth: 50, minWidth:50 }}>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <h5>{currentSkillLevel}</h5>
-            </Grid>
                 <Grid item xs={6}>
                 <Grid container spacing={1} >
                     <Grid item xs={12}>
+                      <Box sx={{width:30, minWidth:30, height:40, minHeight:40 }}>
                       {isValidUp() && <IconButton onClick={_ => changeLevel(true)}>
                         <KeyboardArrowUpIcon />
                       </IconButton>}
+                      </Box>
                     </Grid>
                     <Grid item xs={12}>
+                    <Box sx={{width:30, height:40  }}>
                       {isValidDown() &&  <IconButton onClick={_ => changeLevel(false)}>
                         <KeyboardArrowDownIcon />
                       </IconButton>}
+                      </Box>
                     </Grid>
                 </Grid>
                 </Grid>
