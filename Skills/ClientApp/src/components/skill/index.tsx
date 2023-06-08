@@ -6,22 +6,37 @@ import DraggableList from '../DraggabeList/DraggableList'
 import { reorder } from '../DraggabeList/helpers'
 import './styles.css'
 import { v4 } from 'uuid'
-import _ from 'lodash'
+import _, { forIn } from 'lodash'
 import SkillModel from '../../models/SkillModel'
-import TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import dayjs, { Dayjs } from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs, { Dayjs } from 'dayjs'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import Table from '@mui/material/Table'
+
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography'
 
 import ImageUpload from "./ImageUpload"
 import { getRandomImage, getSameForOtherLevel } from '../../services/ImageService'
+import Box from '@mui/material/Box/Box'
+import { Button } from '@mui/material'
 
-
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 //https://codesandbox.io/s/vj1q68zm25?file=/src/ImageUpload.js
 
 const useStyles = makeStyles({
@@ -41,11 +56,13 @@ export default function SkillList () {
   const classes = useStyles()
   const [name, setName] = useState('')
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
-  const [skillPointCount, setskillPointCount] = useState(0)
+  const [skillPointCount, setskillPointCount] = useState(1)
+  const [existingImages, setExistingImages] = useState<string[]>([''])
 
-  const [subHeadline, setSubHeadline] = useState('')
-  const [id, setId] = useState('')
-  const [isActive, setIsActive] = useState(false)
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const [items, setItems] = useState<SkillModel[]>([{
     id: v4(),
     createDate: new Date(),
@@ -56,19 +73,18 @@ export default function SkillList () {
     level:1,
     skillPictureId: 'skillPictureId',
     isMain:1,
-    image: getRandomImage()
+    image: getRandomImage(existingImages)
   }])
 
   const setOrderedItems = (newItems: SkillModel[]) => {
     const orderedItems = _.sortBy(newItems, 'priority')
-    setItems(orderedItems)
+    setCahngedItems(orderedItems)
   }
 
   const setItem = (value: string, id: string) => {
     const newItems = items.map(x => {
       if (x.id === id) {
         x.skillName = value
-
       }
       return x
     })
@@ -80,6 +96,7 @@ export default function SkillList () {
       if (x.id !== id) {
         return x
       }
+      setskillPointCount(skillPointCount+x.level)
     })
     for (let i = 0; i < newItems.length; i++) {
       newItems[i].priority = i
@@ -88,7 +105,8 @@ export default function SkillList () {
   }
 
   const addItem = () => {
-    const newitems = [...items, {
+    if(skillPointCount >= 1){
+      const newitems = [...items, {
         id: v4(),
         createDate: new Date(),
         editDate: new Date(),
@@ -97,10 +115,12 @@ export default function SkillList () {
         level:1,
         skillPictureId: 'skillPictureId',
         isMain:1,
-        image: getRandomImage(),
+        image: getRandomImage(existingImages),
         priority: items.length,
-    }]
-    setOrderedItems(newitems)
+      }]
+      setOrderedItems(newitems)
+      setskillPointCount(skillPointCount-1)
+    }
   }
 
   const onDragEnd = ({ destination, source }: DropResult) => {
@@ -121,26 +141,72 @@ export default function SkillList () {
     const now = new Date();
     const nowYear=now.getFullYear();
     const startYear = value.year()
-    const skillPointCount = nowYear + 1 - startYear
+    let skillPointCount = nowYear - startYear
+
+    let newItems = new Array<SkillModel>()
+
+    for (let item of items)
+    {
+      if(skillPointCount - item.level >=0 ) {
+        skillPointCount -= item.level
+        newItems.push(item)
+        continue
+      }
+      break
+    }
+
+    const firstItem =items[0]
+    
+    if(newItems.length===0) {
+      newItems = [{
+        id: firstItem.id,
+        createDate: firstItem.createDate,
+        editDate: firstItem.editDate,
+        ownerId:firstItem.ownerId,
+        priority:1,
+        skillName:firstItem.skillName,
+        level:1,
+        skillPictureId: firstItem.skillPictureId,
+        isMain:1,
+        image: firstItem.image
+      }]
+      
+    }
+    setCahngedItems(newItems)
     setskillPointCount(skillPointCount)
+  }
+
+  const setCahngedItems = (value: SkillModel[]) =>{
+    setUsedImageTypes(value)
+    setItems(value)
   }
 
   const changeSkillLevelValue = (value:boolean, id: string):void =>{
     var newItems = items.map(x=>{
       if(x.id === id) {
         if(value){
-          
-          x.level++
-          x.image = getSameForOtherLevel(x.image.id, true)
+          if(skillPointCount>=1)
+          {
+            x.level++
+            x.image = getSameForOtherLevel(x.image.id, true)
+            setskillPointCount(skillPointCount-1)
+            return x
+          }
           return x
         }
         x.level--
         x.image = getSameForOtherLevel(x.image.id, false)
+        setskillPointCount(skillPointCount+1)
         return x
       }
       return x
     })
-    setItems(newItems);
+    setCahngedItems(newItems)
+  }
+
+  const setUsedImageTypes = (skillModels:SkillModel[]) =>{
+    const usedImages = skillModels.map(x=>x.image.type)
+    setExistingImages(usedImages)
   }
 
   useEffect(() => {
@@ -174,7 +240,8 @@ export default function SkillList () {
         </LocalizationProvider>
         </TableCell>
         <TableCell align="right">
-        {skillPointCount === 0 ? '':skillPointCount}
+          Skill Points
+        {skillPointCount}
         </TableCell>
       </TableRow>
     </Table>
@@ -186,6 +253,21 @@ export default function SkillList () {
     addItem={addItem}
     changeSkillLevel={changeSkillLevelValue}
     />
-    
+    <Button onClick={handleOpen}>Open modal</Button>
+    <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>
   </>)
 }

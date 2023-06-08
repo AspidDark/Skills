@@ -1,5 +1,6 @@
 import { BaseModel } from "./BaseModel"
 import FileModel from "./FileModel"
+import SkillImageModel from "./SkillImageModel"
 
 export default interface SkillModel extends BaseModel
 {
@@ -8,6 +9,6 @@ export default interface SkillModel extends BaseModel
     level: number
     skillPictureId: string
     isMain: number
-    image: FileModel
+    image: SkillImageModel
 }
 
