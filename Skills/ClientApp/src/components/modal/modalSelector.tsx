@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
-import {getById} from '../../services/ImageService'
+import SkillImageModel from '../../models/SkillImageModel';
 
 const templateUrl = 'images/'
 
@@ -70,56 +70,49 @@ const ImageMarked = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
-export default function ButtonBases(id: string, onImageButtonClick : (id:string, level: number, type:string) => void) {
-  let image = getById(id)
-  const completeUrl = `${templateUrl}${image.url}`
 
-  const showSkillLevel = (value:number):string => {
-    switch (value){
-      case 1 : {
-        return 'Junior'
-      }
-      case 2 : {
-        return 'Middle'
-      }
-      case 3 : {
-        return 'Senior'
-      }
-      default : {
-        return ''
-      }
-    }
+
+export const modalSelector = (skillImageModels:SkillImageModel[] | undefined, onSelectedImageClick:(skillModel:SkillImageModel)=>void) => {
+  if(!skillImageModels)
+  {
+    return  <>Error</>
   }
-
-  return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 100, maxWidth: 100, width: '100%' }}>
-        <ImageButton
-          focusRipple
-          key={image.title}
-          style={{
-            width: '100%',
-          }}
-          onClick={() => onImageButtonClick(image.id, image.level, image.type)}
-        >
-          <ImageSrc style={{ backgroundImage: `url(${completeUrl})` }} />
-          <ImageBackdrop className="MuiImageBackdrop-root" />
-          <Image>
-            <Typography
-              component="span"
-              variant="subtitle1"
-              color="inherit"
-              sx={{
-                position: 'relative',
-                p: 4,
-                pt: 2,
-                pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-              }}
-            >
-              {showSkillLevel(image.level)}
-              <ImageMarked className="MuiImageMarked-root" />
-            </Typography>
-          </Image>
-        </ImageButton>
-    </Box>
-  );
-}
+        return (
+            <>
+            Text from map
+            {skillImageModels[0].type}
+        </>
+        );
+    }
+    
+    
+    /*
+ <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 100, maxWidth: 100, width: '100%' }}>
+                 <ImageButton
+                   focusRipple
+                   key={x.id}
+                   style={{
+                     width: '100%',
+                   }}
+                   onClick={() => onSelectedImageClick(x)}
+                 >
+                   <ImageSrc style={{ backgroundImage: `url(${templateUrl}${x.url})` }} />
+                   <ImageBackdrop className="MuiImageBackdrop-root" />
+                   <Image>
+                     <Typography
+                       component="span"
+                       variant="subtitle1"
+                       color="inherit"
+                       sx={{
+                         position: 'relative',
+                         p: 4,
+                         pt: 2,
+                         pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
+                       }}
+                     >
+                       <ImageMarked className="MuiImageMarked-root" />
+                     </Typography>
+                   </Image>
+                 </ImageButton>
+             </Box>
+    */

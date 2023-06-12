@@ -26,9 +26,10 @@ export interface DraggableListItemProps {
   isLast: boolean
   itemsLength: number,
   changeSkillLevel: (value:boolean, id: string) => void
+  onImageButtonClick : (id:string, level: number, type:string) => void
 }
 
-const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, isLast, itemsLength, changeSkillLevel }: DraggableListItemProps) => {
+const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, isLast, itemsLength, changeSkillLevel, onImageButtonClick }: DraggableListItemProps) => {
   const classes = useStyles()
 
   const [skillText, setSkillText] = useState<string>('')
@@ -68,7 +69,7 @@ const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, is
             sx={{ display: 'flex' }}
           >
           <Box sx={{ width: '50' }}>
-          {ButtonBases(item.image.id)}
+          {ButtonBases(item.image.id, onImageButtonClick)}
           </Box>
           <SkillLevelSelector currentSkillLevel={item.level} changeSkillValue={changeSkillLevelValue}></SkillLevelSelector>
           <Box sx={{ width: '800', minWidth: 800 }}>

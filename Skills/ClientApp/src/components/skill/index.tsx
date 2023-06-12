@@ -22,9 +22,11 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography'
 
 import ImageUpload from "./ImageUpload"
-import { getRandomImage, getSameForOtherLevel } from '../../services/ImageService'
+import { getRandomImage, getSameForOtherLevel, getByLevel } from '../../services/ImageService'
 import Box from '@mui/material/Box/Box'
 import { Button } from '@mui/material'
+import { modalSelector } from '../modal/modalSelector'
+import SkillImageModel from '../../models/SkillImageModel'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -58,10 +60,13 @@ export default function SkillList () {
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
   const [skillPointCount, setskillPointCount] = useState(1)
   const [existingImages, setExistingImages] = useState<string[]>([''])
+  const [unusedImages, setUnusedImages] = useState<SkillImageModel[]>()
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [imageIdToChange, setImageIdToChange] = useState('')
 
   const [items, setItems] = useState<SkillModel[]>([{
     id: v4(),
@@ -209,6 +214,29 @@ export default function SkillList () {
     setExistingImages(usedImages)
   }
 
+const onImageButtonClick = (id:string, level: number, type:string) =>{
+  const imagesOfSameLevel = getByLevel(level)
+  const unusedImages = imagesOfSameLevel.filter(x=>{
+    if(!existingImages.some(y => y===x.type)){
+      return x
+    }
+  })
+  setImageIdToChange(id)
+  setUnusedImages(unusedImages)
+  handleOpen()
+}
+
+const changeImaage = (newSkillModel:SkillImageModel) => {
+  const newItems = items.map(x=> {
+    if(x.id === imageIdToChange){
+      x.image = newSkillModel 
+    }
+    return x
+  })
+  setCahngedItems(newItems)
+}
+
+
   useEffect(() => {
   }, [items]);
 
@@ -252,6 +280,7 @@ export default function SkillList () {
     deleteValue={deleteItem} 
     addItem={addItem}
     changeSkillLevel={changeSkillLevelValue}
+    onImageButtonClick={onImageButtonClick}
     />
     <Button onClick={handleOpen}>Open modal</Button>
     <Modal
@@ -262,10 +291,7 @@ export default function SkillList () {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          {modalSelector(unusedImages, changeImaage)}
           </Typography>
         </Box>
       </Modal>

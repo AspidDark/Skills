@@ -714,8 +714,13 @@ export const getRandomImage = (existingTypes: string []):SkillImageModel =>{
     return randomImage
 }
 
-export let getByType = (type:string):SkillImageModel[] => {
+export const getByType = (type:string):SkillImageModel[] => {
     const result = images.filter(x=>x.type===type)
+    return result
+}
+
+export const getByLevel = (level:number):SkillImageModel[] =>{
+    const result = images.filter(x=> x.level ===level)
     return result
 }
 
