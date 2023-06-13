@@ -4,6 +4,10 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import SkillImageModel from '../../models/SkillImageModel';
 
+import * as React from 'react';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+
 const templateUrl = 'images/'
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
@@ -71,23 +75,63 @@ const ImageMarked = styled('span')(({ theme }) => ({
 }));
 
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 export const modalSelector = (skillImageModels:SkillImageModel[] | undefined, onSelectedImageClick:(skillModel:SkillImageModel)=>void) => {
   if(!skillImageModels)
   {
     return  <>Error</>
   }
-        return (
-            <>
-            Text from map
-            {skillImageModels[0].type}
-        </>
+  return (
+          <Box sx={{ width: '100%' }}>
+          <Grid container spacing={10}>
+  {skillImageModels.map(item => (
+    <Grid item xs={12} md key={item.id}>  
+       <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 100, maxWidth: 100, width: '100%' }}>
+                 <ImageButton
+                   focusRipple
+                   key={item.type}
+                   style={{
+                     width: '100%',
+                   }}
+                   onClick={() => onSelectedImageClick(item)}
+                 >
+                   <ImageSrc style={{ backgroundImage: `url(${templateUrl}${item.url})` }} />
+                   <ImageBackdrop className="MuiImageBackdrop-root" />
+                   <Image>
+                     <Typography
+                       component="span"
+                       variant="subtitle1"
+                       color="inherit"
+                       sx={{
+                         position: 'relative',
+                         p: 4,
+                         pt: 2,
+                         pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
+                       }}
+                     >
+                       <ImageMarked className="MuiImageMarked-root" />
+                     </Typography>
+                   </Image>
+                 </ImageButton>
+             </Box>
+    </Grid>
+  ))}
+</Grid>
+    </Box>
         );
     }
     
     
     /*
- <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 100, maxWidth: 100, width: '100%' }}>
+             {skillImageModels.map(x=>{
+           <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 100, maxWidth: 100, width: '100%' }}>
                  <ImageButton
                    focusRipple
                    key={x.id}
@@ -115,4 +159,5 @@ export const modalSelector = (skillImageModels:SkillImageModel[] | undefined, on
                    </Image>
                  </ImageButton>
              </Box>
+            })}
     */

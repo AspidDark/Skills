@@ -33,13 +33,12 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 1000,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
-//https://codesandbox.io/s/vj1q68zm25?file=/src/ImageUpload.js
 
 const useStyles = makeStyles({
   flexPaper: {
@@ -226,14 +225,15 @@ const onImageButtonClick = (id:string, level: number, type:string) =>{
   handleOpen()
 }
 
-const changeImaage = (newSkillModel:SkillImageModel) => {
+const changeImage = (newSkillModel:SkillImageModel) => {
   const newItems = items.map(x=> {
-    if(x.id === imageIdToChange){
+    if(x.image.id === imageIdToChange){
       x.image = newSkillModel 
     }
     return x
   })
   setCahngedItems(newItems)
+  handleClose()
 }
 
 
@@ -291,7 +291,7 @@ const changeImaage = (newSkillModel:SkillImageModel) => {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-          {modalSelector(unusedImages, changeImaage)}
+          {modalSelector(unusedImages, changeImage)}
           </Typography>
         </Box>
       </Modal>
