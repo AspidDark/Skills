@@ -24,7 +24,6 @@ import Typography from '@mui/material/Typography'
 import ImageUpload from "./ImageUpload"
 import { getRandomImage, getSameForOtherLevel, getByLevel } from '../../services/ImageService'
 import Box from '@mui/material/Box/Box'
-import { Button } from '@mui/material'
 import { modalSelector } from '../modal/modalSelector'
 import SkillImageModel from '../../models/SkillImageModel'
 
@@ -33,7 +32,8 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 1000,
+  width:650,
+  height:'flex',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -60,6 +60,7 @@ export default function SkillList () {
   const [skillPointCount, setskillPointCount] = useState(1)
   const [existingImages, setExistingImages] = useState<string[]>([''])
   const [unusedImages, setUnusedImages] = useState<SkillImageModel[]>()
+  const [modalHeight, setModalHeight ] = useState(770)
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -82,7 +83,7 @@ export default function SkillList () {
 
   const setOrderedItems = (newItems: SkillModel[]) => {
     const orderedItems = _.sortBy(newItems, 'priority')
-    setCahngedItems(orderedItems)
+    setChangedItems(orderedItems)
   }
 
   const setItem = (value: string, id: string) => {
@@ -176,13 +177,14 @@ export default function SkillList () {
       }]
       
     }
-    setCahngedItems(newItems)
+    setOrderedItems(newItems)
     setskillPointCount(skillPointCount)
   }
 
-  const setCahngedItems = (value: SkillModel[]) =>{
+  const setChangedItems = (value: SkillModel[]) =>{
     setUsedImageTypes(value)
     setItems(value)
+    ///
   }
 
   const changeSkillLevelValue = (value:boolean, id: string):void =>{
@@ -205,7 +207,7 @@ export default function SkillList () {
       }
       return x
     })
-    setCahngedItems(newItems)
+    setOrderedItems(newItems)
   }
 
   const setUsedImageTypes = (skillModels:SkillModel[]) =>{
@@ -215,13 +217,13 @@ export default function SkillList () {
 
 const onImageButtonClick = (id:string, level: number, type:string) =>{
   const imagesOfSameLevel = getByLevel(level)
-  const unusedImages = imagesOfSameLevel.filter(x=>{
+  const newUnusedImages = imagesOfSameLevel.filter(x=>{
     if(!existingImages.some(y => y===x.type)){
       return x
     }
   })
   setImageIdToChange(id)
-  setUnusedImages(unusedImages)
+  setUnusedImages(newUnusedImages)
   handleOpen()
 }
 
@@ -232,14 +234,38 @@ const changeImage = (newSkillModel:SkillImageModel) => {
     }
     return x
   })
-  setCahngedItems(newItems)
+  setChangedItems(newItems)
   handleClose()
 }
 
+const changeModalSize = () =>{
+  if(items.length >= 8 ){
+    setModalHeight(530)
+    return
+  }
+  if(items.length >= 3){
+    setModalHeight(650)
+    return
+  }
+  setModalHeight(770)
+}
+
+  useEffect(()=>{
+    changeModalSize()
+    if(items[0]){
+      const imagesOfSameLevel = getByLevel(items[0].level)
+      const newUnusedImages = imagesOfSameLevel.filter(x=>{
+        if(!existingImages.some(y => y===x.type)){
+          return x
+        }
+      })
+      setUnusedImages(newUnusedImages)
+    }
+  },[])
 
   useEffect(() => {
+    changeModalSize()
   }, [items]);
-
 
   const galleryImageList = [
     "https://raw.githubusercontent.com/dxyang/StyleTransfer/master/style_imgs/mosaic.jpg",
@@ -282,14 +308,13 @@ const changeImage = (newSkillModel:SkillImageModel) => {
     changeSkillLevel={changeSkillLevelValue}
     onImageButtonClick={onImageButtonClick}
     />
-    <Button onClick={handleOpen}>Open modal</Button>
     <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+      <Box sx={{...style, height:modalHeight}}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
           {modalSelector(unusedImages, changeImage)}
           </Typography>

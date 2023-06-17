@@ -1,12 +1,9 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
-import Typography from '@mui/material/Typography';
 import SkillImageModel from '../../models/SkillImageModel';
 
-import * as React from 'react';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 
 const templateUrl = 'images/'
 
@@ -41,18 +38,6 @@ const ImageSrc = styled('span')({
   backgroundPosition: 'center 40%',
 });
 
-const Image = styled('span')(({ theme }) => ({
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  top: 0,
-  bottom: 0,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: theme.palette.common.white,
-}));
-
 const ImageBackdrop = styled('span')(({ theme }) => ({
   position: 'absolute',
   left: 0,
@@ -64,25 +49,6 @@ const ImageBackdrop = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
-const ImageMarked = styled('span')(({ theme }) => ({
-  height: 3,
-  width: 18,
-  backgroundColor: theme.palette.common.white,
-  position: 'absolute',
-  bottom: -2,
-  left: 'calc(50% - 9px)',
-  transition: theme.transitions.create('opacity'),
-}));
-
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
 export const modalSelector = (skillImageModels:SkillImageModel[] | undefined, onSelectedImageClick:(skillModel:SkillImageModel)=>void) => {
   if(!skillImageModels)
   {
@@ -92,8 +58,8 @@ export const modalSelector = (skillImageModels:SkillImageModel[] | undefined, on
           <Box sx={{ width: '100%' }}>
           <Grid container spacing={10}>
   {skillImageModels.map(item => (
-    <Grid item xs={12} md key={item.id}>  
-       <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 100, maxWidth: 100, width: '100%' }}>
+    <Grid item xs={2} key={item.id} width={100} height={100} >  
+       <Box sx={{ width: 100 }}>
                  <ImageButton
                    focusRipple
                    key={item.type}
@@ -104,21 +70,6 @@ export const modalSelector = (skillImageModels:SkillImageModel[] | undefined, on
                  >
                    <ImageSrc style={{ backgroundImage: `url(${templateUrl}${item.url})` }} />
                    <ImageBackdrop className="MuiImageBackdrop-root" />
-                   <Image>
-                     <Typography
-                       component="span"
-                       variant="subtitle1"
-                       color="inherit"
-                       sx={{
-                         position: 'relative',
-                         p: 4,
-                         pt: 2,
-                         pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-                       }}
-                     >
-                       <ImageMarked className="MuiImageMarked-root" />
-                     </Typography>
-                   </Image>
                  </ImageButton>
              </Box>
     </Grid>
@@ -130,34 +81,25 @@ export const modalSelector = (skillImageModels:SkillImageModel[] | undefined, on
     
     
     /*
-             {skillImageModels.map(x=>{
-           <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 100, maxWidth: 100, width: '100%' }}>
+               <Box sx={{ width: '100%' }}>
+          <Grid container spacing={10}>
+  {skillImageModels.map(item => (
+    <Grid item xs={2} key={item.id} width={100} height={110} >  
+       <Box sx={{ display: 'flex', flexWrap: 'wrap', width: 100 }}>
                  <ImageButton
                    focusRipple
-                   key={x.id}
+                   key={item.type}
                    style={{
                      width: '100%',
                    }}
-                   onClick={() => onSelectedImageClick(x)}
+                   onClick={() => onSelectedImageClick(item)}
                  >
-                   <ImageSrc style={{ backgroundImage: `url(${templateUrl}${x.url})` }} />
+                   <ImageSrc style={{ backgroundImage: `url(${templateUrl}${item.url})` }} />
                    <ImageBackdrop className="MuiImageBackdrop-root" />
-                   <Image>
-                     <Typography
-                       component="span"
-                       variant="subtitle1"
-                       color="inherit"
-                       sx={{
-                         position: 'relative',
-                         p: 4,
-                         pt: 2,
-                         pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-                       }}
-                     >
-                       <ImageMarked className="MuiImageMarked-root" />
-                     </Typography>
-                   </Image>
                  </ImageButton>
              </Box>
-            })}
+    </Grid>
+  ))}
+</Grid>
+    </Box>
     */
