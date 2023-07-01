@@ -13,7 +13,7 @@ namespace Skills.Controllers;
 //[Authorize]
 [AllowAnonymous]
 [ApiController]
-[Route("[controller]")]
+//[Route("[controller]")]
 public class CharacterController : ControllerBase
 {
     private readonly IMapper _mapper;

@@ -3,7 +3,7 @@ import SkillImageModel from '../models/SkillImageModel'
 const images: SkillImageModel[] =
 [
     {
-        id:'1',
+        id:'32314d2e-3d80-4e29-b6b5-ecb427e7293f',
         level: 2,
         type: 'AirMagic',
         url:'AirMagicAdvanced.jpg',
@@ -11,7 +11,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'2',
+        id:'49560821-f46c-456e-8b65-3d92976a2256',
         level: 1,
         type: 'AirMagic',
         url:'AirMagicBasic.jpg',
@@ -19,7 +19,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'3',
+        id:'e9df7455-c004-4b20-bba0-e151538e118a',
         level: 3,
         type: 'AirMagic',
         url:'AirMagicExpert.jpg',
@@ -27,7 +27,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'4',
+        id:'01829ea0-3c5e-4e36-b33c-f9632f3be1d4',
         level: 2,
         type: 'arch',
         url:'ArcheryAdvanced.jpg',
@@ -35,7 +35,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'5',
+        id:'d7c7fc00-bba8-419f-a96a-18be6a41f272',
         level: 1,
         type: 'arch',
         url:'ArcheryBasic.jpg',
@@ -43,7 +43,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'6',
+        id:'34b4b8ec-6d99-4f38-b071-dcb70c411be6',
         level: 3,
         type: 'arch',
         url:'ArcheryExpert.jpg',
@@ -51,7 +51,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'7',
+        id:'27034e6d-c4ce-42d8-8e31-09845716fc3b',
         level: 2,
         type: 'arm',
         url:'ArmorerAdvanced.jpg',
@@ -59,7 +59,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'8',
+        id:'f902a90d-6eab-4aef-a8d6-c8b92cff4922',
         level: 1,
         type: 'arm',
         url:'ArmorerBasic.jpg',
@@ -67,7 +67,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'9',
+        id:'b151ba5a-dc6e-445c-b4a2-ae6723141a7f',
         level: 3,
         type: 'arm',
         url:'ArmorerExpert.jpg',
@@ -75,7 +75,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'10',
+        id:'f96b6c21-a358-4bfe-89b1-d12a015871e6',
         level: 2,
         type: 'art',
         url:'ArtilleryAdvanced.jpg',
@@ -83,7 +83,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'11',
+        id:'f35a5065-3c2b-4879-80d3-e8b698138d8d',
         level: 1,
         type: 'art',
         url:'ArtilleryBasic.jpg',
@@ -91,7 +91,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'12',
+        id:'45f88a68-7ee1-43e9-bb4f-01c77df05337',
         level: 3,
         type: 'art',
         url:'ArtilleryExpert.jpg',
@@ -99,7 +99,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'13',
+        id:'eda3b272-7336-4e22-91c6-67fdfe9eb621',
         level: 2,
         type: 'bal',
         url:'BallisticsAdvanced.jpg',
@@ -107,7 +107,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'14',
+        id:'a08bf445-794e-4595-a4a2-998077e6ccbe',
         level: 1,
         type: 'bal',
         url:'BallisticsBasic.jpg',
@@ -115,7 +115,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'15',
+        id:'da2d92cc-240c-4d9c-8544-39105d4efccc',
         level: 3,
         type: 'bal',
         url:'BallisticsExpert.jpg',
@@ -131,7 +131,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'17',
+        id:'63da3e77-8331-4ba7-88aa-439c6657b674',
         level: 1,
         type: 'dip',
         url:'DiplomacyBasic.jpg',
@@ -139,7 +139,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'18',
+        id:'e4a8637f-cb17-492f-9a88-64068c1706dc',
         level: 3,
         type: 'dip',
         url:'DiplomacyExpert.jpg',
@@ -147,7 +147,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'19',
+        id:'32b0aacb-3d28-4860-9815-075a5e2f2298f',
         level: 2,
         type: 'eag',
         url:'EagleEyeAdvanced.jpg',
@@ -155,7 +155,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'20',
+        id:'bcbd93f7-3041-483f-9232-8d9a83933f3a',
         level: 1,
         type: 'eag',
         url:'EagleEyeBasic.jpg',
@@ -163,7 +163,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'21',
+        id:'dc740cf6-5ab3-4414-a9b1-1314efb0669e',
         level: 3,
         type: 'eag',
         url:'EagleEyeExpert.jpg',
@@ -171,7 +171,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'22',
+        id:'ee11f4a0-038e-4321-b324-924304fb67aa',
         level: 2,
         type: 'ear',
         url:'EarthMagicAdvanced.jpg',
@@ -179,7 +179,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'23',
+        id:'7f3068a0-c340-46b5-834d-bf63a601faae',
         level: 1,
         type: 'ear',
         url:'EarthMagicBasic.jpg',
@@ -187,7 +187,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'24',
+        id:'63baf0bb-2bcb-40a5-94ed-d7fcf7dd0591',
         level: 3,
         type: 'ear',
         url:'EarthMagicExpert.jpg',
@@ -195,7 +195,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'25',
+        id:'e6b81997-3451-433c-8f3b-0bf62aa8c941',
         level: 2,
         type: 'est',
         url:'EstatesAdvanced.jpg',
@@ -203,7 +203,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'26',
+        id:'ffbcfda7-e997-4846-be65-177e3f41d6d6',
         level: 1,
         type: 'est',
         url:'EstatesBasic.jpg',
@@ -211,7 +211,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'27',
+        id:'bb889175-d4e0-4463-936c-54d8766b7dff',
         level: 3,
         type: 'est',
         url:'EstatesExpert.jpg',
@@ -219,7 +219,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'28',
+        id:'585f96dc-3b13-4e92-bf25-d80c3a7c102c',
         level: 2,
         type: 'fir',
         url:'FireMagicAdvanced.jpg',
@@ -227,7 +227,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'29',
+        id:'96dda211-7e57-4347-b3d4-6625991a80cf',
         level: 1,
         type: 'fir',
         url:'FireMagicBasic.jpg',
@@ -235,7 +235,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'30',
+        id:'7388af3a-70da-4f43-bb6b-8dc62b05321e',
         level: 3,
         type: 'fir',
         url:'FireMagicExpert.jpg',
@@ -243,7 +243,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'31',
+        id:'4ab9d3e0-9d15-4496-b04e-634dada20e5c',
         level: 2,
         type: 'fai',
         url:'FirstAidAdvanced.jpg',
@@ -251,7 +251,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'32',
+        id:'95df5bea-96b0-436f-9f90-cab11ca1ddfb',
         level: 1,
         type: 'fai',
         url:'FirstAidBasic.jpg',
@@ -259,7 +259,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'33',
+        id:'8d143023-0c2f-4281-acab-1871575fd96d',
         level: 3,
         type: 'fai',
         url:'FirstAidExpert.jpg',
@@ -267,7 +267,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'34',
+        id:'0f3d00a3-5deb-4cd1-a724-3d02c24c67bc',
         level: 2,
         type: 'int',
         url:'IntelligenceAdvanced.jpg',
@@ -275,7 +275,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'35',
+        id:'cf71eabd-6c8b-4b0d-97ff-28e4039e406a',
         level: 1,
         type: 'int',
         url:'IntelligenceBasic.jpg',
@@ -283,7 +283,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'36',
+        id:'31f251f3-77b7-44ff-906d-ae95c6792c18',
         level: 3,
         type: 'int',
         url:'IntelligenceExpert.jpg',
@@ -291,7 +291,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'37',
+        id:'bf7400b0-677b-45e7-892a-425e09e5e133',
         level: 2,
         type: 'lea',
         url:'LeadershipAdvanced.jpg',
@@ -299,7 +299,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'38',
+        id:'485ba1a3-da27-4e09-8613-377cdef27071',
         level: 1,
         type: 'lea',
         url:'LeadershipBasic.jpg',
@@ -307,7 +307,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'39',
+        id:'b8c47ddb-7363-4d28-90ff-344fd8375daf',
         level: 3,
         type: 'lea',
         url:'LeadershipExpert.jpg',
@@ -315,7 +315,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'40',
+        id:'6e2df8bb-4a87-49d7-8e65-8b76e787651b',
         level: 2,
         type: 'ler',
         url:'LearningAdvanced.jpg',
@@ -323,7 +323,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'41',
+        id:'823e2415-fb47-4e30-b7e2-e39c3de5c459',
         level: 1,
         type: 'ler',
         url:'LearningBasic.jpg',
@@ -331,7 +331,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'42',
+        id:'209ee762-aaf7-4083-a7df-baa65fb4ebb6',
         level: 3,
         type: 'ler',
         url:'LearningExpert.jpg',
@@ -339,7 +339,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'43',
+        id:'85ba01e2-15a0-4d4c-81a5-491c5c686333',
         level: 2,
         type: 'Logistics',
         url:'LogisticsAdvanced.jpg',
@@ -347,7 +347,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'44',
+        id:'b5ff6323-c94a-45ab-bcda-f911dfcdce10',
         level: 1,
         type: 'Logistics',
         url:'LogisticsBasic.jpg',
@@ -355,7 +355,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'45',
+        id:'0b3d2513-9546-461a-934c-3ce285c7fba1',
         level: 3,
         type: 'Logistics',
         url:'LogisticsExpert.jpg',
@@ -363,7 +363,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'46',
+        id:'1195a27a-4160-42bf-bdfc-82f138033feb',
         level: 2,
         type: 'Luck',
         url:'LuckAdvanced.jpg',
@@ -371,7 +371,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'47',
+        id:'3128015e-be2f-4d78-89fa-f9a249e474cf',
         level: 1,
         type: 'Luck',
         url:'LuckBasic.jpg',
@@ -379,7 +379,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'48',
+        id:'2401a3a1-fe9a-47f3-baf5-e819f6be0600',
         level: 3,
         type: 'Luck',
         url:'LuckExpert.jpg',
@@ -387,7 +387,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'49',
+        id:'2b29f524-3056-49d4-9615-22c0775088f2',
         level: 2,
         type: 'Mysticism',
         url:'MysticismAdvanced.jpg',
@@ -395,7 +395,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'50',
+        id:'c7beb0ee-39e4-4e0b-a472-904fc4b72600',
         level: 1,
         type: 'Mysticism',
         url:'MysticismBasic.jpg',
@@ -403,7 +403,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'51',
+        id:'aeca75a4-d8af-4cf1-b499-572a3d54207e',
         level: 3,
         type: 'Mysticism',
         url:'MysticismExpert.jpg',
@@ -411,7 +411,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'52',
+        id:'570c220e-3c8b-49b3-84e5-b28278f0e529',
         level: 2,
         type: 'Navigation',
         url:'NavigationAdvanced.jpg',
@@ -419,7 +419,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'53',
+        id:'f1ba0aeb-893e-4168-94e7-cc9e799e152b',
         level: 1,
         type: 'Navigation',
         url:'NavigationBasic.jpg',
@@ -427,7 +427,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'54',
+        id:'08785fa0-b6a8-4b2d-98a5-a86ecac2bde9',
         level: 3,
         type: 'Navigation',
         url:'NavigationExpert.jpg',
@@ -435,7 +435,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'55',
+        id:'92f72714-e0e3-470a-a0db-1953e2dc916f',
         level: 2,
         type: 'Necromancy',
         url:'NecromancyAdvanced.jpg',
@@ -443,7 +443,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'56',
+        id:'43f639fb-0c97-4538-bda8-4b8d3503b477',
         level: 1,
         type: 'Necromancy',
         url:'NecromancyBasic.jpg',
@@ -451,7 +451,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'57',
+        id:'c86c385a-4ff6-49f0-96c5-4ab8cd259b81',
         level: 3,
         type: 'Necromancy',
         url:'NecromancyExpert.jpg',
@@ -459,7 +459,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'58',
+        id:'2c4c2931-a480-4871-bad8-139d66738331',
         level: 2,
         type: 'Offense',
         url:'OffenseAdvanced.jpg',
@@ -467,7 +467,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'59',
+        id:'b1acc8f2-f48e-4be2-83cc-c7ac4381d3ac',
         level: 1,
         type: 'Offense',
         url:'OffenseBasic.jpg',
@@ -475,7 +475,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'60',
+        id:'cf04bb49-6c08-4632-a330-b286fb3a01a1',
         level: 3,
         type: 'Offense',
         url:'OffenseExpert.jpg',
@@ -483,7 +483,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'61',
+        id:'c65fb8bb-0051-473c-b75a-a10f85ba3f31',
         level: 2,
         type: 'Pathfinding',
         url:'PathfindingAdvanced.jpg',
@@ -491,7 +491,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'62',
+        id:'147a581d-f9c2-4e4b-b6ab-4c696b2126f7',
         level: 1,
         type: 'Pathfinding',
         url:'PathfindingBasic.jpg',
@@ -499,7 +499,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'63',
+        id:'89f16522-2c33-4471-8ffb-d6f6e034eef3',
         level: 3,
         type: 'Pathfinding',
         url:'PathfindingExpert.jpg',
@@ -507,7 +507,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'64',
+        id:'1bb0e77f-0a67-4987-a76a-ca69eb481c75',
         level: 2,
         type: 'Resistance',
         url:'ResistanceAdvanced.jpg',
@@ -515,7 +515,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'65',
+        id:'1168b3a1-e897-42db-ba4d-3f2a464ae970',
         level: 1,
         type: 'Resistance',
         url:'ResistanceBasic.jpg',
@@ -523,7 +523,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'66',
+        id:'7df933d6-137c-4a5a-ba4c-5503e0c398b3',
         level: 3,
         type: 'Resistance',
         url:'ResistanceExpert.jpg',
@@ -531,7 +531,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'67',
+        id:'13c9c974-4452-431b-a377-ad8e0766fd3c',
         level: 2,
         type: 'Scouting',
         url:'ScoutingAdvanced.jpg',
@@ -539,7 +539,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'68',
+        id:'70ad34ad-25a4-4681-a543-f28faacb33f4',
         level: 1,
         type: 'Scouting',
         url:'ScoutingBasic.jpg',
@@ -547,7 +547,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'69',
+        id:'80441dd6-c7cd-45ba-957f-ea96c81036cb',
         level: 3,
         type: 'Scouting',
         url:'ScoutingExpert.jpg',
@@ -555,7 +555,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'70',
+        id:'e2463649-0390-4794-aec5-a8de9435b339',
         level: 2,
         type: 'Sorcery',
         url:'SorceryAdvanced.jpg',
@@ -563,7 +563,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'71',
+        id:'37e6d37c-327c-4078-9528-999225add630',
         level: 1,
         type: 'Sorcery',
         url:'SorceryBasic.jpg',
@@ -571,7 +571,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'72',
+        id:'d86f6469-2062-4f75-b8e6-0c50d25cc630',
         level: 3,
         type: 'Sorcery',
         url:'SorceryExpert.jpg',
@@ -579,7 +579,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'73',
+        id:'c105408b-4f17-4bea-9a16-ccf8ab7b729f',
         level: 2,
         type: 'Tactics',
         url:'TacticsAdvanced.jpg',
@@ -587,7 +587,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'74',
+        id:'40cc4622-66f2-4430-a851-e5ce87d6e55e',
         level: 1,
         type: 'Tactics',
         url:'TacticsBasic.jpg',
@@ -595,7 +595,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'75',
+        id:'602b47f0-2799-4561-b898-4f64c2907da6',
         level: 3,
         type: 'Tactics',
         url:'TacticsExpert.jpg',
@@ -603,7 +603,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'76',
+        id:'ca3a5b6e-1e01-42ae-b6e7-6772e9ed641f',
         level: 2,
         type: 'WaterMagic',
         url:'WaterMagicAdvanced.jpg',
@@ -611,7 +611,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'77',
+        id:'4d3ac431-b9a4-4d71-b087-b0d49c7b7689',
         level: 1,
         type: 'WaterMagic',
         url:'WaterMagicBasic.jpg',
@@ -619,7 +619,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'78',
+        id:'3fe6d22f-ff59-40cb-8876-2a7bd0ebd078',
         level: 3,
         type: 'WaterMagic',
         url:'WaterMagicExpert.jpg',
@@ -628,7 +628,7 @@ const images: SkillImageModel[] =
     },
 
     {
-        id:'79',
+        id:'e25ac2a6-855e-48bb-94fe-4c0b683fe948',
         level: 2,
         type: 'Wisdom',
         url:'WisdomAdvanced.jpg',
@@ -636,7 +636,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'80',
+        id:'a71850a5-b780-42b8-be01-cb63d28d3fca',
         level: 1,
         type: 'Wisdom',
         url:'WisdomBasic.jpg',
@@ -644,7 +644,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'81',
+        id:'a76ec8b8-495f-4438-89fc-368f629c29c1',
         level: 3,
         type: 'Wisdom',
         url:'WisdomExpert.jpg',
@@ -652,7 +652,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'82',
+        id:'d508ea0a-8372-4932-b864-5fbc9ee254d8',
         level: 2,
         type: 'Scholar',
         url:'ScholarAdvanced.jpg',
@@ -660,7 +660,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'83',
+        id:'f11e3277-a7d7-43de-ba86-83d21c78ee9a',
         level: 1,
         type: 'Scholar',
         url:'ScholarBasic.jpg',
@@ -668,7 +668,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'84',
+        id:'cccd0de0-3f6a-42ee-b30d-2dd6eb141fc4',
         level: 3,
         type: 'Scholar',
         url:'ScholarExpert.jpg',

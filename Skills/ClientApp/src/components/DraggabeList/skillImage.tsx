@@ -22,7 +22,7 @@ const ImageButton = styled(ButtonBase)(({ theme }) => ({
       opacity: 0,
     },
     '& .MuiTypography-root': {
-      border: '4px solid currentColor',
+      border: 0,
     },
   },
 }));
@@ -60,16 +60,6 @@ const ImageBackdrop = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
-const ImageMarked = styled('span')(({ theme }) => ({
-  height: 3,
-  width: 18,
-  backgroundColor: theme.palette.common.white,
-  position: 'absolute',
-  bottom: -2,
-  left: 'calc(50% - 9px)',
-  transition: theme.transitions.create('opacity'),
-}));
-
 export default function ButtonBases(id: string, onImageButtonClick : (id:string, level: number, type:string) => void) {
   let image = getById(id)
   const completeUrl = `${templateUrl}${image.url}`
@@ -92,7 +82,7 @@ export default function ButtonBases(id: string, onImageButtonClick : (id:string,
   }
 
   return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 100, maxWidth: 100, width: '100%' }}>
+    <Box sx={{ width: 100 }}>
         <ImageButton
           focusRipple
           key={image.title}
@@ -107,16 +97,8 @@ export default function ButtonBases(id: string, onImageButtonClick : (id:string,
             <Typography
               component="span"
               variant="subtitle1"
-              color="inherit"
-              sx={{
-                position: 'relative',
-                p: 4,
-                pt: 2,
-                pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-              }}
             >
               {showSkillLevel(image.level)}
-              <ImageMarked className="MuiImageMarked-root" />
             </Typography>
           </Image>
         </ImageButton>

@@ -78,28 +78,3 @@ export const modalSelector = (skillImageModels:SkillImageModel[] | undefined, on
     </Box>
         );
     }
-    
-    
-    /*
-               <Box sx={{ width: '100%' }}>
-          <Grid container spacing={10}>
-  {skillImageModels.map(item => (
-    <Grid item xs={2} key={item.id} width={100} height={110} >  
-       <Box sx={{ display: 'flex', flexWrap: 'wrap', width: 100 }}>
-                 <ImageButton
-                   focusRipple
-                   key={item.type}
-                   style={{
-                     width: '100%',
-                   }}
-                   onClick={() => onSelectedImageClick(item)}
-                 >
-                   <ImageSrc style={{ backgroundImage: `url(${templateUrl}${item.url})` }} />
-                   <ImageBackdrop className="MuiImageBackdrop-root" />
-                 </ImageButton>
-             </Box>
-    </Grid>
-  ))}
-</Grid>
-    </Box>
-    */

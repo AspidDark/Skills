@@ -1,9 +1,8 @@
-import { BaseModel } from "./BaseModel"
-import FileModel from "./FileModel"
 import SkillImageModel from "./SkillImageModel"
 
-export default interface SkillModel extends BaseModel
+export default interface SkillModel
 {
+    id:string
     priority: number
     skillName: string
     level: number

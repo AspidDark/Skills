@@ -6,17 +6,14 @@ import DraggableList from '../DraggabeList/DraggableList'
 import { reorder } from '../DraggabeList/helpers'
 import './styles.css'
 import { v4 } from 'uuid'
-import _, { forIn } from 'lodash'
+import _ from 'lodash'
 import SkillModel from '../../models/SkillModel'
 import TextField from '@mui/material/TextField'
-import TableCell from '@mui/material/TableCell'
-import TableRow from '@mui/material/TableRow'
 import dayjs, { Dayjs } from 'dayjs'
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import Table from '@mui/material/Table'
 
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography'
@@ -26,6 +23,10 @@ import { getRandomImage, getSameForOtherLevel, getByLevel } from '../../services
 import Box from '@mui/material/Box/Box'
 import { modalSelector } from '../modal/modalSelector'
 import SkillImageModel from '../../models/SkillImageModel'
+import { Grid } from '@mui/material'
+import CharacterModel from '../../models/CharacterModel'
+import {posCharacter } from '../../ApiServices/charecterApiSerice'
+import Button from '@mui/material/Button';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -70,9 +71,6 @@ export default function SkillList () {
 
   const [items, setItems] = useState<SkillModel[]>([{
     id: v4(),
-    createDate: new Date(),
-    editDate: new Date(),
-    ownerId:'ownerId',
     priority:1,
     skillName:'skillName',
     level:1,
@@ -165,9 +163,6 @@ export default function SkillList () {
     if(newItems.length===0) {
       newItems = [{
         id: firstItem.id,
-        createDate: firstItem.createDate,
-        editDate: firstItem.editDate,
-        ownerId:firstItem.ownerId,
         priority:1,
         skillName:firstItem.skillName,
         level:1,
@@ -184,7 +179,6 @@ export default function SkillList () {
   const setChangedItems = (value: SkillModel[]) =>{
     setUsedImageTypes(value)
     setItems(value)
-    ///
   }
 
   const changeSkillLevelValue = (value:boolean, id: string):void =>{
@@ -250,6 +244,22 @@ const changeModalSize = () =>{
   setModalHeight(770)
 }
 
+const saveCharacter = async () =>{
+  let startDateValue = startDate?.toDate()
+  if(!startDateValue) {
+    startDateValue=new Date()
+  }
+
+  const saveModel: CharacterModel ={
+    priority : 1,
+    buildName : name,
+    startingDate: startDateValue,
+    skills: items
+  }
+
+  const result= await posCharacter(saveModel)
+}
+
   useEffect(()=>{
     changeModalSize()
     if(items[0]){
@@ -277,12 +287,20 @@ const changeModalSize = () =>{
   ];
 
   return (<>
-  <h4>{name}</h4>
-  <ImageUpload cardName="Input Image" imageGallery={galleryImageList} />
-  <TextField id="standard-basic" label="Name" variant="standard" value={name} onChange={e=>setName(e.target.value)}/>
-    <Table>
-      <TableRow>
-        <TableCell align="left">
+  <Button
+  onClick={() => saveCharacter()}
+>
+  Click me
+</Button>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={1}>
+        <Grid item xs={2}>
+          <ImageUpload cardName="Input Image" imageGallery={galleryImageList} />
+        </Grid>
+        <Grid item xs={5}>
+          <TextField id="standard-basic" label="Name" variant="standard" value={name} onChange={e=>setName(e.target.value)}/>
+        </Grid>
+        <Grid item xs={4}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker', 'DatePicker']}>
             <DatePicker
@@ -292,13 +310,12 @@ const changeModalSize = () =>{
             />
           </DemoContainer>
         </LocalizationProvider>
-        </TableCell>
-        <TableCell align="right">
-          Skill Points
-        {skillPointCount}
-        </TableCell>
-      </TableRow>
-    </Table>
+        </Grid>
+        <Grid item xs={1}>
+          Points {skillPointCount}
+        </Grid>
+      </Grid>
+    </Box>
   <DraggableList 
     items={items} 
     onDragEnd={onDragEnd} 
