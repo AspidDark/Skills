@@ -678,7 +678,15 @@ const images: SkillImageModel[] =
 
 ]
 
-export let getAll = ():SkillImageModel[] => {
+export const getStartingSkillImage = (skillType = 'eag' ):SkillImageModel=>{
+    const result = images.find(x=>x.type===skillType&&x.level===1)
+    if(!result){
+       return images[0]
+    }
+    return result
+}
+
+export const getAll = ():SkillImageModel[] => {
     return images
 }
 

@@ -16,4 +16,6 @@ public class Skill : BaseEntity
     public FileEntity? Image { get; set; }
 
     public int IsMain { get; set; }
+
+    public string Type { get; set; } = null!;
 }

@@ -6,8 +6,8 @@ export default interface SkillModel
     priority: number
     skillName: string
     level: number
-    skillPictureId: string
     isMain: number
+    type: string
     image: SkillImageModel
 }
 

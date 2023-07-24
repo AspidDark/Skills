@@ -21,6 +21,7 @@ namespace Skills.DataBase.DataAccess
             modelBuilder.ApplyConfiguration(new CharacterMap());
             modelBuilder.ApplyConfiguration(new SkillMap());
             modelBuilder.ApplyConfiguration(new FileEntityMap());
+            modelBuilder.ApplyConfiguration(new SkillImageMap());
 
             modelBuilder.Entity<Character>()
                 .HasMany(s => s.Skills)
@@ -34,5 +35,7 @@ namespace Skills.DataBase.DataAccess
         public DbSet<Skill> Skills { get; set; }
 
         public DbSet<FileEntity> Files { get; set; }
+
+        public DbSet<FileEntity> SkillImages { get; set; }
     }
 }

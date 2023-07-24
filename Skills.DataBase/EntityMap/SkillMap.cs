@@ -17,5 +17,6 @@ public class SkillMap : BaseEntityMap<Skill>
         builder.HasOne(x => x.Image).WithMany().HasForeignKey("image_id");
         builder.Property(x => x.IsMain).HasColumnName("is_main").IsRequired();
         builder.Property(x => x.SkillName).HasColumnName("skill_name").HasMaxLength(100).IsRequired();
+        builder.Property(x => x.Type).HasColumnName("skillType").HasMaxLength(100).IsRequired();
     }
 }

@@ -5,6 +5,7 @@ using Skills.Shared.V1;
 using Skills.DataBase.DataAccess;
 using OneOf;
 using Microsoft.EntityFrameworkCore;
+using Skills.DataBase.DataAccess.Services;
 
 namespace Skills.Services;
 
@@ -15,14 +16,14 @@ public interface IFileService
     Task<OneOf<FileEntityResponseDto, ErrorModel>> Get(Guid fileId);
 }
 
-
 public class FileService : IFileService
 {
     private readonly ILogger<FileService> _logger;
     private readonly AppDbContext _appDbContext;
     private readonly IFileHelper _fileHelper;
+    
 
-    public FileService( AppDbContext appDbContext, IFileHelper fileHelper)
+    public FileService(AppDbContext appDbContext, IFileHelper fileHelper, IImageDataService imageDataService)
     {
         _appDbContext = appDbContext;
         _fileHelper = fileHelper;
@@ -48,38 +49,39 @@ public class FileService : IFileService
 
     public async Task<OneOf<Guid, ErrorModel>> Create(FileCreate request)
     {
-            //имя файла
-            var fileName = request.FileBody.FileName;
-            // var name = request.FileBody.Name;
-            //Расширенеи файла
-            string ext = Path.GetExtension(fileName);
-            var fileId = Guid.NewGuid();
+        //имя файла
+        var fileName = request.FileBody.FileName;
+        // var name = request.FileBody.Name;
+        //Расширенеи файла
+        string ext = Path.GetExtension(fileName);
+        var fileId = Guid.NewGuid();
 
-            //Имя файла для сохранения
-            string fileSaveName = fileId.ToString() + fileName;
+        //Имя файла для сохранения
+        string fileSaveName = fileId.ToString() + fileName;
 
-            if (!await _fileHelper.SaveFile(request.FileBody, fileSaveName))
-            {
-                return new ErrorModel(1006, "File Save Error");
-            }
+        if (!await _fileHelper.SaveFile(request.FileBody, fileSaveName))
+        {
+            return new ErrorModel(1006, "File Save Error");
+        }
 
-            FileEntity fileEntity = new()
-            {
-                Path = fileSaveName,
-                Id = fileId,
-                OwnerId = request.UserId,
-            };
+        FileEntity fileEntity = new()
+        {
+            Path = fileSaveName,
+            Id = fileId,
+            OwnerId = request.UserId,
+        };
 
-            var result = await _appDbContext.Files.AddAsync(fileEntity);
-            var saveResult = await _appDbContext.SaveChangesAsync();
+        var result = await _appDbContext.Files.AddAsync(fileEntity);
+        var saveResult = await _appDbContext.SaveChangesAsync();
 
-            if (saveResult == 0)
-            {
-                return new ErrorModel(1006, "File Save Error");
-            }
+        if (saveResult == 0)
+        {
+            return new ErrorModel(1006, "File Save Error");
+        }
 
-            return fileId;
+        return fileId;
     }
 
+   
 
 }

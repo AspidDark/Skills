@@ -4,16 +4,16 @@ namespace Skills.Shared.V1.Request;
 
 public class CharacterRequestModel
 {
-    public required int Priority { get; init; }
+    public int Priority { get; init; }
     [MaxLength(100)]
-    public required string BuildName { get; init; }
+    public string BuildName { get; init; }
 
-    public required DateOnly StartingDate { get; set; }
+    public string StartingDate { get; set; }
 
     public Guid? PhotoId { get; set; }
 
-    [MaxLength(9)]
-    public required IEnumerable<SkillsRequestModel> Skills { get; init; }
+    [MaxLength(8)]
+    public IEnumerable<SkillRequestModel> Skills { get; init; }
     [MaxLength(1000)]
     public string? Story { get; set; }
 }

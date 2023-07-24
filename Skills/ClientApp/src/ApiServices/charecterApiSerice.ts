@@ -49,10 +49,9 @@ import CharacterModel from '../models/CharacterModel';
     }
     */
 
-export const posCharacter = async(entity:CharacterModel):Promise<BaseDto<CharacterModel>|BaseDto<string>> => {
+export const postCharacter = async(entity:CharacterModel):Promise<BaseDto<CharacterModel>|BaseDto<string>> => {
 
         const apiService = new CRUDRequestHelper();
-
 
         const resultApi = await apiService.postRequest({url:uri, data: entity}, false);
         if(!resultApi||!resultApi.success){

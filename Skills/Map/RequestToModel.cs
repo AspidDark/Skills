@@ -13,7 +13,8 @@ public class RequestToModel : Profile
         CreateMap<EntityQuery, ByEntityFilter>();
 
         CreateMap<CharacterRequestModel, CharacterModel>();
-        CreateMap<SkillsRequestModel, SkillsModel>();
+        CreateMap<SkillRequestModel, SkillsModel>();
         CreateMap<ImageRequestModel, ImageModel>();
+        CreateMap<SkillImageRequestModel, SkillImageModel>();
     }
 }

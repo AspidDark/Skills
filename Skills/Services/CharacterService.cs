@@ -25,11 +25,13 @@ public class CharacterService : ICharacterService
 {
     private readonly ICharacterDataService _characterDataService;
     private readonly ISkillsDataService _skillsDataService;
+    private readonly ISkillImageService _skillImageService;
 
-    public CharacterService(ICharacterDataService characterDataService, ISkillsDataService skillsDataService)
+    public CharacterService(ICharacterDataService characterDataService, ISkillsDataService skillsDataService, ISkillImageService skillImageService)
     {
         _characterDataService = characterDataService;
         _skillsDataService = skillsDataService;
+        _skillImageService = skillImageService;
     }
     public async Task<OneOf<Character, ErrorModel>> Get(ByEntityFilter filter)
     {
@@ -58,6 +60,11 @@ public class CharacterService : ICharacterService
         {
             return new ErrorModel(1100, "Character model is invalid skills mismach year of expirience");
         }
+
+        var fileEntities = ImageMap(model.Skills, userId);
+        var saveFileResult = await _skillImageService.SaveSkillImages(fileEntities);
+        //handle error
+
         var characterToCraate = CharacterMap(model, userId);
         var character = await _characterDataService.Create(characterToCraate);
 
@@ -96,6 +103,17 @@ public class CharacterService : ICharacterService
         return character;
     }
 
+    private static IEnumerable<FileEntity> ImageMap(IEnumerable<SkillsModel> skills, Guid userId)
+        => skills.Select(x => new FileEntity
+        {
+            Id=x.Image.Id,
+            CreateDate=DateTime.Now,
+            EditDate=DateTime.Now,
+            IsDeleted=0,
+            OwnerId= userId,
+            Path = x.Image.Path
+        });
+
     private static Character CharacterMap(CharacterModel model, Guid userId)
     => new()
     {
@@ -119,11 +137,12 @@ public class CharacterService : ICharacterService
           EditDate = DateTime.UtcNow,
           Id = Guid.NewGuid(),
           Level = x.Level,
-          ImageId = x.SkillPictureId,
+          ImageId = x.Image.Id,
           IsDeleted = 0,
           IsMain = x.IsMain,
           OwnerId = userId,
-          Priority = x.Priority
+          Priority = x.Priority,
+          Type = x.Type,
       }).ToList();
 
     private static bool IsCharacterValid(CharacterModel model)

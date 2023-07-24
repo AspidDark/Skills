@@ -19,13 +19,13 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography'
 
 import ImageUpload from "./ImageUpload"
-import { getRandomImage, getSameForOtherLevel, getByLevel } from '../../services/ImageService'
+import { getRandomImage, getSameForOtherLevel, getByLevel, getStartingSkillImage } from '../../services/ImageService'
 import Box from '@mui/material/Box/Box'
 import { modalSelector } from '../modal/modalSelector'
 import SkillImageModel from '../../models/SkillImageModel'
 import { Grid } from '@mui/material'
 import CharacterModel from '../../models/CharacterModel'
-import {posCharacter } from '../../ApiServices/charecterApiSerice'
+import {postCharacter } from '../../ApiServices/charecterApiSerice'
 import Button from '@mui/material/Button';
 
 const style = {
@@ -53,13 +53,15 @@ const useStyles = makeStyles({
   }
 })
 
+const startingImageType = 'eag'
+
 export default function SkillList () {
   const theme: any = useTheme()
   const classes = useStyles()
   const [name, setName] = useState('')
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
   const [skillPointCount, setskillPointCount] = useState(1)
-  const [existingImages, setExistingImages] = useState<string[]>([''])
+  const [existingImages, setExistingImages] = useState<string[]>([startingImageType])
   const [unusedImages, setUnusedImages] = useState<SkillImageModel[]>()
   const [modalHeight, setModalHeight ] = useState(770)
 
@@ -71,12 +73,12 @@ export default function SkillList () {
 
   const [items, setItems] = useState<SkillModel[]>([{
     id: v4(),
-    priority:1,
+    priority:0,
     skillName:'skillName',
     level:1,
-    skillPictureId: 'skillPictureId',
     isMain:1,
-    image: getRandomImage(existingImages)
+    type:startingImageType,
+    image: getStartingSkillImage(startingImageType)
   }])
 
   const setOrderedItems = (newItems: SkillModel[]) => {
@@ -109,6 +111,8 @@ export default function SkillList () {
 
   const addItem = () => {
     if(skillPointCount >= 1){
+      const newImage = getRandomImage(existingImages)
+
       const newitems = [...items, {
         id: v4(),
         createDate: new Date(),
@@ -118,7 +122,8 @@ export default function SkillList () {
         level:1,
         skillPictureId: 'skillPictureId',
         isMain:1,
-        image: getRandomImage(existingImages),
+        type: newImage.type,
+        image: newImage,
         priority: items.length,
       }]
       setOrderedItems(newitems)
@@ -166,8 +171,8 @@ export default function SkillList () {
         priority:1,
         skillName:firstItem.skillName,
         level:1,
-        skillPictureId: firstItem.skillPictureId,
         isMain:1,
+        type: firstItem.image.type,
         image: firstItem.image
       }]
       
@@ -257,7 +262,7 @@ const saveCharacter = async () =>{
     skills: items
   }
 
-  const result= await posCharacter(saveModel)
+  const result= await postCharacter(saveModel)
 }
 
   useEffect(()=>{
