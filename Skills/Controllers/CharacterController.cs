@@ -75,6 +75,7 @@ public class CharacterController : ControllerBase
         try
         {
             var model = _mapper.Map<CharacterModel>(request);
+
             var userId = HttpContext.GetUserId();
             var result = await _characterService.Create(model, userId);
 

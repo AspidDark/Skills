@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OneOf;
-using Skills.DataBase.DataAccess;
 using Skills.DataBase.DataAccess.Entities;
 using Skills.DataBase.DataAccess.Services;
 using Skills.Models;
@@ -35,17 +34,53 @@ public class CharacterService : ICharacterService
     }
     public async Task<OneOf<Character, ErrorModel>> Get(ByEntityFilter filter)
     {
-        var character = await _characterDataService.Get(filter.EntityId, filter.UserId);
-        if (character is null)
+        if (filter.EntityId.HasValue)
         {
-            return new ErrorModel(1001, $"Character with {filter.EntityId} not found");
+            var result = await _characterDataService.GetById(filter.EntityId.Value);
+
+            if (result is null)
+            {
+                return ErrorModelNoCharacter;
+            }
+            return result;
         }
-        return character;
+
+        if (filter.UserId.HasValue)
+        {
+            var result = await _characterDataService.GetByUserId(filter.UserId.Value);
+            if (result is null)
+            {
+                return ErrorModelNoCharacter;
+            }
+            return result;
+        }
+
+        return new Character
+        {
+            Id = Guid.Empty,
+            Priority = 0,
+            Skills = new List<Skill>
+            {
+                new Skill()
+                {
+                    Level = 1,
+                    SkillName = "eag",
+                    Character = new(),
+                    Type = string.Empty,
+                }
+
+            }
+        };
     }
 
     public async Task<OneOf<List<Character>, ErrorModel>> GetList(BaseUserIdFilter filter, PaginationFilter paginationFilter)
     {
-        var result = await _characterDataService.GetList(filter.UserId, paginationFilter.PageSize, paginationFilter.PageNumber);
+        if (!filter.UserId.HasValue)
+        {
+            return new ErrorModel(1101, "No user Id");
+        }
+
+        var result = await _characterDataService.GetList(filter.UserId.Value, paginationFilter.PageSize, paginationFilter.PageNumber);
 
         if (result is null || result.Count == 0)
         {
@@ -87,7 +122,7 @@ public class CharacterService : ICharacterService
         var skillsToUpdate = MapSkills(model.Skills, updatedCharacter.Id, userId);
 
         var skills = await _skillsDataService.UpdateMany(skillsToUpdate, characterId);
-        updatedCharacter.Skills =skills;
+        updatedCharacter.Skills = skills;
         return updatedCharacter;
     }
 
@@ -106,11 +141,11 @@ public class CharacterService : ICharacterService
     private static IEnumerable<FileEntity> ImageMap(IEnumerable<SkillsModel> skills, Guid userId)
         => skills.Select(x => new FileEntity
         {
-            Id=x.Image.Id,
-            CreateDate=DateTime.Now,
-            EditDate=DateTime.Now,
-            IsDeleted=0,
-            OwnerId= userId,
+            Id = x.Image.Id,
+            CreateDate = DateTime.Now,
+            EditDate = DateTime.Now,
+            IsDeleted = 0,
+            OwnerId = userId,
             Path = x.Image.Path
         });
 
@@ -156,5 +191,7 @@ public class CharacterService : ICharacterService
 
         return maxSkill + 1 >= skillLevel;
     }
+
+    private static readonly ErrorModel ErrorModelNoCharacter = new(1001, "Character not found");
 }
 

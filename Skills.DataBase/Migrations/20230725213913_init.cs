@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Skills.DataBase.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace Skills.DataBase.Migrations
                 name: "public");
 
             migrationBuilder.CreateTable(
-                name: "file_entity",
+                name: "skill_image",
                 schema: "public",
                 columns: table => new
                 {
@@ -28,7 +28,7 @@ namespace Skills.DataBase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_file_entity", x => x.id);
+                    table.PrimaryKey("PK_skill_image", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -39,7 +39,7 @@ namespace Skills.DataBase.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     priority = table.Column<int>(type: "integer", nullable: false),
                     build_name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    starting_date = table.Column<DateOnly>(type: "date", nullable: false),
+                    starting_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     story = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
                     photo_id = table.Column<Guid>(type: "uuid", nullable: true),
                     photo_id1 = table.Column<Guid>(type: "uuid", nullable: true),
@@ -52,10 +52,10 @@ namespace Skills.DataBase.Migrations
                 {
                     table.PrimaryKey("PK_caharacter", x => x.id);
                     table.ForeignKey(
-                        name: "FK_caharacter_file_entity_photo_id1",
+                        name: "FK_caharacter_skill_image_photo_id1",
                         column: x => x.photo_id1,
                         principalSchema: "public",
-                        principalTable: "file_entity",
+                        principalTable: "skill_image",
                         principalColumn: "id");
                 });
 
@@ -72,6 +72,7 @@ namespace Skills.DataBase.Migrations
                     image_id = table.Column<Guid>(type: "uuid", nullable: true),
                     image_id1 = table.Column<Guid>(type: "uuid", nullable: true),
                     is_main = table.Column<int>(type: "integer", nullable: false),
+                    skillType = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     create_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     edit_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     owner_id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -88,10 +89,10 @@ namespace Skills.DataBase.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_skill_file_entity_image_id1",
+                        name: "FK_skill_skill_image_image_id1",
                         column: x => x.image_id1,
                         principalSchema: "public",
-                        principalTable: "file_entity",
+                        principalTable: "skill_image",
                         principalColumn: "id");
                 });
 
@@ -126,7 +127,7 @@ namespace Skills.DataBase.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "file_entity",
+                name: "skill_image",
                 schema: "public");
         }
     }

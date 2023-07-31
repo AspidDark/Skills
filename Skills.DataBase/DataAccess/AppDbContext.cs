@@ -10,7 +10,7 @@ namespace Skills.DataBase.DataAccess
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             //inmemory
-            //Database.Migrate();
+            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

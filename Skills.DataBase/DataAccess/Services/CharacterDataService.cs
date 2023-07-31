@@ -5,8 +5,9 @@ namespace Skills.DataBase.DataAccess.Services;
 
 public interface ICharacterDataService
 {
-    Task<Character?> Get(Guid id, Guid userId);
+    Task<Character?> GetById(Guid id);
 
+    Task<Character?> GetByUserId(Guid userId);
     Task<List<Character>?> GetList(Guid userId, int pageSize, int pageNumber);
 
     Task<Character> Create(Character character);
@@ -16,7 +17,7 @@ public interface ICharacterDataService
     Task<Character?> Delete(Guid characterId, Guid userId);
 }
 
-public class CharacterDataService: ICharacterDataService
+public class CharacterDataService : ICharacterDataService
 {
     private readonly AppDbContext _appDbContext;
     public CharacterDataService(AppDbContext appDbContext)
@@ -24,12 +25,21 @@ public class CharacterDataService: ICharacterDataService
         _appDbContext = appDbContext;
     }
 
-    public Task<Character?> Get(Guid id, Guid userId)
+    public Task<Character?> GetById(Guid id)
+           => _appDbContext.Characters
+          .Include(x => x.Skills)
+          .Include(x => x.Photo)
+          .AsNoTracking()
+          .FirstOrDefaultAsync(x => x.Id == id);
+
+    public Task<Character?> GetByUserId(Guid userId)
         => _appDbContext.Characters
           .Include(x => x.Skills)
           .Include(x => x.Photo)
           .AsNoTracking()
-          .FirstOrDefaultAsync(x => x.Id == id && x.OwnerId == userId);
+          .Where(x => x.Id == userId)
+          .OrderBy(x=>x.Priority)
+          .FirstOrDefaultAsync();
 
     public Task<List<Character>?> GetList(Guid userId, int pageSize, int pageNumber)
         => _appDbContext.Characters.
@@ -51,7 +61,7 @@ public class CharacterDataService: ICharacterDataService
     public async Task<Character?> Update(Character character, Guid id, Guid userId)
     {
         var characterFromDatabase = _appDbContext.Characters.FirstOrDefault(x => x.OwnerId == userId && x.Id == id);
-        if (characterFromDatabase == null) 
+        if (characterFromDatabase == null)
         {
             return null;
         }

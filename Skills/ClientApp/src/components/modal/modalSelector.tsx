@@ -68,7 +68,7 @@ export const modalSelector = (skillImageModels:SkillImageModel[] | undefined, on
                    }}
                    onClick={() => onSelectedImageClick(item)}
                  >
-                   <ImageSrc style={{ backgroundImage: `url(${templateUrl}${item.url})` }} />
+                   <ImageSrc style={{ backgroundImage: `url(${templateUrl}${item.path})` }} />
                    <ImageBackdrop className="MuiImageBackdrop-root" />
                  </ImageButton>
              </Box>

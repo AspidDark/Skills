@@ -62,7 +62,7 @@ const ImageBackdrop = styled('span')(({ theme }) => ({
 
 export default function ButtonBases(id: string, onImageButtonClick : (id:string, level: number, type:string) => void) {
   let image = getById(id)
-  const completeUrl = `${templateUrl}${image.url}`
+  const completeUrl = `${templateUrl}${image.path}`
 
   const showSkillLevel = (value:number):string => {
     switch (value){

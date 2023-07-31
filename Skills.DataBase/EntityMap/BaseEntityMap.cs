@@ -19,9 +19,9 @@ public abstract class BaseEntityMap<T> : IEntityTypeConfiguration<T> where T : B
 
         builder.Property(x => x.OwnerId).HasColumnName("owner_id").IsRequired();
 
-        builder.Property(x => x.CreateDate).HasColumnName("create_date").IsRequired();
+        builder.Property(x => x.CreateDate).HasConversion(typeof(DateTimeToDateTimeUtc)).HasColumnName("create_date").IsRequired();
 
-        builder.Property(x => x.EditDate).HasColumnName("edit_date").IsRequired();
+        builder.Property(x => x.EditDate).HasConversion(typeof(DateTimeToDateTimeUtc)).HasColumnName("edit_date").IsRequired();
 
         builder.Property(x => x.IsDeleted).HasColumnName("is_deleted");
 

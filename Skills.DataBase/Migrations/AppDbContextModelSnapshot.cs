@@ -60,8 +60,8 @@ namespace Skills.DataBase.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("priority");
 
-                    b.Property<DateOnly>("StartingDate")
-                        .HasColumnType("date")
+                    b.Property<DateTime>("StartingDate")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("starting_date");
 
                     b.Property<string>("Story")
@@ -114,7 +114,7 @@ namespace Skills.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("file_entity", "public");
+                    b.ToTable("skill_image", "public");
                 });
 
             modelBuilder.Entity("Skills.DataBase.DataAccess.Entities.Skill", b =>
@@ -164,6 +164,12 @@ namespace Skills.DataBase.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("skill_name");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("skillType");
 
                     b.Property<Guid?>("image_id")
                         .HasColumnType("uuid");

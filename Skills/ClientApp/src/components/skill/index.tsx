@@ -25,7 +25,7 @@ import { modalSelector } from '../modal/modalSelector'
 import SkillImageModel from '../../models/SkillImageModel'
 import { Grid } from '@mui/material'
 import CharacterModel from '../../models/CharacterModel'
-import {postCharacter } from '../../ApiServices/charecterApiSerice'
+import {postCharacter, getCharacter } from '../../ApiServices/charecterApiSerice'
 import Button from '@mui/material/Button';
 
 const style = {
@@ -53,6 +53,7 @@ const useStyles = makeStyles({
   }
 })
 
+const emptyGuid='00000000-0000-0000-0000-000000000000'
 const startingImageType = 'eag'
 
 export default function SkillList () {
@@ -64,6 +65,7 @@ export default function SkillList () {
   const [existingImages, setExistingImages] = useState<string[]>([startingImageType])
   const [unusedImages, setUnusedImages] = useState<SkillImageModel[]>()
   const [modalHeight, setModalHeight ] = useState(770)
+  const [characterId, setCharacterId] = useState('')
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -74,7 +76,7 @@ export default function SkillList () {
   const [items, setItems] = useState<SkillModel[]>([{
     id: v4(),
     priority:0,
-    skillName:'skillName',
+    skillName:'',
     level:1,
     isMain:1,
     type:startingImageType,
@@ -265,6 +267,19 @@ const saveCharacter = async () =>{
   const result= await postCharacter(saveModel)
 }
 
+const getCahracterRequest = async () =>{
+  const response = await getCharacter()
+  if(!response || !response.result){
+    //error
+    return
+  }
+  const character = response.data as CharacterModel 
+  if(character.id === emptyGuid) {
+    
+  }
+
+}
+
   useEffect(()=>{
     changeModalSize()
     if(items[0]){
@@ -281,6 +296,10 @@ const saveCharacter = async () =>{
   useEffect(() => {
     changeModalSize()
   }, [items]);
+
+  useEffect(()=>{
+    getCahracterRequest()
+  }, [])
 
   const galleryImageList = [
     "https://raw.githubusercontent.com/dxyang/StyleTransfer/master/style_imgs/mosaic.jpg",

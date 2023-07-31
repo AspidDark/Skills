@@ -5,7 +5,6 @@ using Skills.Services;
 using Swashbuckle.AspNetCore.Filters;
 using Skills.Options;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.FileProviders;
 
 internal class Program
 {
@@ -97,3 +96,13 @@ internal class Program
         app.Run();
     }
 }
+
+//Привести в порядок Фронт:
+// Загрузку фото
+// Верстку
+//Рефакторить фронт
+
+//Бэк/Фронт
+//Подятягивать стартовые настройки страницы c бэка
+//Авторизация Гугл почта то се
+//Подгружать данные на страницу
