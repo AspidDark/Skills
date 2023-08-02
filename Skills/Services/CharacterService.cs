@@ -50,27 +50,12 @@ public class CharacterService : ICharacterService
             var result = await _characterDataService.GetByUserId(filter.UserId.Value);
             if (result is null)
             {
-                return ErrorModelNoCharacter;
+                return GetEmptyCharacter;
             }
             return result;
         }
 
-        return new Character
-        {
-            Id = Guid.Empty,
-            Priority = 0,
-            Skills = new List<Skill>
-            {
-                new Skill()
-                {
-                    Level = 1,
-                    SkillName = "eag",
-                    Character = new(),
-                    Type = string.Empty,
-                }
-
-            }
-        };
+        return GetEmptyCharacter;
     }
 
     public async Task<OneOf<List<Character>, ErrorModel>> GetList(BaseUserIdFilter filter, PaginationFilter paginationFilter)
@@ -193,5 +178,22 @@ public class CharacterService : ICharacterService
     }
 
     private static readonly ErrorModel ErrorModelNoCharacter = new(1001, "Character not found");
+
+    private static Character GetEmptyCharacter
+        => new()
+        {
+            Id = Guid.Empty,
+            Priority = 0,
+            Skills = new List<Skill>
+            {
+                new Skill()
+                {
+                    Level = 1,
+                    SkillName = "eag",
+                    Character = new(),
+                    Type = string.Empty,
+                }
+            }
+        };
 }
 

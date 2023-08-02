@@ -29,10 +29,10 @@ class CRUDRequestHelper{
                 if(!responseJson){
                     return  this.errorObject();
                 }
-                if(!responseJson.data.result){
-                    return this.errorObject(responseJson.data.message)
+                if(!responseJson.data){
+                    return this.errorObject(responseJson.data)
                 }
-                return {success:responseJson.data.result, data:responseJson.data.data}
+                return {success:true, data:responseJson.data}
     
              }catch (ex) {
                 console.log(ex);

@@ -54,7 +54,6 @@ const useStyles = makeStyles({
 })
 
 const emptyGuid='00000000-0000-0000-0000-000000000000'
-const startingImageType = 'eag'
 
 export default function SkillList () {
   const theme: any = useTheme()
@@ -62,10 +61,10 @@ export default function SkillList () {
   const [name, setName] = useState('')
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
   const [skillPointCount, setskillPointCount] = useState(1)
-  const [existingImages, setExistingImages] = useState<string[]>([startingImageType])
+  const [existingImages, setExistingImages] = useState<string[]>([])
   const [unusedImages, setUnusedImages] = useState<SkillImageModel[]>()
   const [modalHeight, setModalHeight ] = useState(770)
-  const [characterId, setCharacterId] = useState('')
+  const [characterId, setCharacterId] = useState<string|undefined>('')
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -73,15 +72,7 @@ export default function SkillList () {
 
   const [imageIdToChange, setImageIdToChange] = useState('')
 
-  const [items, setItems] = useState<SkillModel[]>([{
-    id: v4(),
-    priority:0,
-    skillName:'',
-    level:1,
-    isMain:1,
-    type:startingImageType,
-    image: getStartingSkillImage(startingImageType)
-  }])
+  const [items, setItems] = useState<SkillModel[]>([])
 
   const setOrderedItems = (newItems: SkillModel[]) => {
     const orderedItems = _.sortBy(newItems, 'priority')
@@ -269,15 +260,41 @@ const saveCharacter = async () =>{
 
 const getCahracterRequest = async () =>{
   const response = await getCharacter()
-  if(!response || !response.result){
-    //error
+  if(response.id === emptyGuid) {
+    const skill1 = response.skills
+
+    const startingPageSkillType = skill1[0].skillName
+
+    setExistingImages([startingPageSkillType])
+    setItems([{
+      id: v4(),
+      priority:0,
+      skillName:'',
+      level:1,
+      isMain:1,
+      type:startingPageSkillType,
+      image: getStartingSkillImage(startingPageSkillType)
+    }])
+    //starting entity
     return
   }
-  const character = response.data as CharacterModel 
-  if(character.id === emptyGuid) {
-    
-  }
-
+  setCharacterId(response.id)
+  const newExistingImages = response.skills.map(x=>{
+    return x.type
+  })
+  setExistingImages(newExistingImages)
+  const mapedImages = response.skills.map(x=>{
+    return {
+      id: x.id,
+      priority:x.priority,
+      skillName:x.skillName,
+      level:x.level,
+      isMain:x.isMain,
+      type:x.type,
+      image: getStartingSkillImage(x.type)
+    }
+  })
+  setItems(mapedImages)
 }
 
   useEffect(()=>{

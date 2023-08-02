@@ -8,6 +8,6 @@ export default interface CharacterModel {
     startingDate: Date
     photoId?: string
     story?: string
-    skills: Array<SkillModel>
+    skills: SkillModel[]
     photo?: FileModel
 }

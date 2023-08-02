@@ -46,27 +46,27 @@ public class FileController : ControllerBase
         }
     }
 
-    [HttpGet(ApiRoutes.FileRoute.Get)]
-    public async Task<IActionResult> Get([FromQuery] EntityQuery entityByUserIdQuery)
-    {
-        try
-        {
-            var userId = HttpContext.GetUserId();
-            var entityByUserIdfilter = _mapper.Map<ByEntityFilter>(entityByUserIdQuery);
-            entityByUserIdfilter.UserId = userId;
-            var result = await _fileService.Get(entityByUserIdQuery.EntityId);
+    //[HttpGet(ApiRoutes.FileRoute.Get)]
+    //public async Task<IActionResult> Get([FromQuery] EntityQuery entityByUserIdQuery)
+    //{
+    //    try
+    //    {
+    //        var userId = HttpContext.GetUserId();
+    //        var entityByUserIdfilter = _mapper.Map<ByEntityFilter>(entityByUserIdQuery);
+    //        entityByUserIdfilter.UserId = userId;
+    //        var result = await _fileService.Get(entityByUserIdQuery.EntityId);
 
-            return result.Match<IActionResult>(
-               fileStream => new FileStreamResult(fileStream.FileEntity, "application/octet-stream")
-               {
-                   FileDownloadName = fileStream.FileName
-               },
-               errorModel => BadRequest(errorModel.Message)
-               );
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
+    //        return result.Match<IActionResult>(
+    //           fileStream => new FileStreamResult(fileStream.FileEntity, "application/octet-stream")
+    //           {
+    //               FileDownloadName = fileStream.FileName
+    //           },
+    //           errorModel => BadRequest(errorModel.Message)
+    //           );
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return BadRequest(ex.Message);
+    //    }
+    //}
 }

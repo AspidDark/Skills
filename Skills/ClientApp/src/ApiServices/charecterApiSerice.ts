@@ -8,22 +8,14 @@ import CharacterModel from '../models/CharacterModel';
         result:boolean,
         data:T
     }
-    export const getCharacter = async(entityId?:string) :Promise<BaseDto<CharacterModel>|BaseDto<string>> => {
+    export const getCharacter = async(entityId?:string) :Promise<CharacterModel> => {
         const apiService = new CRUDRequestHelper();
-        const path= uri+`?entityId=${entityId}`;
-        const resultApi=await apiService.getRequest(path);
-        if(!resultApi.success){
-            let errorResult:BaseDto<string>={
-                result:false,
-                data:resultApi.data
-            }
-            return errorResult;
+        let path = uri
+        if(entityId) {
+            path= uri+`?entityId=${entityId}`;
         }
-        let result:BaseDto<CharacterModel>={
-            result:true,
-            data:resultApi.data
-        }
-        return result;
+        const resultApi=await apiService.getRequest(path, false);
+        return resultApi.data;
     }
 
   /*   async getParagraphs(pagination:PaginatonWithMainEntity):Promise<BaseDto<ParagraphDto[]>|BaseDto<string>>{
