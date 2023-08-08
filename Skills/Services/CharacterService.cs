@@ -113,12 +113,12 @@ public class CharacterService : ICharacterService
 
     public async Task<OneOf<Character, ErrorModel>> Delete(Guid characterId, Guid userId)
     {
-        var skills = await _skillsDataService.DeleteForCharacter(characterId, userId);
         var character = await _characterDataService.Delete(characterId, userId);
         if (character is null)
         {
             return new ErrorModel(1001, $"Character with {characterId} not found");
         }
+        var skills = await _skillsDataService.DeleteForCharacter(characterId, userId);
         character.Skills = skills;
         return character;
     }

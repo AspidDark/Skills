@@ -6,6 +6,7 @@ using Swashbuckle.AspNetCore.Filters;
 using Skills.Options;
 using System.Text.Json.Serialization;
 
+
 internal class Program
 {
     private static void Main(string[] args)

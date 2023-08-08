@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
+using Skills.DataBase.DataAccess.Entities;
 using Skills.Extensions;
 using Skills.Models;
 using Skills.Services;
 using Skills.Shared.V1;
 using Skills.Shared.V1.Request;
 using Skills.Shared.V1.Request.Queries;
+using System.Text.Json;
 
 namespace Skills.Controllers;
 
@@ -36,7 +39,7 @@ public class CharacterController : ControllerBase
             var result = await _characterService.Get(entityByUserIdfilter);
 
             return result.Match<IActionResult>(
-                Ok,
+                ch => Ok(Serialize(ch)),
                 errorModel => BadRequest(errorModel.Message)
                 );
         }
@@ -126,5 +129,16 @@ public class CharacterController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+    }
+
+    private static string Serialize(Character character)
+    {
+        var serializeOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        };
+       return JsonSerializer.Serialize(character, serializeOptions);
     }
 }
