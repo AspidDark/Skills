@@ -37,7 +37,7 @@ public class CharacterDataService : ICharacterDataService
           .Include(x => x.Skills)
           .Include(x => x.Photo)
           .AsNoTracking()
-          .Where(x => x.Id == userId)
+          .Where(x => x.OwnerId == userId)
           .OrderBy(x=>x.Priority)
           .FirstOrDefaultAsync();
 

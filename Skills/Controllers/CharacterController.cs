@@ -2,15 +2,17 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Serialization;
 using Skills.DataBase.DataAccess.Entities;
 using Skills.Extensions;
+using Skills.Map;
 using Skills.Models;
 using Skills.Services;
 using Skills.Shared.V1;
 using Skills.Shared.V1.Request;
 using Skills.Shared.V1.Request.Queries;
+using Skills.Shared.V1.Response;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Skills.Controllers;
 
@@ -29,7 +31,7 @@ public class CharacterController : ControllerBase
     }
 
     [HttpGet(ApiRoutes.CharacterRoute.Get)]
-    public async Task<IActionResult> Get([FromQuery] EntityQuery entityByUserIdQuery)
+    public async Task<ActionResult<CharacterResponse>> Get([FromQuery] EntityQuery entityByUserIdQuery)
     {
         try
         {
@@ -38,10 +40,11 @@ public class CharacterController : ControllerBase
             entityByUserIdfilter.UserId = userId;
             var result = await _characterService.Get(entityByUserIdfilter);
 
-            return result.Match<IActionResult>(
-                ch => Ok(Serialize(ch)),
-                errorModel => BadRequest(errorModel.Message)
-                );
+            if (result.TryPickT0(out var character, out var error))
+            {
+                return ModelToResponse.Map(character);
+            }
+            return BadRequest(error);
         }
         catch (Exception ex)
         { 
@@ -62,7 +65,7 @@ public class CharacterController : ControllerBase
             var result = await _characterService.GetList(userIdFilter, paginationfilter);
 
             return result.Match<IActionResult>(
-                Ok,
+                ch => Ok(ModelToResponse.Map(ch)),
                 errorModel => BadRequest(errorModel.Message)
                 );
         }
@@ -83,7 +86,7 @@ public class CharacterController : ControllerBase
             var result = await _characterService.Create(model, userId);
 
             return result.Match<IActionResult>(
-              Ok,
+              ch => Ok(ModelToResponse.Map(ch)),
               errorModel => BadRequest(errorModel.Message)
               );
         }
@@ -103,7 +106,7 @@ public class CharacterController : ControllerBase
             var result = await _characterService.Update(model, characterId, userId);
 
             return result.Match<IActionResult>(
-               Ok,
+               ch => Ok(ModelToResponse.Map(ch)),
               errorModel => BadRequest(errorModel.Message)
               );
         }
@@ -114,14 +117,14 @@ public class CharacterController : ControllerBase
     }
 
     [HttpDelete(ApiRoutes.CharacterRoute.Delete)]
-    public async Task<IActionResult> Delete([FromRoute] Guid characterId)
+    public async Task<ActionResult<CharacterResponse>> Delete([FromRoute] Guid characterId)
     {
         try
         {
             var userId = HttpContext.GetUserId();
             var result = await _characterService.Delete(characterId, userId);
-            return result.Match<IActionResult>(
-            Ok,
+            return result.Match<ActionResult>(
+            ch => Ok(ModelToResponse.Map(ch)),
             errorModel => BadRequest(errorModel.Message)
             );
         }
@@ -137,6 +140,7 @@ public class CharacterController : ControllerBase
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
             WriteIndented = true
         };
        return JsonSerializer.Serialize(character, serializeOptions);

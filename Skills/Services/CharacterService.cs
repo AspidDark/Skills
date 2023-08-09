@@ -85,8 +85,8 @@ public class CharacterService : ICharacterService
         var saveFileResult = await _skillImageService.SaveSkillImages(fileEntities);
         //handle error
 
-        var characterToCraate = CharacterMap(model, userId);
-        var character = await _characterDataService.Create(characterToCraate);
+        var characterToCrate = CharacterMap(model, userId);
+        var character = await _characterDataService.Create(characterToCrate);
 
         var skillsToSave = MapSkills(model.Skills, character.Id, userId);
 
