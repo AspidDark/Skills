@@ -1,3 +1,4 @@
+﻿using Newtonsoft.Json;
 ﻿using System.Text.Json.Serialization;
 
 namespace Skills.Shared.V1.Response;
