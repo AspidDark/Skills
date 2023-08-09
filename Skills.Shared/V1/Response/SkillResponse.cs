@@ -1,7 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace Skills.Shared.V1.Response;
-
 public class SkillResponse : BaseResponseEntity
 {
     [JsonPropertyName("priority")]

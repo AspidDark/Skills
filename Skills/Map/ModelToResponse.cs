@@ -22,7 +22,7 @@ namespace Skills.Map
              Story = character.Story,
              PhotoId = character.PhotoId,
              Photo = Map(character.Photo),
-             Skills = character.Skills?.Select(x => Map(x)),
+             Skills = character.Skills?.Select(x => Map(x)).OrderBy(x=>x.Priority),
          };
 
         private static SkillResponse Map(Skill skill)

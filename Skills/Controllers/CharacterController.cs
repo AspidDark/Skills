@@ -15,7 +15,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Skills.Controllers;
-
+////https://stackoverflow.com/questions/34662966/json-net-serialization-of-ienumerable-with-typenamehandling-auto
 //[Authorize]
 [AllowAnonymous]
 [ApiController]
@@ -31,7 +31,7 @@ public class CharacterController : ControllerBase
     }
 
     [HttpGet(ApiRoutes.CharacterRoute.Get)]
-    public async Task<ActionResult<CharacterResponse>> Get([FromQuery] EntityQuery entityByUserIdQuery)
+    public async Task<IActionResult> Get([FromQuery] EntityQuery entityByUserIdQuery)
     {
         try
         {
@@ -39,12 +39,10 @@ public class CharacterController : ControllerBase
             var entityByUserIdfilter = _mapper.Map<ByEntityFilter>(entityByUserIdQuery);
             entityByUserIdfilter.UserId = userId;
             var result = await _characterService.Get(entityByUserIdfilter);
-
-            if (result.TryPickT0(out var character, out var error))
-            {
-                return ModelToResponse.Map(character);
-            }
-            return BadRequest(error);
+            return result.Match<IActionResult>(
+               ch => Ok(ModelToResponse.Map(ch)),
+               errorModel => BadRequest(errorModel.Message)
+               );
         }
         catch (Exception ex)
         { 
@@ -117,13 +115,13 @@ public class CharacterController : ControllerBase
     }
 
     [HttpDelete(ApiRoutes.CharacterRoute.Delete)]
-    public async Task<ActionResult<CharacterResponse>> Delete([FromRoute] Guid characterId)
+    public async Task<IActionResult> Delete([FromRoute] Guid characterId)
     {
         try
         {
             var userId = HttpContext.GetUserId();
             var result = await _characterService.Delete(characterId, userId);
-            return result.Match<ActionResult>(
+            return result.Match<IActionResult>(
             ch => Ok(ModelToResponse.Map(ch)),
             errorModel => BadRequest(errorModel.Message)
             );

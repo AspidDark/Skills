@@ -32,9 +32,9 @@ internal class Program
 
         builder.Services.AddDataAccess(configuration);
 
-        builder.Services.AddControllers()
-            .AddJsonOptions(o => o.JsonSerializerOptions
-                .ReferenceHandler = ReferenceHandler.Preserve);
+        //builder.Services.AddControllers()
+        //    .AddJsonOptions(o => o.JsonSerializerOptions
+        //        .ReferenceHandler = ReferenceHandler.Preserve);
 
 
         builder.Services.AddOptions<FilePathOptions>()
