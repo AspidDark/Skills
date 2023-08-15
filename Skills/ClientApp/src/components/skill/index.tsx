@@ -14,12 +14,10 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography'
-
 import ImageUpload from "./ImageUpload"
-import { getRandomImage, getSameForOtherLevel, getByLevel, getStartingSkillImage } from '../../services/ImageService'
+import { getRandomImage, getSameForOtherLevel, getByLevel, getStartingSkillImage, getById } from '../../services/ImageService'
 import Box from '@mui/material/Box/Box'
 import { modalSelector } from '../modal/modalSelector'
 import SkillImageModel from '../../models/SkillImageModel'
@@ -27,6 +25,8 @@ import { Grid } from '@mui/material'
 import CharacterModel from '../../models/CharacterModel'
 import {postCharacter, getCharacter } from '../../ApiServices/charecterApiSerice'
 import Button from '@mui/material/Button';
+
+const emptyGuid='00000000-0000-0000-0000-000000000000'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -53,8 +53,6 @@ const useStyles = makeStyles({
   }
 })
 
-const emptyGuid='00000000-0000-0000-0000-000000000000'
-
 export default function SkillList () {
   const theme: any = useTheme()
   const classes = useStyles()
@@ -65,19 +63,28 @@ export default function SkillList () {
   const [unusedImages, setUnusedImages] = useState<SkillImageModel[]>()
   const [modalHeight, setModalHeight ] = useState(770)
   const [characterId, setCharacterId] = useState<string|undefined>('')
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   const [imageIdToChange, setImageIdToChange] = useState('')
-
   const [items, setItems] = useState<SkillModel[]>([])
 
+  //Draggable list
   const setOrderedItems = (newItems: SkillModel[]) => {
     const orderedItems = _.sortBy(newItems, 'priority')
     setChangedItems(orderedItems)
   }
+
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    // dropped outside the list
+    if (!destination) return
+    const newItems = reorder(items, source.index, destination.index)
+    for (let i = 0; i < newItems.length; i++) {
+      newItems[i].priority = i
+    }
+    setOrderedItems(newItems)
+  }
+
 
   const setItem = (value: string, id: string) => {
     const newItems = items.map(x => {
@@ -122,16 +129,6 @@ export default function SkillList () {
       setOrderedItems(newitems)
       setskillPointCount(skillPointCount-1)
     }
-  }
-
-  const onDragEnd = ({ destination, source }: DropResult) => {
-    // dropped outside the list
-    if (!destination) return
-    const newItems = reorder(items, source.index, destination.index)
-    for (let i = 0; i < newItems.length; i++) {
-      newItems[i].priority = i
-    }
-    setOrderedItems(newItems)
   }
 
   const setStartDateValue =(value: Dayjs | null) => {
@@ -242,6 +239,7 @@ const changeModalSize = () =>{
   setModalHeight(770)
 }
 
+//Crud
 const saveCharacter = async () =>{
   let startDateValue = startDate?.toDate()
   if(!startDateValue) {
@@ -284,6 +282,7 @@ const getCahracterRequest = async () =>{
   })
   setExistingImages(newExistingImages)
   const mapedImages = response.skills.map(x=>{
+    const image = getById(x.imageId)
     return {
       id: x.id,
       priority:x.priority,
@@ -291,9 +290,10 @@ const getCahracterRequest = async () =>{
       level:x.level,
       isMain:x.isMain,
       type:x.type,
-      image: getStartingSkillImage(x.type)
+      image: image
     }
   })
+
   setItems(mapedImages)
 }
 
@@ -331,7 +331,7 @@ const getCahracterRequest = async () =>{
   <Button
   onClick={() => saveCharacter()}
 >
-  Click me
+  Post
 </Button>
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={1}>

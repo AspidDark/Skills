@@ -1,5 +1,6 @@
 import CRUDRequestHelper from '../services/CRUDRequestHelper'
 import * as path from '../Consts/PathConsts';
+import CharacterResponseModel from '../models/ResponseModels/CharacterResponseModel';
 import CharacterModel from '../models/CharacterModel';
 
     const uri:string='https://localhost:7256/api/v1/character';
@@ -8,7 +9,7 @@ import CharacterModel from '../models/CharacterModel';
         result:boolean,
         data:T
     }
-    export const getCharacter = async(entityId?:string) :Promise<CharacterModel> => {
+    export const getCharacter = async(entityId?:string) :Promise<CharacterResponseModel> => {
         const apiService = new CRUDRequestHelper();
         let path = uri
         if(entityId) {
@@ -39,7 +40,7 @@ import CharacterModel from '../models/CharacterModel';
     }
     */
 
-export const postCharacter = async(entity:CharacterModel):Promise<BaseDto<CharacterModel>|BaseDto<string>> => {
+export const postCharacter = async(entity:CharacterModel):Promise<BaseDto<CharacterResponseModel>|BaseDto<string>> => {
 
         const apiService = new CRUDRequestHelper();
 
@@ -52,7 +53,7 @@ export const postCharacter = async(entity:CharacterModel):Promise<BaseDto<Charac
             return errorResult;
         }
 
-        let result:BaseDto<CharacterModel>={
+        let result:BaseDto<CharacterResponseModel>={
             result:true,
             data:resultApi.data
         }

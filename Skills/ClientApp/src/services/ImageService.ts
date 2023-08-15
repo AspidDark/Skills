@@ -691,7 +691,7 @@ export const getAll = ():SkillImageModel[] => {
 }
 
 export const getById = (id:string):SkillImageModel => {
-    let result = images.find(x=>x.id==id)
+    let result = images.find(x=>x.id===id)
     if(!result){
         result = images[0];
     }

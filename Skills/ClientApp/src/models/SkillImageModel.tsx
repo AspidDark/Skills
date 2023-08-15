@@ -7,3 +7,5 @@ export default interface SkillImageModel
     title: string
     width: string
 }
+
+

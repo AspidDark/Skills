@@ -32,7 +32,7 @@ export interface DraggableListItemProps {
 const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, isLast, itemsLength, changeSkillLevel, onImageButtonClick }: DraggableListItemProps) => {
   const classes = useStyles()
 
-  const [skillText, setSkillText] = useState<string>('')
+  const [skillText, setSkillText] = useState<string>(item.skillName?? '')
 
   const deleteItem = (itemId: string) => {
     if (itemsLength > 1) {
@@ -48,6 +48,7 @@ const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, is
   }
 
   const setSkillTextVlue =(value:string) => {
+    item.skillName = value
     setSkillText(value),
     setSkillName(value, item.id)
   }
