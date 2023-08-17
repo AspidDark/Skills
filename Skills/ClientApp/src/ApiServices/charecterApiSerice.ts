@@ -40,24 +40,11 @@ import CharacterModel from '../models/CharacterModel';
     }
     */
 
-export const postCharacter = async(entity:CharacterModel):Promise<BaseDto<CharacterResponseModel>|BaseDto<string>> => {
+export const postCharacter = async(entity:CharacterModel):Promise<CharacterResponseModel> => {
 
         const apiService = new CRUDRequestHelper();
-
         const resultApi = await apiService.postRequest({url:uri, data: entity}, false);
-        if(!resultApi||!resultApi.success){
-            let errorResult:BaseDto<string>={
-                result:false,
-                data:resultApi.data
-            }
-            return errorResult;
-        }
-
-        let result:BaseDto<CharacterResponseModel>={
-            result:true,
-            data:resultApi.data
-        }
-        return result;
+        return resultApi.data;
     }
 
   /*  async deleteParagraph(entityId:string):Promise<BaseDto<string>>{
@@ -77,24 +64,13 @@ export const postCharacter = async(entity:CharacterModel):Promise<BaseDto<Charac
         }
         return result;
     }
-
-    async updateParagraph(updateEntity:UpdateParagraphDto):Promise<BaseDto<ParagraphDto>|BaseDto<string>>{
-        const path=this.uri+`/${updateEntity.id}`;
+  */
+    export const updateCharacter = async(updateEntity:CharacterModel):Promise<CharacterResponseModel> =>{
+        const path=uri+`/${updateEntity.id}`;
         const apiService = new CRUDRequestHelper();
-        const resultApi = await apiService.updateRequest({url:path, data:{name:updateEntity.name}});
-        if(!resultApi||!resultApi.success){
-            let errorResult:BaseDto<string>={
-                result:false,
-                data:resultApi.data
-            }
-            return errorResult;
-        }
-        let result:BaseDto<ParagraphDto>={
-            result:true,
-            data:resultApi.data
-        }
-        return result;
+        const resultApi = await apiService.updateRequest({url:path, data:updateEntity}, false);
+        return resultApi.data;
     }
 
-   */
+ 
 

@@ -23,8 +23,9 @@ import { modalSelector } from '../modal/modalSelector'
 import SkillImageModel from '../../models/SkillImageModel'
 import { Grid } from '@mui/material'
 import CharacterModel from '../../models/CharacterModel'
-import {postCharacter, getCharacter } from '../../ApiServices/charecterApiSerice'
+import {postCharacter, getCharacter, updateCharacter } from '../../ApiServices/charecterApiSerice'
 import Button from '@mui/material/Button';
+import CharacterResponseModel from '../../models/ResponseModels/CharacterResponseModel'
 
 const emptyGuid='00000000-0000-0000-0000-000000000000'
 
@@ -240,7 +241,7 @@ const changeModalSize = () =>{
 }
 
 //Crud
-const saveCharacter = async () =>{
+const saveCharacterRequest = async () =>{
   let startDateValue = startDate?.toDate()
   if(!startDateValue) {
     startDateValue=new Date()
@@ -254,14 +255,35 @@ const saveCharacter = async () =>{
   }
 
   const result= await postCharacter(saveModel)
+  setData(result);
+
 }
 
 const getCahracterRequest = async () =>{
   const response = await getCharacter()
-  if(response.id === emptyGuid) {
-    const skill1 = response.skills
+  setData(response)
+}
 
-    const startingPageSkillType = skill1[0].skillName
+const updateCharacterRequest = async () =>{
+  let startDateValue = startDate?.toDate()
+  if(!startDateValue) {
+    startDateValue=new Date()
+  }
+
+  const saveModel: CharacterModel ={
+    id: characterId,
+    priority : 1,
+    buildName : name,
+    startingDate: startDateValue,
+    skills: items
+  }
+  const response = await updateCharacter(saveModel)
+  setData(response)
+}
+
+const setData = (data: CharacterResponseModel): void => {
+  if(data.id === emptyGuid) {
+    const startingPageSkillType = data.skills[0].skillName
 
     setExistingImages([startingPageSkillType])
     setItems([{
@@ -273,15 +295,17 @@ const getCahracterRequest = async () =>{
       type:startingPageSkillType,
       image: getStartingSkillImage(startingPageSkillType)
     }])
+    setStartDate(dayjs(new Date()))
     //starting entity
     return
   }
-  setCharacterId(response.id)
-  const newExistingImages = response.skills.map(x=>{
+  setCharacterId(data.id)
+  const newExistingImages = data.skills.map(x=>{
     return x.type
   })
   setExistingImages(newExistingImages)
-  const mapedImages = response.skills.map(x=>{
+  setStartDate(dayjs(data.startingDate))
+  const mapedImages = data.skills.map(x=>{
     const image = getById(x.imageId)
     return {
       id: x.id,
@@ -329,9 +353,14 @@ const getCahracterRequest = async () =>{
 
   return (<>
   <Button
-  onClick={() => saveCharacter()}
+  onClick={() => saveCharacterRequest()}
 >
   Post
+</Button>
+<Button
+  onClick={() => updateCharacterRequest()}
+>
+    Update
 </Button>
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={1}>

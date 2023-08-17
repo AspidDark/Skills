@@ -52,13 +52,13 @@ class CRUDRequestHelper{
 
             const responseJson = await axios.post(request.url, request.data,
                 authorize ? {headers:headers}:undefined);
-            if(!responseJson){
-                return  this.errorObject();
-            }
-            if(!responseJson.data.result){
-                return this.errorObject(responseJson.data.message)
-            }
-            return {success:responseJson.data.result, data:responseJson.data.data}
+                if(!responseJson){
+                    return  this.errorObject();
+                }
+                if(!responseJson.data){
+                    return this.errorObject(responseJson.data)
+                }
+                return {success:true, data:responseJson.data}
 
         }catch (ex) {
             console.log(ex);
@@ -104,13 +104,13 @@ class CRUDRequestHelper{
 
             const responseJson = await axios.put(request.url, request.data, 
                 authorize ? {headers:headers}:undefined);
-            if(!responseJson){
-                return  this.errorObject();
-            }
-            if(!responseJson.data.result){
-                return this.errorObject(responseJson.data.message)
-            }
-            return {success:responseJson.data.result, data:responseJson.data.data}
+                if(!responseJson){
+                    return  this.errorObject();
+                }
+                if(!responseJson.data){
+                    return this.errorObject(responseJson.data)
+                }
+                return {success:true, data:responseJson.data}
 
         }catch (ex) {
             console.log(ex);
