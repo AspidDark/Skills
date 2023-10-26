@@ -4,11 +4,11 @@ using Skills.DataBase.DataAccess.Entities;
 
 namespace Skills.DataBase.EntityMap;
 
-public class SkillMap : BaseEntityMap<Skill>
+public class SkillMap : BaseEntityMap<HeroSkill>
 {
     public SkillMap() : base("skill") { }
 
-    public override void Configure(EntityTypeBuilder<Skill> builder)
+    public override void Configure(EntityTypeBuilder<HeroSkill> builder)
     {
         base.Configure(builder);
         builder.Property(x => x.Priority).HasColumnName("priority").IsRequired();

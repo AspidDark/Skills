@@ -148,8 +148,8 @@ public class CharacterService : ICharacterService
         Story = model.Story,
     };
 
-    private static List<Skill> MapSkills(IEnumerable<SkillsModel> skills, Guid characterId, Guid userId)
-      => skills.Select(x => new Skill()
+    private static List<HeroSkill> MapSkills(IEnumerable<SkillsModel> skills, Guid characterId, Guid userId)
+      => skills.Select(x => new HeroSkill()
       {
           SkillName = x.SkillName,
           CahracterId = characterId,
@@ -184,9 +184,9 @@ public class CharacterService : ICharacterService
         {
             Id = Guid.Empty,
             Priority = 0,
-            Skills = new List<Skill>
+            Skills = new List<HeroSkill>
             {
-                new Skill()
+                new HeroSkill()
                 {
                     Level = 1,
                     SkillName = "eag",

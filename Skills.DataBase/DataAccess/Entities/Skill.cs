@@ -2,20 +2,13 @@
 
 public class Skill : BaseEntity
 {
-    public int Priority { get; set; }
+    public required string DefaultName { get; set; }
 
-    public required string SkillName { get; set; }
+    public string? Description { get; set; }
 
-    public required int Level { get; set; }
+    public Guid SkillSetId { get; set; }
 
-    public Guid CahracterId { get; set; }
+    public SkillSet SkillSet { get; set; } = null!;
 
-    public Character Character { get; set; } = null!;
-
-    public Guid? ImageId { get; set; }
-    public FileEntity? Image { get; set; }
-
-    public int IsMain { get; set; }
-
-    public string Type { get; set; } = null!;
+    public List<SkillInfo> SkillData { get; set; } = null!;
 }

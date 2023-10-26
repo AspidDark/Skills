@@ -25,7 +25,7 @@ public static class ModelToResponse
          Skills = character.Skills?.Select(x => Map(x)).OrderBy(x=>x.Priority),
      };
 
-    private static SkillResponse Map(Skill skill)
+    private static SkillResponse Map(HeroSkill skill)
     => new()
     {
         Id = skill.Id,

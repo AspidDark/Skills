@@ -32,7 +32,7 @@ namespace Skills.DataBase.DataAccess
         }
 
         public DbSet<Character> Characters { get; set; }
-        public DbSet<Skill> Skills { get; set; }
+        public DbSet<HeroSkill> Skills { get; set; }
 
         public DbSet<FileEntity> Files { get; set; }
 

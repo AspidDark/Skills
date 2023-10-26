@@ -5,9 +5,9 @@ namespace Skills.DataBase.DataAccess.Services;
 
 public interface ISkillsDataService
 {
-    Task<List<Skill>> AddMany(IEnumerable<Skill> skills);
-    Task<List<Skill>> UpdateMany(IEnumerable<Skill> skills, Guid userId);
-    Task<List<Skill>?> DeleteForCharacter(Guid characterId, Guid userId);
+    Task<List<HeroSkill>> AddMany(IEnumerable<HeroSkill> skills);
+    Task<List<HeroSkill>> UpdateMany(IEnumerable<HeroSkill> skills, Guid userId);
+    Task<List<HeroSkill>?> DeleteForCharacter(Guid characterId, Guid userId);
 }
 public class SkillsDataService : ISkillsDataService
 {
@@ -18,14 +18,14 @@ public class SkillsDataService : ISkillsDataService
         _appDbContext = appDbContext;
     }
 
-    public async Task<List<Skill>> AddMany(IEnumerable<Skill> skills)
+    public async Task<List<HeroSkill>> AddMany(IEnumerable<HeroSkill> skills)
     {
         await _appDbContext.Skills.AddRangeAsync(skills);
         await _appDbContext.SaveChangesAsync();
         return skills.ToList();
     }
 
-    public async Task<List<Skill>> UpdateMany(IEnumerable<Skill> skills, Guid characterId)
+    public async Task<List<HeroSkill>> UpdateMany(IEnumerable<HeroSkill> skills, Guid characterId)
     {
         var skillsfromBase =  _appDbContext.Skills.Where(x => x.Character.Id == characterId);
         _appDbContext.Skills.RemoveRange(skillsfromBase);
@@ -35,7 +35,7 @@ public class SkillsDataService : ISkillsDataService
         return skills.ToList();
     }
 
-    public async Task<List<Skill>?> DeleteForCharacter(Guid characterId, Guid userId)
+    public async Task<List<HeroSkill>?> DeleteForCharacter(Guid characterId, Guid userId)
     {
         var skills = _appDbContext.Skills.Where(x => x.OwnerId == userId && x.Character.Id == characterId);
         if (skills is null || skills.Count() == 0)

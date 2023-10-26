@@ -7,7 +7,7 @@ public class Character : BaseEntity
     public  string BuildName { get; set; }
     public  DateTime StartingDate { get; set; }
 
-    public List<Skill>? Skills { get; set; }
+    public List<HeroSkill>? Skills { get; set; }
 
     public string? Story { get; set; }
 
