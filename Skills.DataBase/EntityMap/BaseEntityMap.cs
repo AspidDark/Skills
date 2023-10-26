@@ -1,6 +1,7 @@
 ﻿using Skills.DataBase.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Skills.DataBase.EntityMap;
 
@@ -25,5 +26,12 @@ public abstract class BaseEntityMap<T> : IEntityTypeConfiguration<T> where T : B
 
         builder.Property(x => x.IsDeleted).HasColumnName("is_deleted");
 
+    }
+}
+
+public class DateTimeToDateTimeUtc : ValueConverter<DateTime, DateTime>
+{
+    public DateTimeToDateTimeUtc() : base(c => DateTime.SpecifyKind(c, DateTimeKind.Utc), c => c)
+    {
     }
 }

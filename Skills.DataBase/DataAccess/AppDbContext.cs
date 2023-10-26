@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Skills.DataBase.DataAccess.Entities;
 using Skills.DataBase.EntityMap;
-using System.Security.Principal;
 
 namespace Skills.DataBase.DataAccess
 {
@@ -19,7 +18,7 @@ namespace Skills.DataBase.DataAccess
             modelBuilder.HasDefaultSchema("public");
             //Table name mapping
             modelBuilder.ApplyConfiguration(new CharacterMap());
-            modelBuilder.ApplyConfiguration(new SkillMap());
+            modelBuilder.ApplyConfiguration(new HeroSkillMap());
             modelBuilder.ApplyConfiguration(new FileEntityMap());
             modelBuilder.ApplyConfiguration(new SkillImageMap());
 
@@ -28,14 +27,17 @@ namespace Skills.DataBase.DataAccess
                 .WithOne(c => c.Character)
                 .HasForeignKey(p => p.CahracterId);
 
+            modelBuilder.Entity<SkillSet>()
+                .HasMany(s => s.Skills)
+                .WithOne(c => c.SkillSet)
+                .HasForeignKey(p => p.SkillSetId);
+
             base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Character> Characters { get; set; }
         public DbSet<HeroSkill> Skills { get; set; }
-
         public DbSet<FileEntity> Files { get; set; }
-
         public DbSet<FileEntity> SkillImages { get; set; }
     }
 }

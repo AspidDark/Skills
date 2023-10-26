@@ -1,10 +1,10 @@
 ﻿namespace Skills.DataBase.DataAccess.Entities;
 
-public class SkillInfo : BaseEntity
+public class SkillLevelInfo : BaseEntity
 {
-    public string Path { get; set; }
+    public required string Path { get; set; }
     public int Level { get; set; }
     public required string Name { get; set; }
-
     public int IsLocal { get; set; }
+    public List<Skill>? Skills { get; set; }
 }
