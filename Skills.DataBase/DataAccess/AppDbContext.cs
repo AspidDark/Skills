@@ -32,6 +32,10 @@ namespace Skills.DataBase.DataAccess
                 .WithOne(c => c.SkillSet)
                 .HasForeignKey(p => p.SkillSetId);
 
+            modelBuilder.Entity<Skill>()
+                .HasMany(e => e.SkillLevelData)
+                .WithMany(e => e.Skills);
+
             base.OnModelCreating(modelBuilder);
         }
 
