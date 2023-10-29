@@ -11,6 +11,7 @@ public class SkillMap : BaseEntityMap<Skill>
     public override void Configure(EntityTypeBuilder<Skill> builder)
     {
         base.Configure(builder);
+        builder.Property(x => x.IsDefault).HasDefaultValue(false);
         builder.Property(x => x.DefaultName).HasColumnName("default_name").HasMaxLength(200).IsRequired();
         builder.Property(x => x.Description).HasColumnName("description");
     }

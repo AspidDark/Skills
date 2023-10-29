@@ -2,6 +2,7 @@
 
 public class Skill : BaseEntity
 {
+    public bool IsDefault { get; set; }
     public required string DefaultName { get; set; }
 
     public string? Description { get; set; }
