@@ -6,4 +6,6 @@ public class SkillSet : BaseEntity
     public required string Name { get; set; }
 
     public List<Skill>? Skills { get; set; }
+
+    public List<Character>? Characters { get; set; }
 }

@@ -11,5 +11,7 @@ public class Skill : BaseEntity
 
     public SkillSet SkillSet { get; set; } = null!;
 
-    public List<SkillLevelInfo> SkillLevelData { get; set; } = null!;
+    public List<SkillLevelsInfo> SkillLevelData { get; set; } = null!;
+
+    public List<CharacterSkill>? CharacterSkills { get; set; }
 }

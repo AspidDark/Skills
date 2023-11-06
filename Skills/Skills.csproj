@@ -42,6 +42,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Skills.DataBase\Skills.DataBase.csproj" />
     <ProjectReference Include="..\Skills.Identity\Skills.Identity.csproj" />
+    <ProjectReference Include="..\Skills.InternalModels\Skills.InternalModels.csproj" />
     <ProjectReference Include="..\Skills.Shared\Skills.Shared.csproj" />
   </ItemGroup>
 

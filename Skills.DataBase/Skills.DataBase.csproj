@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\Skills.InternalModels\Skills.InternalModels.csproj" />
   </ItemGroup>
 
 </Project>

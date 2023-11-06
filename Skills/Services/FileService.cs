@@ -23,7 +23,7 @@ public class FileService : IFileService
     private readonly IFileHelper _fileHelper;
     
 
-    public FileService(AppDbContext appDbContext, IFileHelper fileHelper, IImageDataService imageDataService)
+    public FileService(AppDbContext appDbContext, IFileHelper fileHelper)
     {
         _appDbContext = appDbContext;
         _fileHelper = fileHelper;

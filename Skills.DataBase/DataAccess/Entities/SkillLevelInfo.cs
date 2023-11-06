@@ -1,6 +1,6 @@
 ﻿namespace Skills.DataBase.DataAccess.Entities;
 
-public class SkillLevelInfo : BaseEntity
+public class SkillLevelsInfo : BaseEntity
 {
     public required string Path { get; set; }
     public int Level { get; set; }

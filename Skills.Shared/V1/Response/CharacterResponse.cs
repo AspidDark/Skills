@@ -8,15 +8,17 @@ public class CharacterResponse : BaseResponseEntity
     public int Priority { get; set; }
 
     [JsonPropertyName("buildName")]
-    public string BuildName { get; set; }
+    public string? BuildName { get; set; }
     [JsonPropertyName("startingDate")]
     public DateTime StartingDate { get; set; }
     [JsonPropertyName("skills")]
-    public IEnumerable<SkillResponse>? Skills { get; set; }
+    public IEnumerable<CharacterSkillResponse>? Skills { get; set; }
     [JsonPropertyName("story")]
     public string? Story { get; set; }
     [JsonPropertyName("photoId")]
     public Guid? PhotoId { get; set; }
     [JsonPropertyName("photo")]
     public FileEntityResponse? Photo { get; set; }
+    [JsonPropertyName("skillSet")]
+    public SkillSetResponse? SkillSet { get; set; }
 }

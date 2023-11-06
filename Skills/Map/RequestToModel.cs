@@ -15,9 +15,9 @@ public class RequestToModel : Profile
         CreateMap<PaginationQuery, PaginationFilter>();
         CreateMap<EntityQuery, ByEntityFilter>();
 
-        CreateMap<CharacterRequestModel, CharacterModel>()
+        CreateMap<CharacterRequest, CharacterModel>()
             .ForMember(dest => dest.StartingDate, opt => opt.MapFrom(src => DateTime.Parse(src.StartingDate)));
-        CreateMap<SkillRequestModel, SkillsModel>();
+        CreateMap<CharacterSkillRequest, CharacterSkillModel>();
         CreateMap<ImageRequestModel, ImageModel>();
         CreateMap<SkillImageRequestModel, SkillImageModel>();
     }

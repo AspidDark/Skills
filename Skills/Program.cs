@@ -45,7 +45,6 @@ internal class Program
         builder.Services.AddScoped<ICharacterService, CharacterService>();
         builder.Services.AddScoped<IFileService, FileService>();
         builder.Services.AddScoped<IFileHelper, FileHelper>();
-        builder.Services.AddScoped<ISkillImageService, SkillImageService>();
 
         //+Front
         builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>

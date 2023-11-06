@@ -23,15 +23,18 @@ public interface ICharacterService
 public class CharacterService : ICharacterService
 {
     private readonly ICharacterDataService _characterDataService;
-    private readonly ISkillsDataService _skillsDataService;
-    private readonly ISkillImageService _skillImageService;
+    private readonly ICahracterSkillsDataService _characterSkillsDataService;
+    private readonly ISkillDataService _skillDataService;
 
-    public CharacterService(ICharacterDataService characterDataService, ISkillsDataService skillsDataService, ISkillImageService skillImageService)
+    public CharacterService(ICharacterDataService characterDataService, 
+        ICahracterSkillsDataService characterSkillsDataService, 
+        ISkillDataService skillDataService)
     {
         _characterDataService = characterDataService;
-        _skillsDataService = skillsDataService;
-        _skillImageService = skillImageService;
+        _characterSkillsDataService = characterSkillsDataService;
+        _skillDataService = skillDataService;
     }
+
     public async Task<OneOf<Character, ErrorModel>> Get(ByEntityFilter filter)
     {
         if (filter.EntityId.HasValue)
@@ -50,12 +53,13 @@ public class CharacterService : ICharacterService
             var result = await _characterDataService.GetByUserId(filter.UserId.Value);
             if (result is null)
             {
-                return GetEmptyCharacter();
+                return await StarterCharacter();
             }
+            result.SkillSet.Skills = await GetDeafultSkills(result.SkillSetId);
             return result;
         }
 
-        return GetEmptyCharacter();
+        return await StarterCharacter();
     }
 
     public async Task<OneOf<List<Character>, ErrorModel>> GetList(BaseUserIdFilter filter, PaginationFilter paginationFilter)
@@ -81,17 +85,9 @@ public class CharacterService : ICharacterService
             return new ErrorModel(1100, "Character model is invalid skills mismach year of expirience");
         }
 
-        var fileEntities = ImageMap(model.Skills, userId);
-        var saveFileResult = await _skillImageService.SaveSkillImages(fileEntities);
-        //handle error
-
-        var characterToCrate = CharacterMap(model, userId);
-        var character = await _characterDataService.Create(characterToCrate);
-
-        var skillsToSave = MapSkills(model.Skills, character.Id, userId);
-
-        var skills = await _skillsDataService.AddMany(skillsToSave);
-        character.Skills = skills;
+        var character = await _characterDataService.Create(model, userId);
+        var skills = await _characterSkillsDataService.AddMany(model.Skills, character.Id, userId);
+        character.CharacterSkill = skills;
         return character;
     }
 
@@ -101,13 +97,10 @@ public class CharacterService : ICharacterService
         {
             return new ErrorModel(1100, "Character model is invalid skills mismach year of expirience");
         }
-        var characterToUpdate = CharacterMap(model, userId);
-        var updatedCharacter = await _characterDataService.Update(characterToUpdate, characterId, userId);
+        var updatedCharacter = await _characterDataService.Update(model, characterId, userId);
 
-        var skillsToUpdate = MapSkills(model.Skills, updatedCharacter.Id, userId);
-
-        var skills = await _skillsDataService.UpdateMany(skillsToUpdate, characterId);
-        updatedCharacter.Skills = skills;
+        var skills = await _characterSkillsDataService.UpdateMany(model.Skills, characterId, userId);
+        updatedCharacter.CharacterSkill = skills;
         return updatedCharacter;
     }
 
@@ -118,52 +111,13 @@ public class CharacterService : ICharacterService
         {
             return new ErrorModel(1001, $"Character with {characterId} not found");
         }
-        var skills = await _skillsDataService.DeleteForCharacter(characterId, userId);
-        character.Skills = skills;
+        var skills = await _characterSkillsDataService.DeleteForCharacter(characterId, userId);
+        character.CharacterSkill = skills;
         return character;
     }
 
-    private static IEnumerable<FileEntity> ImageMap(IEnumerable<SkillsModel> skills, Guid userId)
-        => skills.Select(x => new FileEntity
-        {
-            Id = x.Image.Id,
-            CreateDate = DateTime.Now,
-            EditDate = DateTime.Now,
-            IsDeleted = 0,
-            OwnerId = userId,
-            Path = x.Image.Path
-        });
-
-    private static Character CharacterMap(CharacterModel model, Guid userId)
-    => new()
-    {
-        BuildName = model.BuildName,
-        CreateDate = DateTime.UtcNow,
-        EditDate = DateTime.UtcNow,
-        IsDeleted = 0,
-        OwnerId = userId,
-        PhotoId = model.PhotoId,
-        Priority = model.Priority,
-        StartingDate = model.StartingDate,
-        Story = model.Story,
-    };
-
-    private static List<HeroSkill> MapSkills(IEnumerable<SkillsModel> skills, Guid characterId, Guid userId)
-      => skills.Select(x => new HeroSkill()
-      {
-          SkillName = x.SkillName,
-          CahracterId = characterId,
-          CreateDate = DateTime.UtcNow,
-          EditDate = DateTime.UtcNow,
-          Id = Guid.NewGuid(),
-          Level = x.Level,
-          ImageId = x.Image.Id,
-          IsDeleted = 0,
-          IsMain = x.IsMain,
-          OwnerId = userId,
-          Priority = x.Priority,
-          Type = x.Type,
-      }).ToList();
+    private async Task<List<Skill>> GetBySkillSetId(Guid skillSetid)
+        => await _skillDataService.GetBySkillSetId(skillSetid);
 
     private static bool IsCharacterValid(CharacterModel model)
     {
@@ -179,9 +133,14 @@ public class CharacterService : ICharacterService
 
     private static readonly ErrorModel ErrorModelNoCharacter = new(1001, "Character not found");
 
-    private OneOf<Character, ErrorModel> GetEmptyCharacter()
-    { 
-        
+    private async Task<Character> StarterCharacter()
+    {
+        var result = await _characterDataService.GetStarting();
+        result!.SkillSet.Skills = await GetDeafultSkills(result.SkillSetId);
+        return result;
     }
+
+    private async Task<List<Skill>?> GetDeafultSkills(Guid skillSetId)
+        => await GetBySkillSetId(skillSetId);
 }
 

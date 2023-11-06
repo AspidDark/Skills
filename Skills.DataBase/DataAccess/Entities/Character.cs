@@ -7,10 +7,14 @@ public class Character : BaseEntity
     public  string BuildName { get; set; }
     public  DateTime StartingDate { get; set; }
 
-    public List<HeroSkill>? Skills { get; set; }
+    public List<CharacterSkill>? CharacterSkill { get; set; }
 
     public string? Story { get; set; }
 
     public Guid? PhotoId { get; set; }
     public FileEntity? Photo { get; set; }
+
+    public Guid SkillSetId { get; set; }
+
+    public SkillSet SkillSet { get; set; }
 }

@@ -2,17 +2,13 @@
 
 namespace Skills.Shared.V1.Request;
 
-public class SkillRequestModel
+public class CharacterSkillRequest
 {
     public Guid Id { get; init; }
     public required int Priority { get; init; }
-
-    [MaxLength(50)]
-    public required string SkillName{ get; init; }
+    public string? CustomName { get; set; }
     public required int Level { get; init; }
     [Range(0,2)]
     public int IsMain { get; set; }
-    public required SkillImageRequestModel Image { get; init; }
-
-    public string Type { get; init; } = null!;
+    public Guid SkillId { get; set; }
 }

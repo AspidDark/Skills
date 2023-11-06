@@ -74,7 +74,7 @@ public class CharacterController : ControllerBase
     }
 
     [HttpPost(ApiRoutes.CharacterRoute.Create)]
-    public async Task<IActionResult> Create([FromBody] CharacterRequestModel request)
+    public async Task<IActionResult> Create([FromBody] CharacterRequest request)
     {
         try
         {
@@ -95,7 +95,7 @@ public class CharacterController : ControllerBase
     }
 
     [HttpPut(ApiRoutes.CharacterRoute.Update)]
-    public async Task<IActionResult> Update([FromRoute] Guid characterId, [FromBody] CharacterRequestModel request)
+    public async Task<IActionResult> Update([FromRoute] Guid characterId, [FromBody] CharacterRequest request)
     {
         try
         {

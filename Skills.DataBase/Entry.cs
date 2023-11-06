@@ -16,9 +16,9 @@ namespace Skills.DataBase
                     x => x.MigrationsAssembly("Skills.DataBase"));
             });
 
-            services.AddScoped<ISkillsDataService, SkillsDataService>();
+            services.AddScoped<ICahracterSkillsDataService, CahracterSkillsDataService>();
             services.AddScoped<ICharacterDataService, CharacterDataService>();
-            services.AddScoped<IImageDataService, ImageDataService>();
+            services.AddScoped<ISkillDataService, SkillDataService>();
 
             return services;
         }

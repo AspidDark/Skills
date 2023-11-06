@@ -4,11 +4,11 @@ using Skills.DataBase.DataAccess.Entities;
 
 namespace Skills.DataBase.EntityMap;
 
-public class SkillLevelInfoMap : BaseEntityMap<SkillLevelInfo>
+public class SkillLevelsInfoMap : BaseEntityMap<SkillLevelsInfo>
 {
-    public SkillLevelInfoMap() : base("skill_level_data") { }
+    public SkillLevelsInfoMap() : base("skill_levels_data") { }
 
-    public override void Configure(EntityTypeBuilder<SkillLevelInfo> builder)
+    public override void Configure(EntityTypeBuilder<SkillLevelsInfo> builder)
     {
         base.Configure(builder);
         builder.Property(x => x.Path).HasColumnName("path").HasMaxLength(500).IsRequired();

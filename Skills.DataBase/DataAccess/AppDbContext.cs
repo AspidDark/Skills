@@ -16,16 +16,15 @@ namespace Skills.DataBase.DataAccess
         {
 
             modelBuilder.HasDefaultSchema("public");
-            //Table name mapping
-            modelBuilder.ApplyConfiguration(new CharacterMap());
-            modelBuilder.ApplyConfiguration(new HeroSkillMap());
-            modelBuilder.ApplyConfiguration(new FileEntityMap());
-            modelBuilder.ApplyConfiguration(new SkillImageMap());
 
-            modelBuilder.Entity<Character>()
-                .HasMany(s => s.Skills)
-                .WithOne(c => c.Character)
-                .HasForeignKey(p => p.CahracterId);
+            //Table name mapping
+            modelBuilder.ApplyConfiguration(new SkillSetMap());
+            modelBuilder.ApplyConfiguration(new SkillMap());
+            modelBuilder.ApplyConfiguration(new SkillLevelsInfoMap());
+            modelBuilder.ApplyConfiguration(new CharacterMap());
+            modelBuilder.ApplyConfiguration(new CharacterSkillMap());
+            modelBuilder.ApplyConfiguration(new FileEntityMap());
+
 
             modelBuilder.Entity<SkillSet>()
                 .HasMany(s => s.Skills)
@@ -36,12 +35,24 @@ namespace Skills.DataBase.DataAccess
                 .HasMany(e => e.SkillLevelData)
                 .WithMany(e => e.Skills);
 
+            modelBuilder.Entity<Character>()
+                .HasOne(x => x.SkillSet)
+                .WithMany(x => x.Characters)
+                .HasForeignKey(x => x.SkillSetId);
+
+            modelBuilder.Entity<CharacterSkill>()
+                .HasOne(x=>x.Skill)
+                .WithMany(x=>x.CharacterSkills).
+                HasForeignKey(x => x.SkillId);
+
             base.OnModelCreating(modelBuilder);
         }
 
+        public DbSet<SkillSet> SkillSets { get; set; }
+        public DbSet<Skill> Skills { get; set; }
+        public DbSet<SkillLevelsInfo> SkillLevelsInfo { get; set; }
         public DbSet<Character> Characters { get; set; }
-        public DbSet<HeroSkill> Skills { get; set; }
+        public DbSet<CharacterSkill> CharacterSkills { get; set; }
         public DbSet<FileEntity> Files { get; set; }
-        public DbSet<FileEntity> SkillImages { get; set; }
     }
 }

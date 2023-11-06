@@ -5,7 +5,6 @@ using Skills.Extensions;
 using Skills.Models;
 using Skills.Services;
 using Skills.Shared.V1;
-using Skills.Shared.V1.Request.Queries;
 
 namespace Skills.Controllers;
 
