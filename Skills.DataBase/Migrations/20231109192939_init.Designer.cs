@@ -12,8 +12,8 @@ using Skills.DataBase.DataAccess;
 namespace Skills.DataBase.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231106212203_Init")]
-    partial class Init
+    [Migration("20231109192939_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,21 +25,6 @@ namespace Skills.DataBase.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("SkillSkillLevelsInfo", b =>
-                {
-                    b.Property<Guid>("SkillLevelDataId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SkillsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("SkillLevelDataId", "SkillsId");
-
-                    b.HasIndex("SkillsId");
-
-                    b.ToTable("SkillSkillLevelsInfo", "public");
-                });
 
             modelBuilder.Entity("Skills.DataBase.DataAccess.Entities.Character", b =>
                 {
@@ -282,11 +267,16 @@ namespace Skills.DataBase.Migrations
                         .HasColumnType("character varying(500)")
                         .HasColumnName("path");
 
+                    b.Property<Guid>("SkillId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Source")
                         .HasColumnType("integer")
                         .HasColumnName("source");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SkillId");
 
                     b.ToTable("skill_levels_data", "public");
                 });
@@ -328,21 +318,6 @@ namespace Skills.DataBase.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("skill_set", "public");
-                });
-
-            modelBuilder.Entity("SkillSkillLevelsInfo", b =>
-                {
-                    b.HasOne("Skills.DataBase.DataAccess.Entities.SkillLevelsInfo", null)
-                        .WithMany()
-                        .HasForeignKey("SkillLevelDataId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Skills.DataBase.DataAccess.Entities.Skill", null)
-                        .WithMany()
-                        .HasForeignKey("SkillsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Skills.DataBase.DataAccess.Entities.Character", b =>
@@ -392,6 +367,17 @@ namespace Skills.DataBase.Migrations
                     b.Navigation("SkillSet");
                 });
 
+            modelBuilder.Entity("Skills.DataBase.DataAccess.Entities.SkillLevelsInfo", b =>
+                {
+                    b.HasOne("Skills.DataBase.DataAccess.Entities.Skill", "Skill")
+                        .WithMany("SkillLevelData")
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Skill");
+                });
+
             modelBuilder.Entity("Skills.DataBase.DataAccess.Entities.Character", b =>
                 {
                     b.Navigation("CharacterSkill");
@@ -400,6 +386,8 @@ namespace Skills.DataBase.Migrations
             modelBuilder.Entity("Skills.DataBase.DataAccess.Entities.Skill", b =>
                 {
                     b.Navigation("CharacterSkills");
+
+                    b.Navigation("SkillLevelData");
                 });
 
             modelBuilder.Entity("Skills.DataBase.DataAccess.Entities.SkillSet", b =>

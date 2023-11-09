@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Skills.DataBase.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,26 +29,6 @@ namespace Skills.DataBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_file_entity", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "skill_levels_data",
-                schema: "public",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    path = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    level = table.Column<int>(type: "integer", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    source = table.Column<int>(type: "integer", nullable: false),
-                    create_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    edit_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    owner_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    is_deleted = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_skill_levels_data", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -169,28 +149,29 @@ namespace Skills.DataBase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SkillSkillLevelsInfo",
+                name: "skill_levels_data",
                 schema: "public",
                 columns: table => new
                 {
-                    SkillLevelDataId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SkillsId = table.Column<Guid>(type: "uuid", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    path = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    level = table.Column<int>(type: "integer", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    source = table.Column<int>(type: "integer", nullable: false),
+                    SkillId = table.Column<Guid>(type: "uuid", nullable: false),
+                    create_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    edit_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    owner_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    is_deleted = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SkillSkillLevelsInfo", x => new { x.SkillLevelDataId, x.SkillsId });
+                    table.PrimaryKey("PK_skill_levels_data", x => x.id);
                     table.ForeignKey(
-                        name: "FK_SkillSkillLevelsInfo_skill_SkillsId",
-                        column: x => x.SkillsId,
+                        name: "FK_skill_levels_data_skill_SkillId",
+                        column: x => x.SkillId,
                         principalSchema: "public",
                         principalTable: "skill",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SkillSkillLevelsInfo_skill_levels_data_SkillLevelDataId",
-                        column: x => x.SkillLevelDataId,
-                        principalSchema: "public",
-                        principalTable: "skill_levels_data",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -226,10 +207,10 @@ namespace Skills.DataBase.Migrations
                 column: "SkillSetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SkillSkillLevelsInfo_SkillsId",
+                name: "IX_skill_levels_data_SkillId",
                 schema: "public",
-                table: "SkillSkillLevelsInfo",
-                column: "SkillsId");
+                table: "skill_levels_data",
+                column: "SkillId");
         }
 
         /// <inheritdoc />
@@ -240,7 +221,7 @@ namespace Skills.DataBase.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "SkillSkillLevelsInfo",
+                name: "skill_levels_data",
                 schema: "public");
 
             migrationBuilder.DropTable(
@@ -249,10 +230,6 @@ namespace Skills.DataBase.Migrations
 
             migrationBuilder.DropTable(
                 name: "skill",
-                schema: "public");
-
-            migrationBuilder.DropTable(
-                name: "skill_levels_data",
                 schema: "public");
 
             migrationBuilder.DropTable(
