@@ -14,6 +14,6 @@ public class CharacterSkillMap : BaseEntityMap<CharacterSkill>
         builder.Property(x => x.Priority).HasColumnName("priority").IsRequired();
         builder.Property(x => x.Level).HasColumnName("level").IsRequired();
         builder.Property(x => x.IsMain).HasColumnName("is_main").IsRequired();
-        builder.Property(x => x.CustomName).HasColumnName("skill_name").HasMaxLength(100).IsRequired();
+        builder.Property(x => x.CustomName).HasColumnName("skill_name").HasMaxLength(100);
     }
 }

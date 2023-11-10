@@ -50,7 +50,7 @@ namespace Skills.DataBase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "caharacter",
+                name: "character",
                 schema: "public",
                 columns: table => new
                 {
@@ -59,8 +59,7 @@ namespace Skills.DataBase.Migrations
                     build_name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     starting_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     story = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
-                    photo_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    photo_id1 = table.Column<Guid>(type: "uuid", nullable: true),
+                    PhotoId = table.Column<Guid>(type: "uuid", nullable: true),
                     SkillSetId = table.Column<Guid>(type: "uuid", nullable: false),
                     create_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     edit_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -69,15 +68,15 @@ namespace Skills.DataBase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_caharacter", x => x.id);
+                    table.PrimaryKey("PK_character", x => x.id);
                     table.ForeignKey(
-                        name: "FK_caharacter_file_entity_photo_id1",
-                        column: x => x.photo_id1,
+                        name: "FK_character_file_entity_PhotoId",
+                        column: x => x.PhotoId,
                         principalSchema: "public",
                         principalTable: "file_entity",
                         principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_caharacter_skill_set_SkillSetId",
+                        name: "FK_character_skill_set_SkillSetId",
                         column: x => x.SkillSetId,
                         principalSchema: "public",
                         principalTable: "skill_set",
@@ -119,7 +118,7 @@ namespace Skills.DataBase.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     priority = table.Column<int>(type: "integer", nullable: false),
-                    skill_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    skill_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     level = table.Column<int>(type: "integer", nullable: false),
                     CharacterId = table.Column<Guid>(type: "uuid", nullable: false),
                     SkillId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -133,10 +132,10 @@ namespace Skills.DataBase.Migrations
                 {
                     table.PrimaryKey("PK_character_skill", x => x.id);
                     table.ForeignKey(
-                        name: "FK_character_skill_caharacter_CharacterId",
+                        name: "FK_character_skill_character_CharacterId",
                         column: x => x.CharacterId,
                         principalSchema: "public",
-                        principalTable: "caharacter",
+                        principalTable: "character",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -177,15 +176,15 @@ namespace Skills.DataBase.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_caharacter_photo_id1",
+                name: "IX_character_PhotoId",
                 schema: "public",
-                table: "caharacter",
-                column: "photo_id1");
+                table: "character",
+                column: "PhotoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_caharacter_SkillSetId",
+                name: "IX_character_SkillSetId",
                 schema: "public",
-                table: "caharacter",
+                table: "character",
                 column: "SkillSetId");
 
             migrationBuilder.CreateIndex(
@@ -225,7 +224,7 @@ namespace Skills.DataBase.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "caharacter",
+                name: "character",
                 schema: "public");
 
             migrationBuilder.DropTable(

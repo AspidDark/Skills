@@ -6,7 +6,7 @@ namespace Skills.DataBase.EntityMap;
 
 public class CharacterMap : BaseEntityMap<Character>
 {
-    public CharacterMap() : base("caharacter") { }
+    public CharacterMap() : base("character") { }
 
     public override void Configure(EntityTypeBuilder<Character> builder)
     {
@@ -14,8 +14,8 @@ public class CharacterMap : BaseEntityMap<Character>
         builder.Property(x => x.Priority).HasColumnName("priority").IsRequired();
         builder.Property(x => x.BuildName).HasColumnName("build_name").HasMaxLength(500).IsRequired();
         builder.Property(x => x.StartingDate).HasConversion(typeof(DateTimeToDateTimeUtc)).HasColumnName("starting_date").IsRequired();
-        builder.Property(x => x.PhotoId).HasColumnName("photo_id");
-        builder.HasOne(x => x.Photo).WithMany().HasForeignKey("photo_id");
+        //builder.Property(x => x.PhotoId).HasColumnName("photo_id");
+        //builder.HasOne(x => x.Photo).WithMany().HasForeignKey("photo_id");
         builder.Property(x=> x.Story).HasColumnName("story").HasMaxLength(1000);
     }
 }

@@ -6,8 +6,6 @@ namespace Skills.DataBase.DataAccess.Services;
 
 public interface ICharacterDataService
 {
-    Task<Character?> GetStarting();
-
     Task<Character?> GetById(Guid id);
 
     Task<Character?> GetByUserId(Guid userId);
@@ -27,15 +25,6 @@ public class CharacterDataService : ICharacterDataService
     {
         _appDbContext = appDbContext;
     }
-
-    public Task<Character> GetStarting()
-        => _appDbContext.Characters
-          .Include(x => x.CharacterSkill)
-          .Include(x => x.Photo)
-          .Include(x => x.SkillSet)
-          .Include(x => x.SkillSet.Skills)
-          .AsNoTracking()
-          .FirstOrDefaultAsync()!;
 
     public Task<Character?> GetById(Guid id)
            => _appDbContext.Characters

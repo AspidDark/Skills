@@ -12,7 +12,7 @@ using Skills.DataBase.DataAccess;
 namespace Skills.DataBase.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231109192939_init")]
+    [Migration("20231110122727_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -56,8 +56,7 @@ namespace Skills.DataBase.Migrations
                         .HasColumnName("owner_id");
 
                     b.Property<Guid?>("PhotoId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("photo_id");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Priority")
                         .HasColumnType("integer")
@@ -75,20 +74,13 @@ namespace Skills.DataBase.Migrations
                         .HasColumnType("character varying(1000)")
                         .HasColumnName("story");
 
-                    b.Property<Guid?>("photo_id")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("PhotoId");
 
                     b.HasIndex("SkillSetId");
 
-                    b.HasIndex("photo_id");
-
-                    b.ToTable("caharacter", "public", t =>
-                        {
-                            t.Property("photo_id")
-                                .HasColumnName("photo_id1");
-                        });
+                    b.ToTable("character", "public");
                 });
 
             modelBuilder.Entity("Skills.DataBase.DataAccess.Entities.CharacterSkill", b =>
@@ -106,7 +98,6 @@ namespace Skills.DataBase.Migrations
                         .HasColumnName("create_date");
 
                     b.Property<string>("CustomName")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("skill_name");
@@ -322,15 +313,15 @@ namespace Skills.DataBase.Migrations
 
             modelBuilder.Entity("Skills.DataBase.DataAccess.Entities.Character", b =>
                 {
+                    b.HasOne("Skills.DataBase.DataAccess.Entities.FileEntity", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId");
+
                     b.HasOne("Skills.DataBase.DataAccess.Entities.SkillSet", "SkillSet")
                         .WithMany("Characters")
                         .HasForeignKey("SkillSetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Skills.DataBase.DataAccess.Entities.FileEntity", "Photo")
-                        .WithMany()
-                        .HasForeignKey("photo_id");
 
                     b.Navigation("Photo");
 

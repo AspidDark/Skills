@@ -25,14 +25,17 @@ public class CharacterService : ICharacterService
     private readonly ICharacterDataService _characterDataService;
     private readonly ICahracterSkillsDataService _characterSkillsDataService;
     private readonly ISkillDataService _skillDataService;
+    private readonly IConfiguration _configuration;
 
     public CharacterService(ICharacterDataService characterDataService, 
         ICahracterSkillsDataService characterSkillsDataService, 
-        ISkillDataService skillDataService)
+        ISkillDataService skillDataService,
+        IConfiguration configuration)
     {
         _characterDataService = characterDataService;
         _characterSkillsDataService = characterSkillsDataService;
         _skillDataService = skillDataService;
+        _configuration = configuration;
     }
 
     public async Task<OneOf<Character, ErrorModel>> Get(ByEntityFilter filter)
@@ -135,7 +138,8 @@ public class CharacterService : ICharacterService
 
     private async Task<Character> StarterCharacter()
     {
-        var result = await _characterDataService.GetStarting();
+        var defaultCharacterId = _configuration.GetValue<Guid>("DefaultCahracterId");
+        var result = await _characterDataService.GetById(defaultCharacterId);
         result!.SkillSet.Skills = await GetDeafultSkills(result.SkillSetId);
         return result;
     }
