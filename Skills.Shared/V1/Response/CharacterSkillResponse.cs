@@ -12,6 +12,6 @@ public class CharacterSkillResponse : BaseResponseEntity
 
     [JsonPropertyName("isMain")]
     public int IsMain { get; set; }
-    [JsonPropertyName("skill")]
-    public SkillResponse Skill { get; set; }
+    [JsonPropertyName("skillId")]
+    public Guid SkillId { get; set; }
 }

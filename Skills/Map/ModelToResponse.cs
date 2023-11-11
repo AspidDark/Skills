@@ -32,7 +32,7 @@ public static class ModelToResponse
         CustomName = skill.CustomName,
         Level = skill.Level,
         IsMain = skill.IsMain,
-        Skill = Map(skill.Skill)
+        SkillId = skill.SkillId
     };
 
     public static SkillSetResponse Map(SkillSet skillSet)
@@ -67,7 +67,6 @@ public static class ModelToResponse
             Source = skillLevelsInfo.Source,
         };
 
-
     public static FileEntityResponse? Map(FileEntity? file)
     {
         if (file is null)
@@ -81,5 +80,4 @@ public static class ModelToResponse
             Path = file.Path
         };
     }
-
 }
