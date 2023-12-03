@@ -1,9 +1,9 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
-import SkillImageModel from '../../models/SkillImageModel';
 
 import Grid from '@mui/material/Grid';
+import SkillLevel from '../../models/SkillLevel';
 
 const templateUrl = 'images/'
 
@@ -49,20 +49,16 @@ const ImageBackdrop = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
-export const modalSelector = (skillImageModels:SkillImageModel[] | undefined, onSelectedImageClick:(skillModel:SkillImageModel)=>void) => {
-  if(!skillImageModels)
-  {
-    return  <>Error</>
-  }
+export const modalSelector = (skillLevels:SkillLevel[], onSelectedImageClick:(skill:SkillLevel)=>void) => {
   return (
           <Box sx={{ width: '100%' }}>
           <Grid container spacing={10}>
-  {skillImageModels.map(item => (
+  {skillLevels.map(item => (
     <Grid item xs={2} key={item.id} width={100} height={100} >  
        <Box sx={{ width: 100 }}>
                  <ImageButton
                    focusRipple
-                   key={item.type}
+                   key={item.id}
                    style={{
                      width: '100%',
                    }}

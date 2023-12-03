@@ -6,8 +6,7 @@ import DraggableList from '../DraggabeList/DraggableList'
 import { reorder } from '../DraggabeList/helpers'
 import './styles.css'
 import { v4 } from 'uuid'
-import _ from 'lodash'
-import SkillModel from '../../models/SkillModel'
+import _, { forEach } from 'lodash'
 import TextField from '@mui/material/TextField'
 import dayjs, { Dayjs } from 'dayjs'
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
@@ -17,17 +16,18 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography'
 import ImageUpload from "./ImageUpload"
-import { getRandomImage, getSameForOtherLevel, getByLevel, getStartingSkillImage, getById } from '../../services/ImageService'
+import {getImagepath } from '../../services/ImageService'
 import Box from '@mui/material/Box/Box'
 import { modalSelector } from '../modal/modalSelector'
-import SkillImageModel from '../../models/SkillImageModel'
 import { Grid } from '@mui/material'
 import CharacterModel from '../../models/CharacterModel'
 import {postCharacter, getCharacter, updateCharacter } from '../../ApiServices/charecterApiSerice'
 import Button from '@mui/material/Button';
-import CharacterResponseModel from '../../models/ResponseModels/CharacterResponseModel'
-
-const emptyGuid='00000000-0000-0000-0000-000000000000'
+import CharacterResponseModel from '../../models/ResponseModels/CharacterResponse'
+import SkillSetResponse from '../../models/ResponseModels/SkillSetResponse'
+import CharacterSkillResponse from '../../models/ResponseModels/CharacterSkillResponse'
+import Skill from '../../models/Skill'
+import SkillLevel from '../../models/SkillLevel'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -58,47 +58,69 @@ export default function SkillList () {
   const theme: any = useTheme()
   const classes = useStyles()
   const [name, setName] = useState('')
+  const [skillSet, setSkillSet] = useState<SkillSetResponse>()
+  const [characterId, setCharacterId] = useState<string|undefined>('')
+  //proprity
+  //buildName
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
   const [skillPointCount, setskillPointCount] = useState(1)
-  const [existingImages, setExistingImages] = useState<string[]>([])
-  const [unusedImages, setUnusedImages] = useState<SkillImageModel[]>()
+
+  const [skillLevels, setSkillLevels] = useState<SkillLevel[]>([])
+  const [unusedSkills, setUnusedSkills] = useState<Skill[]>([])
+  const [skillItems, setSkillItems] = useState<Skill[]>([])
+
+  const [unusedLevelSkills, setUnusedLevelSkills] = useState<SkillLevel[]>([])
+
   const [modalHeight, setModalHeight ] = useState(770)
-  const [characterId, setCharacterId] = useState<string|undefined>('')
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [imageIdToChange, setImageIdToChange] = useState('')
-  const [items, setItems] = useState<SkillModel[]>([])
+  const [skillIdToChange, setSkillIdToChange] = useState('')
 
-  //Draggable list
-  const setOrderedItems = (newItems: SkillModel[]) => {
-    const orderedItems = _.sortBy(newItems, 'priority')
-    setChangedItems(orderedItems)
+
+  const setItems = (allSkillData:Skill[]) => {
+    const newskillItems:Skill[]=[];
+    const newUnusedItems:Skill[]=[];
+    allSkillData.forEach(x=>{
+      if(x.isUsed){
+        newskillItems.push(x)
+      }
+      else {
+        newUnusedItems.push(x)
+      }
+    })
+    setUnusedSkills(newUnusedItems);
+    setOrderedItems(newskillItems)
   }
 
+  const setOrderedItems = (newItems:Skill[]) =>{
+    const orderedItems = _.sortBy(newItems, 'priority')
+    setSkillItems(orderedItems)
+  }
+  
+  //Draggable list
   const onDragEnd = ({ destination, source }: DropResult) => {
     // dropped outside the list
     if (!destination) return
-    const newItems = reorder(items, source.index, destination.index)
+    const newItems = reorder(skillItems, source.index, destination.index)
     for (let i = 0; i < newItems.length; i++) {
-      newItems[i].priority = i
+      skillItems[i].priority = i
     }
     setOrderedItems(newItems)
   }
 
-
   const setItem = (value: string, id: string) => {
-    const newItems = items.map(x => {
+    const newItems = skillItems.map(x => {
       if (x.id === id) {
-        x.skillName = value
+        x.customName=value
       }
       return x
     })
-    setOrderedItems(newItems)
+    setSkillItems(newItems)
   }
 
   const deleteItem = (id: string) => {
-    const newItems = items.filter(x => {
+    const newItems = skillItems.filter(x => {
       if (x.id !== id) {
         return x
       }
@@ -111,26 +133,42 @@ export default function SkillList () {
   }
 
   const addItem = () => {
-    if(skillPointCount >= 1){
-      const newImage = getRandomImage(existingImages)
-
-      const newitems = [...items, {
-        id: v4(),
-        createDate: new Date(),
-        editDate: new Date(),
-        ownerId:'ownerId',
-        skillName:'skillName',
-        level:1,
-        skillPictureId: 'skillPictureId',
-        isMain:1,
-        type: newImage.type,
-        image: newImage,
-        priority: items.length,
-      }]
-      setOrderedItems(newitems)
-      setskillPointCount(skillPointCount-1)
+    if(skillPointCount <= 0) {
+      return;
     }
+    const randomSkill = getRandomUnusedSkill()
+    unusedToUsed(randomSkill, 0, skillItems.length)
+    setskillPointCount(skillPointCount-1)
   }
+  
+  const unusedToUsed = (skill: Skill, level: number, priorirty: number) => {
+     const newUnusedSkills = unusedSkills.filter(x=>x.id!==skill.id)
+     setUnusedSkills(newUnusedSkills)
+     skill.isUsed= true;
+     skill.priority = priorirty,
+     skill.level = level
+     const newitems:Skill[] = [...skillItems, skill]
+     setOrderedItems(newitems)
+  }
+
+const usedToUnused = (skill: Skill)=>{
+  skill.level=0
+  skill.priority = 0
+  skill.isUsed = false
+  const newUnused:Skill[] = [...unusedSkills, skill]
+  setUnusedSkills(newUnused)
+}
+
+  const getRandomUnusedSkill = () : Skill =>{
+    const randomUnusedImageIdNumber = getRandomInt(unusedSkills.length)
+    const result = unusedSkills[randomUnusedImageIdNumber]
+    return result
+  }
+
+  const getRandomInt = (max: number) => Math.floor(Math.random() * max);
+
+
+  ///////
 
   const setStartDateValue =(value: Dayjs | null) => {
     setStartDate(value)
@@ -138,60 +176,39 @@ export default function SkillList () {
       return
     }
     const now = new Date();
-    const nowYear=now.getFullYear();
+    const nowYear = now.getFullYear();
     const startYear = value.year()
     let skillPointCount = nowYear - startYear
 
-    let newItems = new Array<SkillModel>()
+    let newItems = new Array<Skill>()
 
-    for (let item of items)
+    for (let item of skillItems)
     {
       if(skillPointCount - item.level >=0 ) {
         skillPointCount -= item.level
         newItems.push(item)
         continue
       }
-      break
-    }
-
-    const firstItem =items[0]
-    
-    if(newItems.length===0) {
-      newItems = [{
-        id: firstItem.id,
-        priority:1,
-        skillName:firstItem.skillName,
-        level:1,
-        isMain:1,
-        type: firstItem.image.type,
-        image: firstItem.image
-      }]
-      
+      usedToUnused(item)
     }
     setOrderedItems(newItems)
     setskillPointCount(skillPointCount)
   }
 
-  const setChangedItems = (value: SkillModel[]) =>{
-    setUsedImageTypes(value)
-    setItems(value)
-  }
-
-  const changeSkillLevelValue = (value:boolean, id: string):void =>{
-    var newItems = items.map(x=>{
+  const changeSkillLevelValue = (up:boolean, id: string):void =>{
+    var newItems = skillItems.map(x=>{
       if(x.id === id) {
-        if(value){
-          if(skillPointCount>=1)
-          {
-            x.level++
-            x.image = getSameForOtherLevel(x.image.id, true)
+        if(up){
+          if(skillPointCount>=1) {
+            const nextlevalValue = x.level+1
+            x.level=nextlevalValue
             setskillPointCount(skillPointCount-1)
             return x
-          }
+          } 
           return x
         }
-        x.level--
-        x.image = getSameForOtherLevel(x.image.id, false)
+        const previousLevel =  x.level-1
+        x.level=previousLevel
         setskillPointCount(skillPointCount+1)
         return x
       }
@@ -200,40 +217,39 @@ export default function SkillList () {
     setOrderedItems(newItems)
   }
 
-  const setUsedImageTypes = (skillModels:SkillModel[]) =>{
-    const usedImages = skillModels.map(x=>x.image.type)
-    setExistingImages(usedImages)
-  }
-
-const onImageButtonClick = (id:string, level: number, type:string) =>{
-  const imagesOfSameLevel = getByLevel(level)
-  const newUnusedImages = imagesOfSameLevel.filter(x=>{
-    if(!existingImages.some(y => y===x.type)){
-      return x
+const onImageButtonClick = (id:string, level: number) =>{
+  const sameLevelSkills = skillLevels.filter(x=>x.level===level)
+  let unusedSkillLevels:SkillLevel[]=[]
+  sameLevelSkills.forEach(x=>{
+    if(unusedSkills.some(y=>y.id===x.skillId)){
+      unusedSkillLevels.push(x)
     }
   })
-  setImageIdToChange(id)
-  setUnusedImages(newUnusedImages)
+  setUnusedLevelSkills(unusedSkillLevels)
+  setSkillIdToChange(id)
   handleOpen()
 }
 
-const changeImage = (newSkillModel:SkillImageModel) => {
-  const newItems = items.map(x=> {
-    if(x.image.id === imageIdToChange){
-      x.image = newSkillModel 
-    }
-    return x
-  })
-  setChangedItems(newItems)
+const changeImage = (newSkillLevel:SkillLevel) => {
+  if(newSkillLevel.skillId === skillIdToChange){
+    return
+  }
+  const previousSkill = skillItems.filter(x => x.id === skillIdToChange)[0]
+  const previousSkillLevel = previousSkill.level
+  const previousSkillPriority = previousSkill.priority
+  usedToUnused(previousSkill)
+  const newSkill = skillItems.filter(x => x.id === newSkillLevel.skillId)[0]
+  unusedToUsed(newSkill, previousSkillLevel, previousSkillPriority)
   handleClose()
 }
 
+//rework to unused TODO
 const changeModalSize = () =>{
-  if(items.length >= 8 ){
+  if(skillItems.length >= 8 ){
     setModalHeight(530)
     return
   }
-  if(items.length >= 3){
+  if(skillItems.length >= 3){
     setModalHeight(650)
     return
   }
@@ -242,7 +258,7 @@ const changeModalSize = () =>{
 
 //Crud
 const saveCharacterRequest = async () =>{
-  let startDateValue = startDate?.toDate()
+  /*let startDateValue = startDate?.toDate()
   if(!startDateValue) {
     startDateValue=new Date()
   }
@@ -256,7 +272,7 @@ const saveCharacterRequest = async () =>{
 
   const result= await postCharacter(saveModel)
   setData(result);
-
+*/
 }
 
 const getCahracterRequest = async () =>{
@@ -265,7 +281,7 @@ const getCahracterRequest = async () =>{
 }
 
 const updateCharacterRequest = async () =>{
-  let startDateValue = startDate?.toDate()
+ /* let startDateValue = startDate?.toDate()
   if(!startDateValue) {
     startDateValue=new Date()
   }
@@ -279,64 +295,57 @@ const updateCharacterRequest = async () =>{
   }
   const response = await updateCharacter(saveModel)
   setData(response)
+  */
 }
 
 const setData = (data: CharacterResponseModel): void => {
-  if(data.id === emptyGuid) {
-    const startingPageSkillType = data.skills[0].skillName
-
-    setExistingImages([startingPageSkillType])
-    setItems([{
-      id: v4(),
-      priority:0,
-      skillName:'',
-      level:1,
-      isMain:1,
-      type:startingPageSkillType,
-      image: getStartingSkillImage(startingPageSkillType)
-    }])
-    setStartDate(dayjs(new Date()))
-    //starting entity
-    return
-  }
+  setSkillSet(data.skillSet)
   setCharacterId(data.id)
-  const newExistingImages = data.skills.map(x=>{
-    return x.type
-  })
-  setExistingImages(newExistingImages)
   setStartDate(dayjs(data.startingDate))
-  const mapedImages = data.skills.map(x=>{
-    const image = getById(x.imageId)
-    return {
+
+  // all skill with images
+  let characterSkillsData : Skill[] = [];
+  let skillLevels : SkillLevel[] =[]
+  data.skillSet.skills.forEach( x=> {
+    x.skillLevelsData.forEach(y=> {
+      const imagePath = getImagepath(y.id)
+      const skillLevel: SkillLevel = {
+        id: y.id,
+        path: imagePath,
+        level: y.level,
+        source: y.source,
+        skillId: x.id,
+      }
+      skillLevels.push(skillLevel)
+    })
+    
+    let characterSkillInfo : Skill = {
       id: x.id,
-      priority:x.priority,
-      skillName:x.skillName,
-      level:x.level,
-      isMain:x.isMain,
-      type:x.type,
-      image: image
+      name :x.defaultName,
+      priority: 10,
+      isUsed : false,
+      isMain: 1,
+      level:0
     }
+    if(data.skills.some(y=> y.skillId === x.id)){
+      const usedSkill =  data.skills.filter(y=> y.skillId === x.id)[0];
+      characterSkillInfo.isMain = usedSkill.isMain
+      characterSkillInfo.isUsed = true
+      characterSkillInfo.isMain = usedSkill.isMain
+      characterSkillInfo.level = usedSkill.level
+      if(usedSkill.customName){
+        characterSkillInfo.name = usedSkill.customName
+      }
+    }
+   characterSkillsData.push(characterSkillInfo)
   })
-
-  setItems(mapedImages)
+  setSkillLevels(skillLevels)
+  setItems(characterSkillsData)
 }
-
-  useEffect(()=>{
-    changeModalSize()
-    if(items[0]){
-      const imagesOfSameLevel = getByLevel(items[0].level)
-      const newUnusedImages = imagesOfSameLevel.filter(x=>{
-        if(!existingImages.some(y => y===x.type)){
-          return x
-        }
-      })
-      setUnusedImages(newUnusedImages)
-    }
-  },[])
 
   useEffect(() => {
     changeModalSize()
-  }, [items]);
+  }, [skillItems]);
 
   useEffect(()=>{
     getCahracterRequest()
@@ -387,7 +396,8 @@ const setData = (data: CharacterResponseModel): void => {
       </Grid>
     </Box>
   <DraggableList 
-    items={items} 
+    items={skillItems}
+    skillLevels={skillLevels}
     onDragEnd={onDragEnd} 
     setValue={setItem} 
     deleteValue={deleteItem} 
@@ -403,7 +413,7 @@ const setData = (data: CharacterResponseModel): void => {
       >
       <Box sx={{...style, height:modalHeight}}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-          {modalSelector(unusedImages, changeImage)}
+          {modalSelector(unusedLevelSkills, changeImage)}
           </Typography>
         </Box>
       </Modal>

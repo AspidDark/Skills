@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
-import SkillModel from '../../models/SkillModel'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import ListItem from '@material-ui/core/ListItem'
 import ButtonBases from './skillImage'
@@ -10,6 +9,8 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import Box from '@mui/material/Box'
 import { SkillLevelSelector } from '../DraggabeList/SkillLevalSelector'
+import Skill from '../../models/Skill'
+import SkillLevel from '../../models/SkillLevel'
 
 const useStyles = makeStyles({
   draggingListItem: {
@@ -18,7 +19,8 @@ const useStyles = makeStyles({
 })
 
 export interface DraggableListItemProps {
-  item: SkillModel
+  item: Skill
+  skillLevel: SkillLevel
   index: number
   setSkillName: (value: string, id: string) => void
   deleteValue: (id: string) => void
@@ -26,13 +28,13 @@ export interface DraggableListItemProps {
   isLast: boolean
   itemsLength: number,
   changeSkillLevel: (value:boolean, id: string) => void
-  onImageButtonClick : (id:string, level: number, type:string) => void
+  onImageButtonClick : (id:string, level: number) => void
 }
 
-const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, isLast, itemsLength, changeSkillLevel, onImageButtonClick }: DraggableListItemProps) => {
+const DraggableListItem = ({ item, skillLevel, index, setSkillName, deleteValue, addItem, isLast, itemsLength, changeSkillLevel, onImageButtonClick }: DraggableListItemProps) => {
   const classes = useStyles()
 
-  const [skillText, setSkillText] = useState<string>(item.skillName?? '')
+  const [skillText, setSkillText] = useState<string>(item.customName?? '')
 
   const deleteItem = (itemId: string) => {
     if (itemsLength > 1) {
@@ -48,7 +50,7 @@ const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, is
   }
 
   const setSkillTextVlue =(value:string) => {
-    item.skillName = value
+    item.customName = value
     setSkillText(value),
     setSkillName(value, item.id)
   }
@@ -70,7 +72,7 @@ const DraggableListItem = ({ item, index, setSkillName, deleteValue, addItem, is
             sx={{ display: 'flex' }}
           >
           <Box sx={{ width: '50' }}>
-          {ButtonBases(item.image.id, onImageButtonClick)}
+          {ButtonBases(skillLevel, onImageButtonClick)}
           </Box>
           <SkillLevelSelector currentSkillLevel={item.level} changeSkillValue={changeSkillLevelValue}></SkillLevelSelector>
           <Box sx={{ width: '800', minWidth: 800 }}>

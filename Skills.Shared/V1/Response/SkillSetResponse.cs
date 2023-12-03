@@ -8,6 +8,6 @@ public class SkillSetResponse : BaseResponseEntity
     public bool IsDefault { get; set; }
     [JsonPropertyName("name")]
     public required string Name { get; set; }
-    [JsonPropertyName("skill")]
+    [JsonPropertyName("skills")]
     public List<SkillResponse>? Skills { get; set; }
 }

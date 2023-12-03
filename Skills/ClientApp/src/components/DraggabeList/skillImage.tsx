@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
-import {getById} from '../../services/ImageService'
+import SkillLevel from '../../models/SkillLevel';
 
 const templateUrl = 'images/'
 
@@ -60,9 +60,8 @@ const ImageBackdrop = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
-export default function ButtonBases(id: string, onImageButtonClick : (id:string, level: number, type:string) => void) {
-  let image = getById(id)
-  const completeUrl = `${templateUrl}${image.path}`
+export default function ButtonBases(skillLevel: SkillLevel, onImageButtonClick : (id:string, level: number) => void) {
+  const completeUrl = `${templateUrl}${skillLevel.path}`
 
   const showSkillLevel = (value:number):string => {
     switch (value){
@@ -85,11 +84,11 @@ export default function ButtonBases(id: string, onImageButtonClick : (id:string,
     <Box sx={{ width: 100 }}>
         <ImageButton
           focusRipple
-          key={image.title}
+          key={skillLevel.id}
           style={{
             width: '100%',
           }}
-          onClick={() => onImageButtonClick(image.id, image.level, image.type)}
+          onClick={() => onImageButtonClick(skillLevel.skillId, skillLevel.level)}
         >
           <ImageSrc style={{ backgroundImage: `url(${completeUrl})` }} />
           <ImageBackdrop className="MuiImageBackdrop-root" />
@@ -98,7 +97,7 @@ export default function ButtonBases(id: string, onImageButtonClick : (id:string,
               component="span"
               variant="subtitle1"
             >
-              {showSkillLevel(image.level)}
+              {showSkillLevel(skillLevel.level)}
             </Typography>
           </Image>
         </ImageButton>

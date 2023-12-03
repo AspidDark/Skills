@@ -1,6 +1,6 @@
 import CRUDRequestHelper from '../services/CRUDRequestHelper'
 import * as path from '../Consts/PathConsts';
-import CharacterResponseModel from '../models/ResponseModels/CharacterResponseModel';
+import CharacterResponseModel from '../models/ResponseModels/CharacterResponse';
 import CharacterModel from '../models/CharacterModel';
 
     const uri:string='https://localhost:7256/api/v1/character';

@@ -1,4 +1,4 @@
-import SkillImageModel from '../models/SkillImageModel'
+import { SkillImageModel } from "../models/SkillImageModel"
 
 const images: SkillImageModel[] =
 [
@@ -690,6 +690,14 @@ export const getAll = ():SkillImageModel[] => {
     return images
 }
 
+export const getImagepath = (id:string):string =>{
+    let result = images.find(x=>x.id===id)
+    if(!result){
+        result = images[0];
+    }
+    return result.path
+}
+
 export const getById = (id:string):SkillImageModel => {
     let result = images.find(x=>x.id===id)
     if(!result){
@@ -732,6 +740,8 @@ export const getByLevel = (level:number):SkillImageModel[] =>{
     return result
 }
 
-let  getRandomInt = (max: number) => {
+export let getRandomInt = (max: number) => {
     return Math.floor(Math.random() * max);
   }
+
+

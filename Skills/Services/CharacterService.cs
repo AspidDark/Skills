@@ -56,13 +56,17 @@ public class CharacterService : ICharacterService
             var result = await _characterDataService.GetByUserId(filter.UserId.Value);
             if (result is null)
             {
-                return await StarterCharacter();
+                var character = await StarterCharacter();
+                character.Id = Guid.Empty;
+                return character;
             }
             result.SkillSet.Skills = await GetDeafultSkills(result.SkillSetId);
             return result;
         }
 
-        return await StarterCharacter();
+        var defautlCharacter = await StarterCharacter();
+        defautlCharacter.Id = Guid.Empty;
+        return defautlCharacter;
     }
 
     public async Task<OneOf<List<Character>, ErrorModel>> GetList(BaseUserIdFilter filter, PaginationFilter paginationFilter)

@@ -1,5 +1,4 @@
-export default interface SkillImageModel
-{
+export interface SkillImageModel {
     id: string
     level: number
     type: string
@@ -7,5 +6,3 @@ export default interface SkillImageModel
     title: string
     width: string
 }
-
-

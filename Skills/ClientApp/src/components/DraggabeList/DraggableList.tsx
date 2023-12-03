@@ -5,19 +5,27 @@ import {
   Droppable,
   OnDragEndResponder
 } from 'react-beautiful-dnd'
-import SkillModel from '../../models/SkillModel'
+import Skill from '../../models/Skill'
+import SkillLevel from '../../models/SkillLevel'
 
 export interface DraggableListProps {
-  items: SkillModel[]
+  items: Skill[]
+  skillLevels: SkillLevel[]
   onDragEnd: OnDragEndResponder
   setValue: (value: string, id: string) => void
   deleteValue: (id: string) => void
   addItem: () => void
   changeSkillLevel: (value:boolean, id: string) => void
-  onImageButtonClick : (id:string, level: number, type:string) => void
+  onImageButtonClick : (id:string, level: number) => void
 }
 
-const DraggableList = React.memo(({ items, onDragEnd, setValue, deleteValue, addItem, changeSkillLevel, onImageButtonClick }: DraggableListProps) => {
+const DraggableList = React.memo(({ items, skillLevels, onDragEnd, setValue, deleteValue, addItem, changeSkillLevel, onImageButtonClick }: DraggableListProps) => {
+
+  const getSkillLevel = (skill:Skill):SkillLevel =>{
+    const result = skillLevels.filter(x=>x.skillId===skill.id&&x.level===skill.level)[0]
+    return result
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable-list">
@@ -26,6 +34,7 @@ const DraggableList = React.memo(({ items, onDragEnd, setValue, deleteValue, add
             {items.map((item, index) => (
               <DraggableListItem
                 item={item}
+                skillLevel={getSkillLevel(item)}
                 index={index}
                 key={item.id}
                 setSkillName={setValue}
