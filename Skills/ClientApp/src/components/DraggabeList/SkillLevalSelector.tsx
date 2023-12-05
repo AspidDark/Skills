@@ -13,7 +13,6 @@ export interface SkillLevelProps {
 export const SkillLevelSelector = ({currentSkillLevel, changeSkillValue}:SkillLevelProps) => {
 
   const changeLevel =(isUp:boolean) =>{
-    console.log("click")
     if(isUp && isValidUp()) {
       changeSkillValue(true)
       return
@@ -23,10 +22,10 @@ export const SkillLevelSelector = ({currentSkillLevel, changeSkillValue}:SkillLe
       return
     }
   }
+  //todo many levels as min max props
+  const isValidUp = ():boolean=>(currentSkillLevel+1 <= 2)
 
-  const isValidUp = ():boolean=>(currentSkillLevel+1 <= 3)
-
-  const isValidDown = ():boolean =>(currentSkillLevel-1 >= 1)
+  const isValidDown = ():boolean =>(currentSkillLevel-1 >= 0)
 
 
       return (

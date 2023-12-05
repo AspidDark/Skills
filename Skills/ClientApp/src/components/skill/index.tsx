@@ -104,7 +104,7 @@ export default function SkillList () {
     if (!destination) return
     const newItems = reorder(skillItems, source.index, destination.index)
     for (let i = 0; i < newItems.length; i++) {
-      skillItems[i].priority = i
+      newItems[i].priority = i
     }
     setOrderedItems(newItems)
   }
@@ -151,12 +151,15 @@ export default function SkillList () {
      setOrderedItems(newitems)
   }
 
-const usedToUnused = (skill: Skill)=>{
-  skill.level=0
-  skill.priority = 0
+const usedToUnused = (skill1: Skill)=>{
+  const skill = skillItems.filter(x=>x.id===skill1.id)[0]
+  skill.level = 0
+  skill.priority = 10
   skill.isUsed = false
   const newUnused:Skill[] = [...unusedSkills, skill]
   setUnusedSkills(newUnused)
+  const newUsedItems = skillItems.filter(x=> x.id !== skill.id)
+  setOrderedItems(newUsedItems)
 }
 
   const getRandomUnusedSkill = () : Skill =>{
@@ -238,7 +241,7 @@ const changeImage = (newSkillLevel:SkillLevel) => {
   const previousSkillLevel = previousSkill.level
   const previousSkillPriority = previousSkill.priority
   usedToUnused(previousSkill)
-  const newSkill = skillItems.filter(x => x.id === newSkillLevel.skillId)[0]
+  const newSkill = unusedSkills.filter(x => x.id === newSkillLevel.skillId)[0]
   unusedToUsed(newSkill, previousSkillLevel, previousSkillPriority)
   handleClose()
 }
@@ -303,6 +306,7 @@ const setData = (data: CharacterResponseModel): void => {
   setCharacterId(data.id)
   setStartDate(dayjs(data.startingDate))
 
+
   // all skill with images
   let characterSkillsData : Skill[] = [];
   let skillLevels : SkillLevel[] =[]
@@ -333,6 +337,7 @@ const setData = (data: CharacterResponseModel): void => {
       characterSkillInfo.isUsed = true
       characterSkillInfo.isMain = usedSkill.isMain
       characterSkillInfo.level = usedSkill.level
+      characterSkillInfo.priority = usedSkill.priority
       if(usedSkill.customName){
         characterSkillInfo.name = usedSkill.customName
       }

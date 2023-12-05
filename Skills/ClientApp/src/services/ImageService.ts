@@ -123,7 +123,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'16',
+        id:'dddd92cc-240c-4d9c-8544-39105d4efccc',
         level: 2,
         type: 'dip',
         path:'DiplomacyAdvanced.jpg',

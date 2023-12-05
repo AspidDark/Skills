@@ -65,13 +65,13 @@ export default function ButtonBases(skillLevel: SkillLevel, onImageButtonClick :
 
   const showSkillLevel = (value:number):string => {
     switch (value){
-      case 1 : {
+      case 0 : {
         return 'Junior'
       }
-      case 2 : {
+      case 1 : {
         return 'Middle'
       }
-      case 3 : {
+      case 2 : {
         return 'Senior'
       }
       default : {
