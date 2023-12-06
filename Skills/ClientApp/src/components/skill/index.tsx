@@ -66,8 +66,9 @@ export default function SkillList () {
   const [skillPointCount, setskillPointCount] = useState(1)
 
   const [skillLevels, setSkillLevels] = useState<SkillLevel[]>([])
-  const [unusedSkills, setUnusedSkills] = useState<Skill[]>([])
-  const [skillItems, setSkillItems] = useState<Skill[]>([])
+  const [skills, setSkills] = useState<Skill[]>([])
+  //const [unusedSkills, setUnusedSkills] = useState<Skill[]>([])
+  //const [skillItems, setSkillItems] = useState<Skill[]>([])
 
   const [unusedLevelSkills, setUnusedLevelSkills] = useState<SkillLevel[]>([])
 
@@ -77,32 +78,17 @@ export default function SkillList () {
   const handleClose = () => setOpen(false);
   const [skillIdToChange, setSkillIdToChange] = useState('')
 
-
-  const setItems = (allSkillData:Skill[]) => {
-    const newskillItems:Skill[]=[];
-    const newUnusedItems:Skill[]=[];
-    allSkillData.forEach(x=>{
-      if(x.isUsed){
-        newskillItems.push(x)
-      }
-      else {
-        newUnusedItems.push(x)
-      }
-    })
-    setUnusedSkills(newUnusedItems);
-    setOrderedItems(newskillItems)
-  }
-
   const setOrderedItems = (newItems:Skill[]) =>{
     const orderedItems = _.sortBy(newItems, 'priority')
-    setSkillItems(orderedItems)
+    setSkills(orderedItems)
+    changeModalSize()
   }
   
   //Draggable list
   const onDragEnd = ({ destination, source }: DropResult) => {
     // dropped outside the list
     if (!destination) return
-    const newItems = reorder(skillItems, source.index, destination.index)
+    const newItems = reorder(skills, source.index, destination.index)
     for (let i = 0; i < newItems.length; i++) {
       newItems[i].priority = i
     }
@@ -110,68 +96,61 @@ export default function SkillList () {
   }
 
   const setItem = (value: string, id: string) => {
-    const newItems = skillItems.map(x => {
+    const newItems = skills.map(x => {
       if (x.id === id) {
         x.customName=value
       }
       return x
     })
-    setSkillItems(newItems)
+    setOrderedItems(newItems)
   }
 
-  const deleteItem = (id: string) => {
-    const newItems = skillItems.filter(x => {
-      if (x.id !== id) {
-        return x
-      }
-      setskillPointCount(skillPointCount+x.level)
-    })
-    for (let i = 0; i < newItems.length; i++) {
-      newItems[i].priority = i
+  const deleteItem = (skillId: string) => {
+    const skillToDelete = skills.filter(x=>x.id==skillId)[0]
+    setskillPointCount(skillPointCount+skillToDelete.level)
+    const skillsWithLowerPriority = skills.filter(x=>x.isUsed && x.priority > skillToDelete.priority)
+    toUnused(skillId)
+    if(skillsWithLowerPriority){
+      skillsWithLowerPriority.forEach(x=>{
+        x.priority--
+      })
     }
-    setOrderedItems(newItems)
+    setOrderedItems(skills)
   }
 
   const addItem = () => {
     if(skillPointCount <= 0) {
       return;
     }
-    const randomSkill = getRandomUnusedSkill()
-    unusedToUsed(randomSkill, 0, skillItems.length)
+    const randomUnusedSkillId = getRandomUnusedSkillId()
+    const usedSkills = skills.filter(x=>x.isUsed)
+    toUsed(randomUnusedSkillId, 0, usedSkills.length)
     setskillPointCount(skillPointCount-1)
+    setOrderedItems(skills)
   }
   
-  const unusedToUsed = (skill: Skill, level: number, priorirty: number) => {
-     const newUnusedSkills = unusedSkills.filter(x=>x.id!==skill.id)
-     setUnusedSkills(newUnusedSkills)
-     skill.isUsed= true;
-     skill.priority = priorirty,
-     skill.level = level
-     const newitems:Skill[] = [...skillItems, skill]
-     setOrderedItems(newitems)
+  const toUsed = (skillId: string, level: number, priorirty: number) => {
+    const skill= skills.filter(x=>x.id===skillId)[0]
+    skill.isUsed= true;
+    skill.priority = priorirty,
+    skill.level = level
   }
 
-const usedToUnused = (skill1: Skill)=>{
-  const skill = skillItems.filter(x=>x.id===skill1.id)[0]
-  skill.level = 0
-  skill.priority = 10
-  skill.isUsed = false
-  const newUnused:Skill[] = [...unusedSkills, skill]
-  setUnusedSkills(newUnused)
-  const newUsedItems = skillItems.filter(x=> x.id !== skill.id)
-  setOrderedItems(newUsedItems)
-}
+  const toUnused = (skillId: string)=>{
+    const skill= skills.filter(x=>x.id===skillId)[0]
+    skill.level = 0
+    skill.priority = 10
+    skill.isUsed = false
+  }
 
-  const getRandomUnusedSkill = () : Skill =>{
-    const randomUnusedImageIdNumber = getRandomInt(unusedSkills.length)
-    const result = unusedSkills[randomUnusedImageIdNumber]
-    return result
+  const getRandomUnusedSkillId = () : string =>{
+    const unusedSkills = skills.filter(x =>x.isUsed===false)
+    const randomSkillIndex = getRandomInt(unusedSkills.length)
+    const result = unusedSkills[randomSkillIndex]
+    return result.id
   }
 
   const getRandomInt = (max: number) => Math.floor(Math.random() * max);
-
-
-  ///////
 
   const setStartDateValue =(value: Dayjs | null) => {
     setStartDate(value)
@@ -183,24 +162,22 @@ const usedToUnused = (skill1: Skill)=>{
     const startYear = value.year()
     let skillPointCount = nowYear - startYear
 
-    let newItems = new Array<Skill>()
-
-    for (let item of skillItems)
+    const skillItems = skills.filter(x=>x.isUsed===true)
+    for (const item of skillItems)
     {
-      if(skillPointCount - item.level >=0 ) {
+      if(skillPointCount - item.level >= 0 ) {
         skillPointCount -= item.level
-        newItems.push(item)
         continue
       }
-      usedToUnused(item)
+      toUnused(item.id)
     }
-    setOrderedItems(newItems)
+    setOrderedItems(skills)
     setskillPointCount(skillPointCount)
   }
 
-  const changeSkillLevelValue = (up:boolean, id: string):void =>{
-    var newItems = skillItems.map(x=>{
-      if(x.id === id) {
+  const changeSkillLevelValue = (up:boolean, skillId: string):void =>{
+    const newItems = skills.map(x=>{
+      if(x.id === skillId) {
         if(up){
           if(skillPointCount>=1) {
             const nextlevalValue = x.level+1
@@ -220,44 +197,46 @@ const usedToUnused = (skill1: Skill)=>{
     setOrderedItems(newItems)
   }
 
-const onImageButtonClick = (id:string, level: number) =>{
-  const sameLevelSkills = skillLevels.filter(x=>x.level===level)
-  let unusedSkillLevels:SkillLevel[]=[]
-  sameLevelSkills.forEach(x=>{
-    if(unusedSkills.some(y=>y.id===x.skillId)){
-      unusedSkillLevels.push(x)
+  const onImageButtonClick = (skillId:string, level: number) =>{
+    const sameLevelSkills = skillLevels.filter(x=>x.level===level)
+    let unusedSkillLevels:SkillLevel[]=[]
+    sameLevelSkills.forEach(x=>{
+      if(skills.some(y=>y.id===x.skillId&& y.isUsed===false)){
+        unusedSkillLevels.push(x)
+      }
+    })
+    setUnusedLevelSkills(unusedSkillLevels)
+    setSkillIdToChange(skillId)
+    handleOpen()
+  }
+
+  const changeImage = (newSkillLevel:SkillLevel) => {
+    if(newSkillLevel.skillId === skillIdToChange){
+      return
     }
-  })
-  setUnusedLevelSkills(unusedSkillLevels)
-  setSkillIdToChange(id)
-  handleOpen()
-}
+    const previousSkill = skills.filter(x => x.id === skillIdToChange)[0]
+    const previousSkillLevel = previousSkill.level
+    const previousSkillPriority = previousSkill.priority
+    toUnused(skillIdToChange)
+    const newSkill = skills.filter(x => x.id === newSkillLevel.skillId)[0]
+    toUsed(newSkill.id, previousSkillLevel, previousSkillPriority)
+    setOrderedItems(skills)
+    handleClose()
+  }
 
-const changeImage = (newSkillLevel:SkillLevel) => {
-  if(newSkillLevel.skillId === skillIdToChange){
-    return
+  const changeModalSize = () =>{
+    const unusedItems = skills.filter(x=>x.isUsed===false)
+    console.log(unusedItems.length)
+    if(unusedItems.length <= 20 ){
+      setModalHeight(530)
+      return
+    }
+    if(unusedItems.length <= 25){
+      setModalHeight(650)
+      return
+    }
+    setModalHeight(770)
   }
-  const previousSkill = skillItems.filter(x => x.id === skillIdToChange)[0]
-  const previousSkillLevel = previousSkill.level
-  const previousSkillPriority = previousSkill.priority
-  usedToUnused(previousSkill)
-  const newSkill = unusedSkills.filter(x => x.id === newSkillLevel.skillId)[0]
-  unusedToUsed(newSkill, previousSkillLevel, previousSkillPriority)
-  handleClose()
-}
-
-//rework to unused TODO
-const changeModalSize = () =>{
-  if(skillItems.length >= 8 ){
-    setModalHeight(530)
-    return
-  }
-  if(skillItems.length >= 3){
-    setModalHeight(650)
-    return
-  }
-  setModalHeight(770)
-}
 
 //Crud
 const saveCharacterRequest = async () =>{
@@ -326,7 +305,7 @@ const setData = (data: CharacterResponseModel): void => {
     let characterSkillInfo : Skill = {
       id: x.id,
       name :x.defaultName,
-      priority: 10,
+      priority: 100,
       isUsed : false,
       isMain: 1,
       level:0
@@ -345,13 +324,8 @@ const setData = (data: CharacterResponseModel): void => {
    characterSkillsData.push(characterSkillInfo)
   })
   setSkillLevels(skillLevels)
-  setItems(characterSkillsData)
+  setOrderedItems(characterSkillsData)
 }
-
-  useEffect(() => {
-    changeModalSize()
-  }, [skillItems]);
-
   useEffect(()=>{
     getCahracterRequest()
   }, [])
@@ -401,7 +375,7 @@ const setData = (data: CharacterResponseModel): void => {
       </Grid>
     </Box>
   <DraggableList 
-    items={skillItems}
+    items={skills}
     skillLevels={skillLevels}
     onDragEnd={onDragEnd} 
     setValue={setItem} 

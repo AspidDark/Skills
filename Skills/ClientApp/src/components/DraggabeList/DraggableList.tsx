@@ -22,8 +22,13 @@ export interface DraggableListProps {
 const DraggableList = React.memo(({ items, skillLevels, onDragEnd, setValue, deleteValue, addItem, changeSkillLevel, onImageButtonClick }: DraggableListProps) => {
 
   const getSkillLevel = (skill:Skill):SkillLevel =>{
-    const result = skillLevels.filter(x=>x.skillId===skill.id&&x.level===skill.level)[0]
+    const result = skillLevels.filter(x=>x.skillId===skill.id && x.level===skill.level)[0]
     return result
+  }
+
+  const getUsedItemsLength =():number =>{
+    const usedItems = items.filter(x=>x.isUsed)
+    return usedItems.length
   }
 
   return (
@@ -32,7 +37,7 @@ const DraggableList = React.memo(({ items, skillLevels, onDragEnd, setValue, del
         {provided => (
           <div ref={provided.innerRef} {...provided.droppableProps}>
             {items.map((item, index) => (
-              <DraggableListItem
+              item.isUsed && <DraggableListItem
                 item={item}
                 skillLevel={getSkillLevel(item)}
                 index={index}
@@ -40,8 +45,8 @@ const DraggableList = React.memo(({ items, skillLevels, onDragEnd, setValue, del
                 setSkillName={setValue}
                 deleteValue={deleteValue}
                 addItem={addItem}
-                isLast={items.length - 1 === index}
-                itemsLength={items.length}
+                isLast={getUsedItemsLength() - 1 === index}
+                itemsLength={getUsedItemsLength()}
                 changeSkillLevel={changeSkillLevel}
                 onImageButtonClick={onImageButtonClick}
                 />

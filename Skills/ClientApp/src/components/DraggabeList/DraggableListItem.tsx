@@ -36,9 +36,9 @@ const DraggableListItem = ({ item, skillLevel, index, setSkillName, deleteValue,
 
   const [skillText, setSkillText] = useState<string>(item.customName?? '')
 
-  const deleteItem = (itemId: string) => {
+  const deleteItem = (skillId: string) => {
     if (itemsLength > 1) {
-      deleteValue(itemId)
+      deleteValue(skillId)
     }
   }
 
