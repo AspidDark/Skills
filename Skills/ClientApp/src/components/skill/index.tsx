@@ -5,7 +5,6 @@ import { DropResult } from 'react-beautiful-dnd'
 import DraggableList from '../DraggabeList/DraggableList'
 import { reorder } from '../DraggabeList/helpers'
 import './styles.css'
-import { v4 } from 'uuid'
 import _, { forEach } from 'lodash'
 import TextField from '@mui/material/TextField'
 import dayjs, { Dayjs } from 'dayjs'
@@ -20,12 +19,9 @@ import {getImagepath } from '../../services/ImageService'
 import Box from '@mui/material/Box/Box'
 import { modalSelector } from '../modal/modalSelector'
 import { Grid } from '@mui/material'
-import CharacterModel from '../../models/CharacterModel'
 import {postCharacter, getCharacter, updateCharacter } from '../../ApiServices/charecterApiSerice'
 import Button from '@mui/material/Button';
 import CharacterResponseModel from '../../models/ResponseModels/CharacterResponse'
-import SkillSetResponse from '../../models/ResponseModels/SkillSetResponse'
-import CharacterSkillResponse from '../../models/ResponseModels/CharacterSkillResponse'
 import Skill from '../../models/Skill'
 import SkillLevel from '../../models/SkillLevel'
 
@@ -58,7 +54,7 @@ export default function SkillList () {
   const theme: any = useTheme()
   const classes = useStyles()
   const [name, setName] = useState('')
-  const [skillSet, setSkillSet] = useState<SkillSetResponse>()
+ // const [skillSet, setSkillSet] = useState<SkillSetResponse>()
   const [characterId, setCharacterId] = useState<string|undefined>('')
   //proprity
   //buildName
@@ -78,11 +74,14 @@ export default function SkillList () {
   const handleClose = () => setOpen(false);
   const [skillIdToChange, setSkillIdToChange] = useState('')
 
+  const baseSkillPoints = 1
+
   const setOrderedItems = (newItems:Skill[]) =>{
     const orderedItems = _.sortBy(newItems, 'priority')
     setSkills(orderedItems)
     changeModalSize()
   }
+
   
   //Draggable list
   const onDragEnd = ({ destination, source }: DropResult) => {
@@ -107,7 +106,7 @@ export default function SkillList () {
 
   const deleteItem = (skillId: string) => {
     const skillToDelete = skills.filter(x=>x.id==skillId)[0]
-    setskillPointCount(skillPointCount+skillToDelete.level)
+    setskillPointCount(skillPointCount+skillToDelete.level+1)
     const skillsWithLowerPriority = skills.filter(x=>x.isUsed && x.priority > skillToDelete.priority)
     toUnused(skillId)
     if(skillsWithLowerPriority){
@@ -151,25 +150,41 @@ export default function SkillList () {
   }
 
   const getRandomInt = (max: number) => Math.floor(Math.random() * max);
-
-  const setStartDateValue =(value: Dayjs | null) => {
-    setStartDate(value)
+  
+  const setStartDateValue =(value: Dayjs | null, usedSkillPoints: number = 0) => {
     if(!value){
       return
     }
     const now = new Date();
     const nowYear = now.getFullYear();
     const startYear = value.year()
-    let skillPointCount = nowYear - startYear
+    
+    //Put limit on chosed year
+    setStartDate(value)
+    let skillPointCount = nowYear - startYear + baseSkillPoints
+    if(usedSkillPoints){
+      skillPointCount -= usedSkillPoints
+    }
+    if(skills && skills.length){
+        const usedPoints = skills.filter(x=>x.isUsed).map(x=>x.level+1).reduce((a,c)=>a+c)
+        skillPointCount -= usedPoints
+    }
 
     const skillItems = skills.filter(x=>x.isUsed===true)
-    for (const item of skillItems)
-    {
-      if(skillPointCount - item.level >= 0 ) {
-        skillPointCount -= item.level
-        continue
+    if(skillItems.length === 1){
+      if(skillItems[0].level+1 >= skillPointCount){
+        skillItems[0].level = skillPointCount
       }
-      toUnused(item.id)
+    }
+    else{
+      for (const item of skillItems)
+      {
+        if(skillPointCount - (item.level + 1) >= 0 ) {
+          skillPointCount = skillPointCount - (item.level+1)
+          continue
+        }
+        toUnused(item.id)
+      }
     }
     setOrderedItems(skills)
     setskillPointCount(skillPointCount)
@@ -183,14 +198,12 @@ export default function SkillList () {
             const nextlevalValue = x.level+1
             x.level=nextlevalValue
             setskillPointCount(skillPointCount-1)
-            return x
           } 
           return x
         }
         const previousLevel =  x.level-1
         x.level=previousLevel
         setskillPointCount(skillPointCount+1)
-        return x
       }
       return x
     })
@@ -281,14 +294,12 @@ const updateCharacterRequest = async () =>{
 }
 
 const setData = (data: CharacterResponseModel): void => {
-  setSkillSet(data.skillSet)
   setCharacterId(data.id)
-  setStartDate(dayjs(data.startingDate))
-
-
+  
   // all skill with images
   let characterSkillsData : Skill[] = [];
   let skillLevels : SkillLevel[] =[]
+  let usedSkillPoints:number = 0
   data.skillSet.skills.forEach( x=> {
     x.skillLevelsData.forEach(y=> {
       const imagePath = getImagepath(y.id)
@@ -317,12 +328,16 @@ const setData = (data: CharacterResponseModel): void => {
       characterSkillInfo.isMain = usedSkill.isMain
       characterSkillInfo.level = usedSkill.level
       characterSkillInfo.priority = usedSkill.priority
+      usedSkillPoints += usedSkill.level + 1
       if(usedSkill.customName){
         characterSkillInfo.name = usedSkill.customName
       }
     }
-   characterSkillsData.push(characterSkillInfo)
+    characterSkillsData.push(characterSkillInfo)
   })
+
+  setStartDateValue(dayjs(data.startingDate), usedSkillPoints)
+
   setSkillLevels(skillLevels)
   setOrderedItems(characterSkillsData)
 }

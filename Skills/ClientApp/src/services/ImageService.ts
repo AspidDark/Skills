@@ -147,7 +147,7 @@ const images: SkillImageModel[] =
         width:'',
     },
     {
-        id:'32b0aacb-3d28-4860-9815-075a5e2f2298f',
+        id:'32b0aacb-3d28-4860-9815-075a5ef2298f',
         level: 2,
         type: 'eag',
         path:'EagleEyeAdvanced.jpg',
