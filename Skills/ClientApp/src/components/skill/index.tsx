@@ -155,21 +155,12 @@ export default function SkillList () {
     if(!value){
       return
     }
+    setStartDate(value)
     const now = new Date();
     const nowYear = now.getFullYear();
     const startYear = value.year()
+    let skillPointCount = nowYear - startYear + baseSkillPoints - usedSkillPoints
     
-    //Put limit on chosed year
-    setStartDate(value)
-    let skillPointCount = nowYear - startYear + baseSkillPoints
-    if(usedSkillPoints){
-      skillPointCount -= usedSkillPoints
-    }
-    if(skills && skills.length){
-        const usedPoints = skills.filter(x=>x.isUsed).map(x=>x.level+1).reduce((a,c)=>a+c)
-        skillPointCount -= usedPoints
-    }
-
     const skillItems = skills.filter(x=>x.isUsed===true)
     if(skillItems.length === 1){
       if(skillItems[0].level+1 >= skillPointCount){
