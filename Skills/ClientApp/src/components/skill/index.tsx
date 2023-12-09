@@ -24,6 +24,7 @@ import Button from '@mui/material/Button';
 import CharacterResponseModel from '../../models/ResponseModels/CharacterResponse'
 import Skill from '../../models/Skill'
 import SkillLevel from '../../models/SkillLevel'
+import CharacterRequest from '../../models/RequestModels/CharacterRequest'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -54,8 +55,8 @@ export default function SkillList () {
   const theme: any = useTheme()
   const classes = useStyles()
   const [name, setName] = useState('')
- // const [skillSet, setSkillSet] = useState<SkillSetResponse>()
   const [characterId, setCharacterId] = useState<string|undefined>('')
+  const [skillSetId, setSkillSetId] = useState('')
   //proprity
   //buildName
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
@@ -63,9 +64,6 @@ export default function SkillList () {
 
   const [skillLevels, setSkillLevels] = useState<SkillLevel[]>([])
   const [skills, setSkills] = useState<Skill[]>([])
-  //const [unusedSkills, setUnusedSkills] = useState<Skill[]>([])
-  //const [skillItems, setSkillItems] = useState<Skill[]>([])
-
   const [unusedLevelSkills, setUnusedLevelSkills] = useState<SkillLevel[]>([])
 
   const [modalHeight, setModalHeight ] = useState(770)
@@ -243,12 +241,12 @@ export default function SkillList () {
 
 //Crud
 const saveCharacterRequest = async () =>{
-  /*let startDateValue = startDate?.toDate()
+  let startDateValue = startDate?.toDate()
   if(!startDateValue) {
     startDateValue=new Date()
   }
 
-  const saveModel: CharacterModel ={
+  const saveModel: CharacterRequest ={
     priority : 1,
     buildName : name,
     startingDate: startDateValue,
@@ -257,7 +255,7 @@ const saveCharacterRequest = async () =>{
 
   const result= await postCharacter(saveModel)
   setData(result);
-*/
+
 }
 
 const getCahracterRequest = async () =>{
@@ -271,7 +269,7 @@ const updateCharacterRequest = async () =>{
     startDateValue=new Date()
   }
 
-  const saveModel: CharacterModel ={
+  const saveModel: CharacterRequest ={
     id: characterId,
     priority : 1,
     buildName : name,
@@ -285,7 +283,7 @@ const updateCharacterRequest = async () =>{
 
 const setData = (data: CharacterResponseModel): void => {
   setCharacterId(data.id)
-  
+  setSkillSetId(data.skillSet.id)
   // all skill with images
   let characterSkillsData : Skill[] = [];
   let skillLevels : SkillLevel[] =[]

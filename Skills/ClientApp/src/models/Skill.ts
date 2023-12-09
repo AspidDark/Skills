@@ -7,5 +7,4 @@ export default interface Skill
     isMain: number
     level:number
     customName?: string
-
 }

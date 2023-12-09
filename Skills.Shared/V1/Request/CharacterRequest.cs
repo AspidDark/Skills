@@ -14,9 +14,9 @@ public class CharacterRequest
 
 
     public Guid? PhotoId { get; set; }
+    public Guid SkillSetId { get; set; }
 
     [MaxLength(8)]
     public IEnumerable<CharacterSkillRequest> Skills { get; init; }
 
-    public Guid SkillSetId { get; set; }
 }

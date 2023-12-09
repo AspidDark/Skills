@@ -1,7 +1,7 @@
 import CRUDRequestHelper from '../services/CRUDRequestHelper'
 import * as path from '../Consts/PathConsts';
 import CharacterResponseModel from '../models/ResponseModels/CharacterResponse';
-import CharacterModel from '../models/CharacterModel';
+import CharacterRequest from '../models/RequestModels/CharacterRequest';
 
     const uri:string='https://localhost:7256/api/v1/character';
 
@@ -40,7 +40,7 @@ import CharacterModel from '../models/CharacterModel';
     }
     */
 
-export const postCharacter = async(entity:CharacterModel):Promise<CharacterResponseModel> => {
+export const postCharacter = async(entity:CharacterRequest):Promise<CharacterResponseModel> => {
 
         const apiService = new CRUDRequestHelper();
         const resultApi = await apiService.postRequest({url:uri, data: entity}, false);
@@ -65,7 +65,7 @@ export const postCharacter = async(entity:CharacterModel):Promise<CharacterRespo
         return result;
     }
   */
-    export const updateCharacter = async(updateEntity:CharacterModel):Promise<CharacterResponseModel> =>{
+    export const updateCharacter = async(updateEntity:CharacterRequest):Promise<CharacterResponseModel> =>{
         const path=uri+`/${updateEntity.id}`;
         const apiService = new CRUDRequestHelper();
         const resultApi = await apiService.updateRequest({url:path, data:updateEntity}, false);
