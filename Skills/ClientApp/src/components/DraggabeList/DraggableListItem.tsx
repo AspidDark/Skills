@@ -34,7 +34,7 @@ export interface DraggableListItemProps {
 const DraggableListItem = ({ item, skillLevel, index, setSkillName, deleteValue, addItem, isLast, itemsLength, changeSkillLevel, onImageButtonClick }: DraggableListItemProps) => {
   const classes = useStyles()
 
-  const [skillText, setSkillText] = useState<string>(item.customName?? '')
+  const [skillText, setSkillText] = useState<string>(item.customName?? item.name)
 
   const deleteItem = (skillId: string) => {
     if (itemsLength > 1) {

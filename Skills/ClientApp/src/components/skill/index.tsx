@@ -79,7 +79,8 @@ export default function SkillList () {
   const setOrderedItems = (newItems:Skill[]) =>{
     const orderedItems = _.sortBy(newItems, 'priority')
     setSkills(orderedItems)
-    changeModalSize()
+    const unusedItems = newItems.filter(x=>x.isUsed===false)
+    changeModalSize(unusedItems.length)
   }
 
   
@@ -228,14 +229,12 @@ export default function SkillList () {
     handleClose()
   }
 
-  const changeModalSize = () =>{
-    const unusedItems = skills.filter(x=>x.isUsed===false)
-    console.log(unusedItems.length)
-    if(unusedItems.length <= 20 ){
+  const changeModalSize = (unusedItemsCount:number) =>{
+    if(unusedItemsCount <= 20 ){
       setModalHeight(530)
       return
     }
-    if(unusedItems.length <= 25){
+    if(unusedItemsCount <= 25){
       setModalHeight(650)
       return
     }
