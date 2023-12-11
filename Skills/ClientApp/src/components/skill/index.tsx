@@ -158,13 +158,12 @@ export default function SkillList () {
     const now = new Date();
     const nowYear = now.getFullYear();
     const startYear = value.year()
+    const skillItems = skills.filter(x=>x.isUsed===true)
     let skillPointCount = nowYear - startYear + baseSkillPoints - usedSkillPoints
     
-    const skillItems = skills.filter(x=>x.isUsed===true)
-    if(skillItems.length === 1){
-      if(skillItems[0].level+1 >= skillPointCount){
-        skillItems[0].level = skillPointCount
-      }
+    if(skillItems.length===1 && skillPointCount < skillItems[0].level +1){
+      skillItems[0].level = skillPointCount -1
+      skillPointCount=0
     }
     else{
       for (const item of skillItems)
@@ -240,22 +239,35 @@ export default function SkillList () {
   }
 
 //Crud
-const saveCharacterRequest = async () =>{
+const getCharacterModel = ():CharacterRequest =>{
   let startDateValue = startDate?.toDate()
   if(!startDateValue) {
     startDateValue=new Date()
   }
 
-  const saveModel: CharacterRequest ={
+  const result: CharacterRequest ={
+    id: characterId,
     priority : 1,
     buildName : name,
     startingDate: startDateValue,
-    skills: items
+    skillSetId: skillSetId,
+    skills: skills.filter(x=>x.isUsed).map(x=>{
+      return {
+        priority:x.priority,
+        customName: x.customName ?? x.name,
+        level:x.level,
+        isMain:x.isMain,
+        skillId:x.id
+      }
+    })
   }
+  return result
+} 
 
-  const result= await postCharacter(saveModel)
+const saveCharacterRequest = async () =>{
+  const request= getCharacterModel()
+  const result = await postCharacter(request)
   setData(result);
-
 }
 
 const getCahracterRequest = async () =>{
@@ -264,21 +276,9 @@ const getCahracterRequest = async () =>{
 }
 
 const updateCharacterRequest = async () =>{
- /* let startDateValue = startDate?.toDate()
-  if(!startDateValue) {
-    startDateValue=new Date()
-  }
-
-  const saveModel: CharacterRequest ={
-    id: characterId,
-    priority : 1,
-    buildName : name,
-    startingDate: startDateValue,
-    skills: items
-  }
-  const response = await updateCharacter(saveModel)
+  const request= getCharacterModel()
+  const response = await updateCharacter(request)
   setData(response)
-  */
 }
 
 const setData = (data: CharacterResponseModel): void => {

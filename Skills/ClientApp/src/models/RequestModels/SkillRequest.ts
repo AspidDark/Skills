@@ -1,5 +1,4 @@
 export default interface SkillRequest {
-    id:string
     priority: number
     customName: string
     level: number
