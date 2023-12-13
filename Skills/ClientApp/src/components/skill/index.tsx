@@ -57,6 +57,7 @@ export default function SkillList () {
   const [name, setName] = useState('')
   const [characterId, setCharacterId] = useState<string|undefined>('')
   const [skillSetId, setSkillSetId] = useState('')
+  const [isNewCharacter, setIsNewCharacter] = useState(true)
   //proprity
   //buildName
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
@@ -73,6 +74,7 @@ export default function SkillList () {
   const [skillIdToChange, setSkillIdToChange] = useState('')
 
   const baseSkillPoints = 1
+  const emptyGuid ='00000000-0000-0000-0000-000000000000'
 
   const setOrderedItems = (newItems:Skill[]) =>{
     const orderedItems = _.sortBy(newItems, 'priority')
@@ -264,24 +266,25 @@ const getCharacterModel = ():CharacterRequest =>{
   return result
 } 
 
-const saveCharacterRequest = async () =>{
-  const request= getCharacterModel()
-  const result = await postCharacter(request)
-  setData(result);
-}
-
 const getCahracterRequest = async () =>{
   const response = await getCharacter()
   setData(response)
 }
 
-const updateCharacterRequest = async () =>{
+const saveCharacterRequest = async () =>{
+  console.log(isNewCharacter)
   const request= getCharacterModel()
+  if(isNewCharacter){
+    const result = await postCharacter(request)
+    setData(result);
+    return
+  }
   const response = await updateCharacter(request)
   setData(response)
 }
 
 const setData = (data: CharacterResponseModel): void => {
+  data.id === emptyGuid ? setIsNewCharacter(true): setIsNewCharacter(false)
   setCharacterId(data.id)
   setSkillSetId(data.skillSet.id)
   // all skill with images
@@ -349,7 +352,7 @@ const setData = (data: CharacterResponseModel): void => {
   Post
 </Button>
 <Button
-  onClick={() => updateCharacterRequest()}
+  onClick={() => saveCharacterRequest()}
 >
     Update
 </Button>

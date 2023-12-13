@@ -19,6 +19,7 @@ namespace Skills.DataBase
             services.AddScoped<ICahracterSkillsDataService, CahracterSkillsDataService>();
             services.AddScoped<ICharacterDataService, CharacterDataService>();
             services.AddScoped<ISkillDataService, SkillDataService>();
+            services.AddScoped<ISkillSetDataService, SkillSetDataService>();
 
             return services;
         }

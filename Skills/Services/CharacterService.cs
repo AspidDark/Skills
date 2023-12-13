@@ -26,16 +26,19 @@ public class CharacterService : ICharacterService
     private readonly ICahracterSkillsDataService _characterSkillsDataService;
     private readonly ISkillDataService _skillDataService;
     private readonly IConfiguration _configuration;
+    private readonly ISkillSetDataService _skillSetDataService;
 
     public CharacterService(ICharacterDataService characterDataService, 
         ICahracterSkillsDataService characterSkillsDataService, 
         ISkillDataService skillDataService,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        ISkillSetDataService skillSetDataService)
     {
         _characterDataService = characterDataService;
         _characterSkillsDataService = characterSkillsDataService;
         _skillDataService = skillDataService;
         _configuration = configuration;
+        _skillSetDataService = skillSetDataService;
     }
 
     public async Task<OneOf<Character, ErrorModel>> Get(ByEntityFilter filter)
@@ -95,6 +98,8 @@ public class CharacterService : ICharacterService
         var character = await _characterDataService.Create(model, userId);
         var skills = await _characterSkillsDataService.AddMany(model.Skills, character.Id, userId);
         character.CharacterSkill = skills;
+        var skillSet = await _skillSetDataService.GetSkillSet(model.SkillSetId);
+        character.SkillSet = skillSet;
         return character;
     }
 
@@ -108,6 +113,8 @@ public class CharacterService : ICharacterService
 
         var skills = await _characterSkillsDataService.UpdateMany(model.Skills, characterId, userId);
         updatedCharacter.CharacterSkill = skills;
+        var skillSet = await _skillSetDataService.GetSkillSet(model.SkillSetId);
+        updatedCharacter.SkillSet = skillSet;
         return updatedCharacter;
     }
 
@@ -120,6 +127,8 @@ public class CharacterService : ICharacterService
         }
         var skills = await _characterSkillsDataService.DeleteForCharacter(characterId, userId);
         character.CharacterSkill = skills;
+        var skillSet = await _skillSetDataService.GetSkillSet(character.SkillSetId);
+        character.SkillSet = skillSet;
         return character;
     }
 
