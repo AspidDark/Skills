@@ -142,7 +142,7 @@ public class CharacterService : ICharacterService
         (((today.Month > model.StartingDate.Month) ||
         ((today.Month == model.StartingDate.Month) && (today.Day >= model.StartingDate.Day))) ? 1 : 0);
 
-        var skillLevel = model.Skills.Select(x => x.Level).Sum();
+        var skillLevel = model.Skills.Select(x => x.Level + 1).Sum();
 
         return maxSkill + 1 >= skillLevel;
     }
