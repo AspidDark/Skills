@@ -4,7 +4,7 @@ namespace Skills.Extensions;
 
 public static class GeneralExtensions
 {
-    public static Guid GetUserId(this HttpContext httpContext)
+    public static Guid? GetUserId(this HttpContext httpContext)
     {
         if (httpContext.User is not null)
         {
@@ -14,9 +14,7 @@ public static class GeneralExtensions
                 return id;
             }
         }
-        return Guid.Empty;
-        // "c2f8bbf7-0564-4ad6-9a4d-4925a037e107"
-        return Guid.Parse("c2f8bbf7-0564-4ad6-9a4d-4925a037e110");
+        return null;
     }
 
     public static Guid GetUserId(this ClaimsPrincipal claimsPrincipal)

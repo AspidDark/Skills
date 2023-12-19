@@ -48,6 +48,14 @@ namespace Skills.DataBase.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("is_deleted");
 
+                    b.Property<bool>("IsDraft")
+                        .HasColumnType("boolean")
+                        .HasColumnName("isDraft");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("boolean")
+                        .HasColumnName("isPublic");
+
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid")
                         .HasColumnName("owner_id");

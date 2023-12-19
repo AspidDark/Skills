@@ -17,6 +17,8 @@ public static class ApiRoutes
 
         public const string Create = Base + baseRoute;
 
+        public const string CreateDraft = Base + baseRoute + "draft";
+
         public const string Update = Base + baseRoute + "/{characterId}";
 
         public const string Delete = Base + baseRoute + "/{characterId}";

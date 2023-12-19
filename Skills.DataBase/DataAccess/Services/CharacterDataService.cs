@@ -8,8 +8,11 @@ public interface ICharacterDataService
 {
     Task<Character?> GetById(Guid id);
 
-    Task<Character?> GetByUserId(Guid userId);
     Task<List<Character>?> GetList(Guid userId, int pageSize, int pageNumber);
+
+    Task<Character> CreateDraft(CharacterModel model);
+
+    Task<Character> UpdateDraft(Guid characterId, Guid userId);
 
     Task<Character> Create(CharacterModel model, Guid userId);
 
@@ -28,23 +31,12 @@ public class CharacterDataService : ICharacterDataService
 
     public Task<Character?> GetById(Guid id)
            => _appDbContext.Characters
+          .AsNoTracking()
           .Include(x => x.CharacterSkill)
           .Include(x => x.Photo)
           .Include(x => x.SkillSet)
           .Include(x => x.SkillSet.Skills)
-          .AsNoTracking()
           .FirstOrDefaultAsync(x => x.Id == id);
-
-    public Task<Character?> GetByUserId(Guid userId)
-        => _appDbContext.Characters
-          .Include(x => x.CharacterSkill)
-          .Include(x => x.Photo)
-          .Include(x => x.SkillSet)
-          .Include(x => x.SkillSet.Skills)
-          .AsNoTracking()
-          .Where(x => x.OwnerId == userId)
-          .OrderBy(x => x.Priority)
-          .FirstOrDefaultAsync();
 
     public Task<List<Character>?> GetList(Guid userId, int pageSize, int pageNumber)
         => _appDbContext.Characters
@@ -58,6 +50,37 @@ public class CharacterDataService : ICharacterDataService
            .Take(pageSize)
            .AsNoTracking().ToListAsync();
 
+    public async Task<Character> CreateDraft(CharacterModel model)
+    {
+        var character = new Character()
+        {
+            Id = Guid.NewGuid(),
+            EditDate = DateTime.UtcNow,
+            CreateDate = DateTime.UtcNow,
+            IsDeleted = 0,
+            Priority = model.Priority,
+            BuildName = model.BuildName,
+            Story = model.Story,
+            PhotoId = model.PhotoId,
+            StartingDate = model.StartingDate,
+            SkillSetId = model.SkillSetId,
+            IsPublic = false,
+            IsDraft = true
+        };
+        var savedCharacter = _appDbContext.Characters.Add(character);
+        await _appDbContext.SaveChangesAsync();
+        return savedCharacter.Entity;
+    }
+
+    public async Task<Character> UpdateDraft(Guid characterId, Guid userId)
+    {
+        var character = _appDbContext.Characters.FirstOrDefault(x => x.Id == characterId)!;
+        character.IsDraft = false;
+        character.OwnerId = userId;
+        await _appDbContext.SaveChangesAsync();
+        return character;
+    }
+    
     public async Task<Character> Create(CharacterModel model, Guid userId)
     {
         var character = new Character()
@@ -73,6 +96,7 @@ public class CharacterDataService : ICharacterDataService
             PhotoId = model.PhotoId,
             StartingDate = model.StartingDate,
             SkillSetId = model.SkillSetId,
+            IsPublic = model.IsPublic,
         };
         var savedCharacter = _appDbContext.Characters.Add(character);
         await _appDbContext.SaveChangesAsync();
@@ -93,6 +117,7 @@ public class CharacterDataService : ICharacterDataService
         character.PhotoId = model.PhotoId;
         character.SkillSetId = model.SkillSetId;
         character.StartingDate = model.StartingDate;
+        character.IsPublic = model.IsPublic;
 
         await _appDbContext.SaveChangesAsync();
         return character;

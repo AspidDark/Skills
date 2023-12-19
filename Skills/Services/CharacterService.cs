@@ -13,6 +13,8 @@ public interface ICharacterService
 
     Task<OneOf<List<Character>, ErrorModel>> GetList(BaseUserIdFilter filter, PaginationFilter paginationFilter);
 
+    Task<OneOf<Character, ErrorModel>> CreateDraft(CharacterModel model);
+
     Task<OneOf<Character, ErrorModel>> Create(CharacterModel model, Guid userId);
 
     Task<OneOf<Character, ErrorModel>> Update(CharacterModel model, Guid characterId, Guid userId);
@@ -28,8 +30,8 @@ public class CharacterService : ICharacterService
     private readonly IConfiguration _configuration;
     private readonly ISkillSetDataService _skillSetDataService;
 
-    public CharacterService(ICharacterDataService characterDataService, 
-        ICahracterSkillsDataService characterSkillsDataService, 
+    public CharacterService(ICharacterDataService characterDataService,
+        ICahracterSkillsDataService characterSkillsDataService,
         ISkillDataService skillDataService,
         IConfiguration configuration,
         ISkillSetDataService skillSetDataService)
@@ -46,22 +48,33 @@ public class CharacterService : ICharacterService
         if (filter.EntityId.HasValue)
         {
             var result = await _characterDataService.GetById(filter.EntityId.Value);
-
             if (result is null)
             {
                 return ErrorModelNoCharacter;
             }
-            return result;
-        }
 
-        if (filter.UserId.HasValue)
-        {
-            var result = await _characterDataService.GetByUserId(filter.UserId.Value);
-            if (result is null)
+            if (result.IsPublic)
             {
-                var character = await StarterCharacter();
-                character.Id = Guid.Empty;
-                return character;
+                result.SkillSet.Skills = await GetDeafultSkills(result.SkillSetId);
+                return result;
+            }
+
+            if (!filter.UserId.HasValue)
+            { 
+                return ErrorModelNoCharacter;
+            }
+
+            //only authorized from here
+            if (result.IsDraft) 
+            {
+                var undraftedCharacter = await _characterDataService.UpdateDraft(filter.EntityId.Value, filter.UserId.Value);
+                undraftedCharacter.SkillSet.Skills = await GetDeafultSkills(result.SkillSetId);
+                return undraftedCharacter;
+            }
+
+            if (result.OwnerId != filter.UserId)
+            {
+                return ErrorModelNoCharacter;
             }
             result.SkillSet.Skills = await GetDeafultSkills(result.SkillSetId);
             return result;
@@ -71,6 +84,23 @@ public class CharacterService : ICharacterService
         defautlCharacter.Id = Guid.Empty;
         return defautlCharacter;
     }
+
+    public async Task<OneOf<Character, ErrorModel>> CreateDraft(CharacterModel model)
+    {
+        if (!IsCharacterValid(model))
+        {
+            return new ErrorModel(1100, "Character model is invalid skills mismatch year of expirience");
+        }
+
+        var character = await _characterDataService.CreateDraft(model);
+        var skills = await _characterSkillsDataService.AddMany(model.Skills, character.Id);
+        character.CharacterSkill = skills;
+        var skillSet = await _skillSetDataService.GetSkillSet(model.SkillSetId);
+        character.SkillSet = skillSet;
+        return character;
+    }
+
+
 
     public async Task<OneOf<List<Character>, ErrorModel>> GetList(BaseUserIdFilter filter, PaginationFilter paginationFilter)
     {
@@ -96,7 +126,7 @@ public class CharacterService : ICharacterService
         }
 
         var character = await _characterDataService.Create(model, userId);
-        var skills = await _characterSkillsDataService.AddMany(model.Skills, character.Id, userId);
+        var skills = await _characterSkillsDataService.AddMany(model.Skills, character.Id);
         character.CharacterSkill = skills;
         var skillSet = await _skillSetDataService.GetSkillSet(model.SkillSetId);
         character.SkillSet = skillSet;
@@ -111,7 +141,7 @@ public class CharacterService : ICharacterService
         }
         var updatedCharacter = await _characterDataService.Update(model, characterId, userId);
 
-        var skills = await _characterSkillsDataService.UpdateMany(model.Skills, characterId, userId);
+        var skills = await _characterSkillsDataService.UpdateMany(model.Skills, characterId);
         updatedCharacter.CharacterSkill = skills;
         var skillSet = await _skillSetDataService.GetSkillSet(model.SkillSetId);
         updatedCharacter.SkillSet = skillSet;

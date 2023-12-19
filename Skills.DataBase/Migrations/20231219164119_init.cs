@@ -61,6 +61,8 @@ namespace Skills.DataBase.Migrations
                     story = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
                     PhotoId = table.Column<Guid>(type: "uuid", nullable: true),
                     SkillSetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    isDraft = table.Column<bool>(type: "boolean", nullable: false),
+                    isPublic = table.Column<bool>(type: "boolean", nullable: false),
                     create_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     edit_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     owner_id = table.Column<Guid>(type: "uuid", nullable: false),

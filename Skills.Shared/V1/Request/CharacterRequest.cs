@@ -19,4 +19,5 @@ public class CharacterRequest
     [MaxLength(8)]
     public IEnumerable<CharacterSkillRequest> Skills { get; init; }
 
+    public bool IsPublic { get; set; }
 }

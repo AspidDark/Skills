@@ -12,7 +12,7 @@ using Skills.DataBase.DataAccess;
 namespace Skills.DataBase.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231110122727_init")]
+    [Migration("20231219164119_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -50,6 +50,14 @@ namespace Skills.DataBase.Migrations
                     b.Property<int>("IsDeleted")
                         .HasColumnType("integer")
                         .HasColumnName("is_deleted");
+
+                    b.Property<bool>("IsDraft")
+                        .HasColumnType("boolean")
+                        .HasColumnName("isDraft");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("boolean")
+                        .HasColumnName("isPublic");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid")

@@ -30,7 +30,7 @@ public class FileController : ControllerBase
         {
             FileCreate fileCreate = new()
             {
-                UserId = HttpContext.GetUserId(),
+                UserId = HttpContext.GetUserId().Value,
                 FileBody = request.FormFile
             };
             var result = await _fileService.Create(fileCreate);

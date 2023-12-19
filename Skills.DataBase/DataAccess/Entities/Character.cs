@@ -17,4 +17,8 @@ public class Character : BaseEntity
     public Guid SkillSetId { get; set; }
 
     public SkillSet SkillSet { get; set; }
+
+    public bool IsDraft { get; set; }
+
+    public bool IsPublic { get; set; }
 }

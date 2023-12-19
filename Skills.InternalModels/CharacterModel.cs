@@ -11,4 +11,5 @@ public class CharacterModel
     public Guid? PhotoId { get; set; }
     public required IEnumerable<CharacterSkillModel> Skills { get; init; }
     public Guid SkillSetId { get; set; }
+    public bool IsPublic { get; set; }
 }

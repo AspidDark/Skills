@@ -5,8 +5,8 @@ namespace Skills.DataBase.DataAccess.Services;
 
 public interface ICahracterSkillsDataService
 {
-    Task<List<CharacterSkill>> AddMany(IEnumerable<CharacterSkillModel> skillsModel, Guid characterId, Guid userId);
-    Task<List<CharacterSkill>> UpdateMany(IEnumerable<CharacterSkillModel> skillsModel, Guid characterId, Guid userId);
+    Task<List<CharacterSkill>> AddMany(IEnumerable<CharacterSkillModel> skillsModel, Guid characterId);
+    Task<List<CharacterSkill>> UpdateMany(IEnumerable<CharacterSkillModel> skillsModel, Guid characterId);
     Task<List<CharacterSkill>?> DeleteForCharacter(Guid characterId, Guid userId);
 }
 public class CahracterSkillsDataService : ICahracterSkillsDataService
@@ -18,14 +18,13 @@ public class CahracterSkillsDataService : ICahracterSkillsDataService
         _appDbContext = appDbContext;
     }
 
-    public async Task<List<CharacterSkill>> AddMany(IEnumerable<CharacterSkillModel> skillsModel, Guid characterId, Guid userId)
+    public async Task<List<CharacterSkill>> AddMany(IEnumerable<CharacterSkillModel> skillsModel, Guid characterId)
     {
         var skills = skillsModel.Select(x => new CharacterSkill
         {
             Id = Guid.NewGuid(),
             CreateDate = DateTime.UtcNow,
             EditDate = DateTime.UtcNow,
-            OwnerId = userId,
             IsDeleted = 0,
             Priority = x.Priority,
             CustomName = x.CustomName,
@@ -39,12 +38,12 @@ public class CahracterSkillsDataService : ICahracterSkillsDataService
         return skills.ToList();
     }
 
-    public async Task<List<CharacterSkill>> UpdateMany(IEnumerable<CharacterSkillModel> skillsModel, Guid characterId, Guid userId)
+    public async Task<List<CharacterSkill>> UpdateMany(IEnumerable<CharacterSkillModel> skillsModel, Guid characterId)
     {
         var skillsfromBase = _appDbContext.CharacterSkills.Where(x => x.Character.Id == characterId);
         _appDbContext.CharacterSkills.RemoveRange(skillsfromBase);
         _appDbContext.SaveChanges();
-        var result = await AddMany(skillsModel, characterId, userId);
+        var result = await AddMany(skillsModel, characterId);
         return result;
     }
 
