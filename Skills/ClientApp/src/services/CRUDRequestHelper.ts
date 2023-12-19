@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import authService from '../components/api-authorization/AuthorizeService'
+import { useNavigate } from "react-router-dom";
 
 export interface RequestData {
     url:string,
@@ -19,20 +20,14 @@ class CRUDRequestHelper{
                 if(authorize){
                    headers=await this.getHeaders();
                    if(!headers){
-                    return  this.errorObject();
+                    return  this.errorObject('Auth')
                    }
                 }
 
                 const responseJson = await axios.get(request, 
                     authorize ? {headers:headers}:undefined);
-
-                if(!responseJson){
-                    return  this.errorObject();
-                }
-                if(!responseJson.data){
-                    return this.errorObject(responseJson.data)
-                }
-                return {success:true, data:responseJson.data}
+                    const result = this.validateResponse(responseJson)
+                    return result
     
              }catch (ex) {
                 console.log(ex);
@@ -46,19 +41,14 @@ class CRUDRequestHelper{
             if(authorize){
                headers=await this.getHeaders();
                if(!headers){
-                return  this.errorObject();
+                return this.errorObject('Auth')
                }
             }
 
             const responseJson = await axios.post(request.url, request.data,
                 authorize ? {headers:headers}:undefined);
-                if(!responseJson){
-                    return  this.errorObject();
-                }
-                if(!responseJson.data){
-                    return this.errorObject(responseJson.data)
-                }
-                return {success:true, data:responseJson.data}
+                const result = this.validateResponse(responseJson)
+                return result
 
         }catch (ex) {
             console.log(ex);
@@ -72,19 +62,14 @@ class CRUDRequestHelper{
             if(authorize){
                headers=await this.getHeaders();
                if(!headers){
-                return  this.errorObject();
+                return this.errorObject('Auth')
                }
             }
 
             const responseJson = await axios.delete(request, 
                 authorize ? {headers:headers}:undefined);
-            if(!responseJson){
-                return  this.errorObject();
-            }
-            if(!responseJson.data.result){
-                return this.errorObject(responseJson.data.message)
-            }
-            return {success:responseJson.data.result, data:responseJson.data.message}
+                const result = this.validateResponse(responseJson)
+                return result
 
         }catch (ex) {
             console.log(ex);
@@ -98,24 +83,32 @@ class CRUDRequestHelper{
             if(authorize){
                headers=await this.getHeaders();
                if(!headers){
-                return  this.errorObject();
+                return this.errorObject('Auth')
                }
             }
 
             const responseJson = await axios.put(request.url, request.data, 
                 authorize ? {headers:headers}:undefined);
-                if(!responseJson){
-                    return  this.errorObject();
-                }
-                if(!responseJson.data){
-                    return this.errorObject(responseJson.data)
-                }
-                return {success:true, data:responseJson.data}
+                const result = this.validateResponse(responseJson)
+                return result
 
         }catch (ex) {
             console.log(ex);
             return  this.errorObject();
         }
+    }
+
+    private validateResponse(responseJson: AxiosResponse<any>):ResponseData {
+        if(!responseJson){
+            return this.errorObject();
+        }
+        if(responseJson.status === 401){
+            return this.errorObject('Auth')
+        }
+        if(!responseJson.data){
+            return this.errorObject(responseJson.data)
+        }
+        return {success:true, data:responseJson.data}
     }
 
     private errorObject(message:string='Error'):ResponseData {

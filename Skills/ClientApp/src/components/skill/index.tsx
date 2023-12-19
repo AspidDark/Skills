@@ -19,12 +19,13 @@ import {getImagepath } from '../../services/ImageService'
 import Box from '@mui/material/Box/Box'
 import { modalSelector } from '../modal/modalSelector'
 import { Grid } from '@mui/material'
-import {postCharacter, getCharacter, updateCharacter } from '../../ApiServices/charecterApiSerice'
+import {postCharacter, getCharacter, updateCharacter, deleteCharacter } from '../../ApiServices/charecterApiSerice'
 import Button from '@mui/material/Button';
 import CharacterResponseModel from '../../models/ResponseModels/CharacterResponse'
 import Skill from '../../models/Skill'
 import SkillLevel from '../../models/SkillLevel'
 import CharacterRequest from '../../models/RequestModels/CharacterRequest'
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -73,6 +74,8 @@ export default function SkillList () {
   const handleClose = () => setOpen(false);
   const [skillIdToChange, setSkillIdToChange] = useState('')
 
+  const navigate = useNavigate();
+
   const baseSkillPoints = 1
   const emptyGuid ='00000000-0000-0000-0000-000000000000'
 
@@ -83,7 +86,6 @@ export default function SkillList () {
     changeModalSize(unusedItems.length)
   }
 
-  
   //Draggable list
   const onDragEnd = ({ destination, source }: DropResult) => {
     // dropped outside the list
@@ -241,7 +243,7 @@ export default function SkillList () {
   }
 
 //Crud
-const getCharacterModel = ():CharacterRequest =>{
+const mapToCharacterRequest = ():CharacterRequest =>{
   let startDateValue = startDate?.toDate()
   if(!startDateValue) {
     startDateValue=new Date()
@@ -272,8 +274,7 @@ const getCahracterRequest = async () =>{
 }
 
 const saveCharacterRequest = async () =>{
-  console.log(isNewCharacter)
-  const request= getCharacterModel()
+  const request= mapToCharacterRequest()
   if(isNewCharacter){
     const result = await postCharacter(request)
     setData(result);
@@ -283,7 +284,24 @@ const saveCharacterRequest = async () =>{
   setData(response)
 }
 
-const setData = (data: CharacterResponseModel): void => {
+const deleteCharacterRequest = async () => {
+  console.log(characterId)
+  if(!isNewCharacter && characterId) {
+    const result = await deleteCharacter(characterId)
+    setData(result);
+    return
+  }
+}
+
+const setData = (data: CharacterResponseModel|string): void => {
+  if(typeof data === 'string'){
+    if(data === 'Auth') {
+      navigate("/auth-test");
+    }
+    //more handling
+    return
+  }
+
   data.id === emptyGuid ? setIsNewCharacter(true): setIsNewCharacter(false)
   setCharacterId(data.id)
   setSkillSetId(data.skillSet.id)
@@ -352,9 +370,9 @@ const setData = (data: CharacterResponseModel): void => {
   Post
 </Button>
 <Button
-  onClick={() => saveCharacterRequest()}
+  onClick={() => deleteCharacterRequest()}
 >
-    Update
+    Delete
 </Button>
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={1}>

@@ -2,6 +2,7 @@ import CRUDRequestHelper from '../services/CRUDRequestHelper'
 import * as path from '../Consts/PathConsts';
 import CharacterResponseModel from '../models/ResponseModels/CharacterResponse';
 import CharacterRequest from '../models/RequestModels/CharacterRequest';
+import { useNavigate } from "react-router-dom";
 
     const uri:string='https://localhost:7256/api/v1/character';
 
@@ -9,7 +10,7 @@ import CharacterRequest from '../models/RequestModels/CharacterRequest';
         result:boolean,
         data:T
     }
-    export const getCharacter = async(entityId?:string) :Promise<CharacterResponseModel> => {
+    export const getCharacter = async(entityId?:string) :Promise<CharacterResponseModel|string> => {
         const apiService = new CRUDRequestHelper();
         let path = uri
         if(entityId) {
@@ -19,53 +20,24 @@ import CharacterRequest from '../models/RequestModels/CharacterRequest';
         return resultApi.data;
     }
 
-  /*   async getParagraphs(pagination:PaginatonWithMainEntity):Promise<BaseDto<ParagraphDto[]>|BaseDto<string>>{
-        const apiService = new CRUDRequestHelper();
-        const path=this.uri+`s?pageNumber=${pagination.pageNumber}&pageSize=${pagination.pageSize}&topicId=${pagination.mainEntityId}`;
-        const resultApi=await apiService.getRequest(path);
-        if(!resultApi.success){
-            let errorResult:BaseDto<string>={
-                result:false,
-                data:resultApi.data
-            }
-            return errorResult;
-        }
-        let resultBody:ParagraphDto[]=resultApi.data.map((x: any)=>this.mapToParagraph(x));
-
-        let response:BaseDto<ParagraphDto[]>={
-            result:true,
-            data:resultBody
-        }
-        return response;
-    }
-    */
-
-export const postCharacter = async(entity:CharacterRequest):Promise<CharacterResponseModel> => {
+    export const postCharacter = async(entity:CharacterRequest):Promise<CharacterResponseModel|string> => {
 
         const apiService = new CRUDRequestHelper();
         const resultApi = await apiService.postRequest({url:uri, data: entity}, false);
         return resultApi.data;
     }
 
-  /*  async deleteParagraph(entityId:string):Promise<BaseDto<string>>{
-        const path=this.uri+`/${entityId}`;
+    export const  deleteCharacter = async(entityId:string):Promise<CharacterResponseModel|string> => {
+        const path= uri+`/${entityId}`;
         const apiService = new CRUDRequestHelper();
         const resultApi = await apiService.deleteRequest(path);
-        if(!resultApi||!resultApi.success){
-            let errorResult:BaseDto<string>={
-                result:false,
-                data:resultApi.data
-            }
-            return errorResult;
+        if(!resultApi.success){
+            return resultApi.data
         }
-        let result:BaseDto<string>={
-            result:true,
-            data:resultApi.data
-        }
-        return result;
+        return resultApi.data;
     }
-  */
-    export const updateCharacter = async(updateEntity:CharacterRequest):Promise<CharacterResponseModel> =>{
+
+    export const updateCharacter = async(updateEntity:CharacterRequest):Promise<CharacterResponseModel|string> =>{
         const path=uri+`/${updateEntity.id}`;
         const apiService = new CRUDRequestHelper();
         const resultApi = await apiService.updateRequest({url:path, data:updateEntity}, false);

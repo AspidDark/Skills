@@ -113,7 +113,7 @@ public class CharacterController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-
+    [Authorize]
     [HttpDelete(ApiRoutes.CharacterRoute.Delete)]
     public async Task<IActionResult> Delete([FromRoute] Guid characterId)
     {
@@ -130,17 +130,5 @@ public class CharacterController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-    }
-
-    private static string Serialize(Character character)
-    {
-        var serializeOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-            ReferenceHandler = ReferenceHandler.IgnoreCycles,
-            WriteIndented = true
-        };
-       return JsonSerializer.Serialize(character, serializeOptions);
     }
 }

@@ -92,7 +92,7 @@ public class CharacterService : ICharacterService
     {
         if (!IsCharacterValid(model))
         {
-            return new ErrorModel(1100, "Character model is invalid skills mismach year of expirience");
+            return new ErrorModel(1100, "Character model is invalid skills mismatch year of expirience");
         }
 
         var character = await _characterDataService.Create(model, userId);
@@ -107,7 +107,7 @@ public class CharacterService : ICharacterService
     {
         if (!IsCharacterValid(model))
         {
-            return new ErrorModel(1100, "Character model is invalid skills mismach year of expirience");
+            return new ErrorModel(1100, "Character model is invalid skills mismatch year of expirience");
         }
         var updatedCharacter = await _characterDataService.Update(model, characterId, userId);
 
