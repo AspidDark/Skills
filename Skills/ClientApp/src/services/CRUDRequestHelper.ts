@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from "axios";
 import authService from '../components/api-authorization/AuthorizeService'
-import { useNavigate } from "react-router-dom";
 
 export interface RequestData {
     url:string,
@@ -14,18 +13,11 @@ export interface ResponseData{
 
 class CRUDRequestHelper{
     
-        async getRequest (request:string, authorize:boolean = true) : Promise<ResponseData>{
+        async getRequest (request:string) : Promise<ResponseData>{
             try{
-                let headers = {};
-                if(authorize){
-                   headers=await this.getHeaders();
-                   if(!headers){
-                    return  this.errorObject('Auth')
-                   }
-                }
-
+                let headers = await this.getHeaders();
                 const responseJson = await axios.get(request, 
-                    authorize ? {headers:headers}:undefined);
+                    {headers:headers});
                     const result = this.validateResponse(responseJson)
                     return result
     

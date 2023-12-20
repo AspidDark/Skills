@@ -19,13 +19,13 @@ import {getImagepath } from '../../services/ImageService'
 import Box from '@mui/material/Box/Box'
 import { modalSelector } from '../modal/modalSelector'
 import { Grid } from '@mui/material'
-import {postCharacter, getCharacter, updateCharacter, deleteCharacter } from '../../ApiServices/charecterApiSerice'
+import {postCharacter, getCharacter, updateCharacter, deleteCharacter, postDraftCharacter } from '../../ApiServices/charecterApiSerice'
 import Button from '@mui/material/Button';
 import CharacterResponseModel from '../../models/ResponseModels/CharacterResponse'
 import Skill from '../../models/Skill'
 import SkillLevel from '../../models/SkillLevel'
 import CharacterRequest from '../../models/RequestModels/CharacterRequest'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -56,7 +56,6 @@ export default function SkillList () {
   const theme: any = useTheme()
   const classes = useStyles()
   const [name, setName] = useState('')
-  const [characterId, setCharacterId] = useState<string|undefined>('')
   const [skillSetId, setSkillSetId] = useState('')
   const [isNewCharacter, setIsNewCharacter] = useState(true)
   //proprity
@@ -73,6 +72,8 @@ export default function SkillList () {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [skillIdToChange, setSkillIdToChange] = useState('')
+
+  const { characterId } = useParams()
 
   const navigate = useNavigate();
 
@@ -242,6 +243,12 @@ export default function SkillList () {
     setModalHeight(770)
   }
 
+  const navigateToCharacterIfChanged = (newCharacterid:string|undefined) =>{
+    if(newCharacterid && characterId !== newCharacterid){
+      navigate(`/character/${newCharacterid}`)
+    }
+  }
+
 //Crud
 const mapToCharacterRequest = ():CharacterRequest =>{
   let startDateValue = startDate?.toDate()
@@ -266,44 +273,57 @@ const mapToCharacterRequest = ():CharacterRequest =>{
     })
   }
   return result
-} 
+}
 
-const getCahracterRequest = async () =>{
-  const response = await getCharacter()
+const saveDraftCahracter = async () =>{
+  const request = mapToCharacterRequest()
+  const response = await postDraftCharacter(request)
+  if(typeof response ==='string' ){
+    return
+  }
+  const navigationRoute = `/character/publish/${response.id}`
+  navigate(navigationRoute)
+}
+
+const getCahracterRequest = async (id?: string) =>{
+  const response = await getCharacter(id)
+  if(typeof response ==='string' ){
+    return
+  }
   setData(response)
 }
 
 const saveCharacterRequest = async () =>{
-  const request= mapToCharacterRequest()
+  const request = mapToCharacterRequest()
   if(isNewCharacter){
     const result = await postCharacter(request)
+    if(typeof result ==='string') {
+      return
+    }
+    navigateToCharacterIfChanged(result.id)
     setData(result);
     return
   }
   const response = await updateCharacter(request)
+  if(typeof response ==='string' ){
+    return
+  }
   setData(response)
 }
 
 const deleteCharacterRequest = async () => {
-  console.log(characterId)
   if(!isNewCharacter && characterId) {
     const result = await deleteCharacter(characterId)
+    if(typeof result ==='string' ){
+      return
+    }
     setData(result);
     return
   }
 }
 
-const setData = (data: CharacterResponseModel|string): void => {
-  if(typeof data === 'string'){
-    if(data === 'Auth') {
-      navigate("/auth-test");
-    }
-    //more handling
-    return
-  }
-
+const setData = (data: CharacterResponseModel): void => {
   data.id === emptyGuid ? setIsNewCharacter(true): setIsNewCharacter(false)
-  setCharacterId(data.id)
   setSkillSetId(data.skillSet.id)
   // all skill with images
   let characterSkillsData : Skill[] = [];
@@ -351,7 +371,7 @@ const setData = (data: CharacterResponseModel|string): void => {
   setOrderedItems(characterSkillsData)
 }
   useEffect(()=>{
-    getCahracterRequest()
+    getCahracterRequest(characterId)
   }, [])
 
   const galleryImageList = [
@@ -367,12 +387,17 @@ const setData = (data: CharacterResponseModel|string): void => {
   <Button
   onClick={() => saveCharacterRequest()}
 >
-  Post
+  SaveRegistered
 </Button>
 <Button
   onClick={() => deleteCharacterRequest()}
 >
-    Delete
+    DeleteRegistered
+</Button>
+<Button
+  onClick={() => saveDraftCahracter()}
+>
+    SaveUnregisterd
 </Button>
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={1}>

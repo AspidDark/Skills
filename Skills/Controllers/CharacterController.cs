@@ -56,6 +56,12 @@ public class CharacterController : ControllerBase
     {
         try 
         {
+            var userId = HttpContext.GetUserId();
+            if (userId is not null)
+            {
+                return RedirectToRoute("/character");
+            }
+
             var model = _mapper.Map<CharacterModel>(request);
             var result = await _characterService.CreateDraft(model);
 

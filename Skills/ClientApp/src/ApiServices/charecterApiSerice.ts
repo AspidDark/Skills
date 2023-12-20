@@ -2,7 +2,6 @@ import CRUDRequestHelper from '../services/CRUDRequestHelper'
 import * as path from '../Consts/PathConsts';
 import CharacterResponseModel from '../models/ResponseModels/CharacterResponse';
 import CharacterRequest from '../models/RequestModels/CharacterRequest';
-import { useNavigate } from "react-router-dom";
 
     const uri:string='https://localhost:7256/api/v1/character';
 
@@ -16,14 +15,14 @@ import { useNavigate } from "react-router-dom";
         if(entityId) {
             path= uri+`?entityId=${entityId}`;
         }
-        const resultApi=await apiService.getRequest(path, false);
+        const resultApi=await apiService.getRequest(path);
         return resultApi.data;
     }
 
     export const postCharacter = async(entity:CharacterRequest):Promise<CharacterResponseModel|string> => {
 
         const apiService = new CRUDRequestHelper();
-        const resultApi = await apiService.postRequest({url:uri, data: entity}, false);
+        const resultApi = await apiService.postRequest({url:uri, data: entity});
         return resultApi.data;
     }
 
@@ -40,7 +39,14 @@ import { useNavigate } from "react-router-dom";
     export const updateCharacter = async(updateEntity:CharacterRequest):Promise<CharacterResponseModel|string> =>{
         const path=uri+`/${updateEntity.id}`;
         const apiService = new CRUDRequestHelper();
-        const resultApi = await apiService.updateRequest({url:path, data:updateEntity}, false);
+        const resultApi = await apiService.updateRequest({url:path, data:updateEntity});
+        return resultApi.data;
+    }
+
+    export const postDraftCharacter = async(entity:CharacterRequest):Promise<CharacterResponseModel|string> => {
+
+        const apiService = new CRUDRequestHelper();
+        const resultApi = await apiService.postRequest({url:`${uri}draft`, data: entity}, false);
         return resultApi.data;
     }
 

@@ -1,21 +1,33 @@
+import { Navigate } from 'react-router-dom';
 import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
+import SkillList from './components/skill';
+
 
 const AppRoutes = [
+  
   {
-    index: true,
-    element: <Home />
+    path: '/character/publish/:characterId',
+    requireAuth: true,
+    element: <SkillList />
+  },
+  {
+    path: '/character/:characterId',
+    element: <SkillList />
+  },
+  {
+    path: '/character',
+    element: <SkillList />
   },
   {
     path: '/counter',
     element: <Counter />
   },
   {
-    path: '/fetch-data',
-    requireAuth: true,
-    element: <FetchData />
+    path: '/',
+    index: true,
+    element: <Navigate to ='/character' replace />
   },
   ...ApiAuthorzationRoutes
 ];
